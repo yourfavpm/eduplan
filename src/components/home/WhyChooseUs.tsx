@@ -1,6 +1,6 @@
 "use client";
 
-import Image from 'next/image';
+
 import { GraduationCap, Phone, Target, ArrowRight } from 'lucide-react';
 import { cn } from '@/lib/utils';
 
@@ -20,6 +20,12 @@ export function WhyChooseUs() {
         <section className="py-24 md:py-32 bg-[#F9FAFB] overflow-hidden">
             <div className="container mx-auto px-4 md:px-6 lg:px-8">
                 <div className="max-w-7xl mx-auto">
+                    <div className="mb-12 md:mb-16 text-center">
+                        <h2 className="text-3xl md:text-4xl font-bold text-[#0F172A]">
+                            Here's why we're a top choice for students
+                        </h2>
+                    </div>
+
                     {/* Bento Grid Layout */}
                     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 lg:gap-8 min-h-[800px] lg:min-h-[700px]">
 
@@ -81,7 +87,7 @@ export function WhyChooseUs() {
                         </div>
 
                         {/* Column 2: Card 2 (Middle Tall) */}
-                        <div className="relative bg-[#E0F2FE] rounded-[32px] overflow-hidden min-h-[500px] lg:h-full group hover:scale-[1.01] transition-transform duration-300">
+                        <div className="relative bg-[#E0F2FE] rounded-[32px] overflow-hidden lg:h-full group hover:scale-[1.01] transition-all duration-300">
                             <div className="p-8 md:p-10 lg:p-12 relative z-20 space-y-6">
                                 <div className="space-y-3">
                                     <span className="text-brand-700 font-semibold uppercase tracking-widest text-xs block">
@@ -96,19 +102,19 @@ export function WhyChooseUs() {
                                 </p>
                             </div>
 
-                            {/* Student Cutout Image */}
-                            <div className="absolute bottom-0 right-0 w-full h-[60%] md:h-[55%] pointer-events-none z-10">
-                                <div className="relative w-full h-full flex items-end justify-center">
-                                    <div className="relative w-[110%] h-full transform translate-y-4 translate-x-4">
-                                        <Image
-                                            src="/images/why-choose-us/student.png"
-                                            alt="Global Success Story Student"
-                                            fill
-                                            className="object-contain object-bottom select-none"
-                                            priority
-                                        />
-                                    </div>
-                                </div>
+                            {/* Scattered Graduation Caps - Desktop Only */}
+                            <div className="hidden lg:block absolute inset-0 z-10 pointer-events-none opacity-20">
+                                {/* Top right cluster */}
+                                <GraduationCap className="absolute top-12 right-12 w-16 h-16 text-brand-500 rotate-12" />
+                                <GraduationCap className="absolute top-24 right-24 w-10 h-10 text-brand-700 -rotate-12" />
+
+                                {/* Bottom right cluster */}
+                                <GraduationCap className="absolute bottom-16 right-8 w-20 h-20 text-brand-600 -rotate-6" />
+                                <GraduationCap className="absolute bottom-32 right-20 w-8 h-8 text-brand-400 rotate-45" />
+
+                                {/* Middle scattered */}
+                                <GraduationCap className="absolute top-1/2 right-1/4 w-12 h-12 text-brand-300 rotate-180" />
+                                <GraduationCap className="absolute bottom-1/4 left-32 w-14 h-14 text-brand-500/50 -rotate-12" />
                             </div>
                         </div>
 

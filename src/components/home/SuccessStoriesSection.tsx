@@ -77,9 +77,10 @@ export function SuccessStoriesSection() {
 
                 {/* Bento Box Carousel */}
                 <div className="relative max-w-5xl mx-auto">
+                    {/* Desktop Carousel */}
                     <div
                         key={currentIndex}
-                        className="bg-brand-50/50 rounded-[2.5rem] overflow-hidden"
+                        className="hidden md:block bg-brand-50/50 rounded-[2.5rem] overflow-hidden"
                     >
                         <div className="grid md:grid-cols-2 gap-0 items-center">
                             {/* Left: Student Image Box */}
@@ -118,20 +119,38 @@ export function SuccessStoriesSection() {
                         </div>
                     </div>
 
-                    {/* Navigation Buttons - Mobile */}
-                    <div className="flex md:hidden gap-4 mt-8 justify-center">
-                        <button
-                            onClick={prev}
-                            className="w-12 h-12 rounded-full border border-border flex items-center justify-center hover:bg-surface transition-colors active:scale-95"
-                        >
-                            <ChevronLeft className="w-5 h-5 text-ink" />
-                        </button>
-                        <button
-                            onClick={next}
-                            className="w-12 h-12 rounded-full border border-border flex items-center justify-center hover:bg-surface transition-colors active:scale-95"
-                        >
-                            <ChevronRight className="w-5 h-5 text-ink" />
-                        </button>
+                    {/* Mobile Sliding Carousel */}
+                    <div className="md:hidden flex overflow-x-auto snap-x snap-mandatory gap-4 pb-4 -mx-4 px-4 scrollbar-hide">
+                        {testimonials.map((t, i) => (
+                            <div key={i} className="flex-none w-[85%] snap-center bg-brand-50/50 rounded-3xl p-6 flex flex-col h-full">
+                                <div className="flex items-center gap-4 mb-4">
+                                    <div className="w-14 h-14 rounded-2xl bg-white shadow-sm flex items-center justify-center text-xl font-bold text-brand-700 overflow-hidden shrink-0">
+                                        <div className="bg-brand-50 w-full h-full flex items-center justify-center">
+                                            {t.name.charAt(0)}
+                                        </div>
+                                    </div>
+                                    <div>
+                                        <h4 className="font-semibold text-ink text-sm">{t.name}</h4>
+                                        <p className="text-xs text-muted line-clamp-1">{t.university}</p>
+                                        <span className="inline-block mt-1 text-[10px] bg-white px-2 py-0.5 rounded-full text-brand-700 border border-brand-100 font-medium whitespace-nowrap">
+                                            {t.status}
+                                        </span>
+                                    </div>
+                                </div>
+
+                                <Quote className="w-5 h-5 text-brand-200 mb-3" />
+
+                                <blockquote className="text-sm text-ink leading-relaxed italic mb-4 font-light flex-grow">
+                                    "{t.quote}"
+                                </blockquote>
+
+                                <div className="mt-auto pt-4 border-t border-brand-100/50">
+                                    <p className="text-xs text-brand-700 font-medium">
+                                        Now in {t.destination}
+                                    </p>
+                                </div>
+                            </div>
+                        ))}
                     </div>
                 </div>
             </div>

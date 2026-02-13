@@ -97,7 +97,7 @@ export function StatsSection() {
                     </div>
 
                     {/* Right Side: Stats Grid */}
-                    <div className="grid sm:grid-cols-2 gap-8 md:gap-12">
+                    <div className="grid grid-cols-2 gap-8 md:gap-12">
                         {stats.map((stat, index) => (
                             <div
                                 key={index}
