@@ -47,8 +47,9 @@ export function ServicesSection() {
         <section className="py-20 md:py-24 bg-surface">
             <div className="container mx-auto px-4 md:px-6 lg:px-8">
                 <div className="mb-16">
-                    <h2 className="font-semibold text-ink mb-4">
+                    <h2 className="font-semibold text-ink mb-6 relative inline-block">
                         How EduPlan Works with You
+                        <div className="absolute -bottom-3 left-0 w-1/2 h-1 bg-brand-500 rounded-full" />
                     </h2>
                     <p className="text-lg text-muted max-w-2xl">
                         Comprehensive support for every step of your study abroad journey

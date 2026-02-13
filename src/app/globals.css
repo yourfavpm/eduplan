@@ -83,7 +83,7 @@
   --shadow-softer: 0 2px 10px rgba(15, 23, 42, 0.05);
 
   /* Typography */
-  --font-sans: 'Inter', system-ui, sans-serif;
+  --font-sans: var(--font-inter), 'Inter', system-ui, sans-serif;
   --font-poppins: var(--font-poppins), sans-serif;
   --font-mono: ui-monospace, monospace;
 

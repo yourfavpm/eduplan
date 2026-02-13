@@ -1,5 +1,6 @@
 import Link from "next/link";
 import Image from "next/image";
+import { Facebook, Twitter, Instagram, Linkedin, Youtube, MapPin, Phone, Mail } from 'lucide-react';
 
 export function Footer() {
     const regions = [
@@ -16,8 +17,8 @@ export function Footer() {
         <footer className="border-t mt-auto bg-gradient-to-br from-brand-900 via-brand-800 to-brand-900 text-white">
             {/* Main Footer Content */}
             <div className="container mx-auto px-4 md:px-6 lg:px-8 py-12">
-                <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
-                    <div>
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-8">
+                    <div className="lg:col-span-1">
                         <div className="mb-4">
                             <Image
                                 src="/eduplan.png"
@@ -30,6 +31,48 @@ export function Footer() {
                         <p className="text-sm text-brand-100 leading-relaxed">
                             Expert guidance for your international education journey.
                         </p>
+                        <div className="flex gap-4 mt-6">
+                            <a href="#" className="text-brand-100 hover:text-white transition-colors p-2 rounded-full hover:bg-brand-700/50">
+                                <Facebook className="w-5 h-5" />
+                            </a>
+                            <a href="#" className="text-brand-100 hover:text-white transition-colors p-2 rounded-full hover:bg-brand-700/50">
+                                <Twitter className="w-5 h-5" />
+                            </a>
+                            <a href="#" className="text-brand-100 hover:text-white transition-colors p-2 rounded-full hover:bg-brand-700/50">
+                                <Instagram className="w-5 h-5" />
+                            </a>
+                            <a href="#" className="text-brand-100 hover:text-white transition-colors p-2 rounded-full hover:bg-brand-700/50">
+                                <Linkedin className="w-5 h-5" />
+                            </a>
+                            <a href="#" className="text-brand-100 hover:text-white transition-colors p-2 rounded-full hover:bg-brand-700/50">
+                                <Youtube className="w-5 h-5" />
+                            </a>
+                        </div>
+                    </div>
+
+                    <div>
+                        <h4 className="font-semibold mb-4 text-white">Contact</h4>
+                        <ul className="space-y-4 text-sm text-brand-100">
+                            <li className="flex gap-3">
+                                <MapPin className="w-5 h-5 flex-shrink-0 text-brand-300" />
+                                <span>65A, Aba Johnson Street, Akora Villa Estate, Adeniyi Jones, Ikeja, Lagos</span>
+                            </li>
+                            <li className="flex gap-3">
+                                <MapPin className="w-5 h-5 flex-shrink-0 text-brand-300" />
+                                <span>7644, MapleFord Blvd, Regina S4Y 0H1, Canada</span>
+                            </li>
+                            <li className="flex gap-3">
+                                <Phone className="w-5 h-5 flex-shrink-0 text-brand-300" />
+                                <div className="flex flex-col">
+                                    <a href="tel:+2348052829316" className="hover:text-white transition-colors">+234-8052829316</a>
+                                    <a href="tel:+2348027442902" className="hover:text-white transition-colors">+234-8027442902</a>
+                                </div>
+                            </li>
+                            <li className="flex gap-3">
+                                <Mail className="w-5 h-5 flex-shrink-0 text-brand-300" />
+                                <a href="mailto:info@eduplan360.com" className="hover:text-white transition-colors">info@eduplan360.com</a>
+                            </li>
+                        </ul>
                     </div>
 
                     <div>

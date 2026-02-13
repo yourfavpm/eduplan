@@ -44,10 +44,11 @@ export function HowItWorks() {
                 {/* Header */}
                 <div className="text-center mb-20 max-w-3xl mx-auto space-y-4">
 
-                    <h2 className="text-3xl md:text-4xl font-bold text-ink uppercase tracking-tight">
+                    <h2 className="text-2xl md:text-3xl font-bold text-ink uppercase tracking-tight relative inline-block font-sans">
                         How It Works
+                        <div className="absolute -bottom-4 left-1/2 -translate-x-1/2 w-1/2 h-1.5 bg-brand-500 rounded-full" />
                     </h2>
-                    <p className="text-muted text-lg max-w-2xl mx-auto font-light leading-relaxed">
+                    <p className="text-muted text-lg max-w-2xl mx-auto font-light leading-relaxed pt-4">
                         Your journey to studying abroad, simplified in four guided steps.
                     </p>
                 </div>

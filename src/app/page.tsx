@@ -20,17 +20,20 @@ export const metadata: Metadata = {
   }
 };
 
+import { LogoMarquee } from "@/components/home/LogoMarquee";
+
 export default function HomePage() {
   return (
     <>
       <HeroSection />
+      <LogoMarquee />
       <HowItWorks />
       <DestinationsSection />
       <ServicesSection />
       <SuccessStoriesSection />
-      <AdvisorsSection />
       <StatsSection />
       <WhyChooseUs />
+      <AdvisorsSection />
       <NextStepsSection />
       <FinalCTASection />
     </>

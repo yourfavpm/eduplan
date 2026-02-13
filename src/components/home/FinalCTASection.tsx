@@ -12,8 +12,9 @@ export function FinalCTASection() {
                     <div className="grid lg:grid-cols-2 gap-8 lg:gap-12 items-center">
                         {/* Left: Content */}
                         <div className="flex flex-col justify-center">
-                            <h2 className="font-semibold text-ink mb-6">
+                            <h2 className="font-semibold text-ink mb-8 relative inline-block">
                                 Let's Build Your Study Abroad Plan
+                                <div className="absolute -bottom-3 left-0 w-1/2 h-1 bg-brand-500 rounded-full" />
                             </h2>
 
                             <p className="text-muted leading-relaxed mb-10">

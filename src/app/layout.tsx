@@ -1,9 +1,10 @@
 import type { Metadata } from "next";
-import { Geist, Geist_Mono, Playfair_Display, Poppins } from "next/font/google";
+import { Geist, Geist_Mono, Playfair_Display, Poppins, Inter } from "next/font/google";
 import "./globals.css";
 import { UtilityBar } from "@/components/layout/UtilityBar";
 import { Navbar } from "@/components/layout/Navbar";
 import { Footer } from "@/components/layout/Footer";
+import { FloatingConsultationButton } from "@/components/layout/FloatingConsultationButton";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -26,10 +27,21 @@ const poppins = Poppins({
   weight: ["400", "500", "600", "700"],
 });
 
+const inter = Inter({
+  variable: "--font-inter",
+  subsets: ["latin"],
+  weight: ["400", "500", "600", "700"],
+});
+
 export const metadata: Metadata = {
   title: "EduPlan360 | Study Abroad Simplified",
   description: "Expert guidance for your international education journey. Get admitted to top universities worldwide with visa support and scholarship assistance.",
+  icons: {
+    icon: '/favicon.ico',
+  },
 };
+
+import { CookieConsent } from "@/components/ui/CookieConsent";
 
 export default function RootLayout({
   children,
@@ -39,12 +51,14 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body
-        className={`${geistSans.variable} ${geistMono.variable} ${playfair.variable} ${poppins.variable} antialiased flex flex-col min-h-screen`}
+        className={`${geistSans.variable} ${geistMono.variable} ${playfair.variable} ${poppins.variable} ${inter.variable} antialiased flex flex-col min-h-screen`}
       >
         <UtilityBar />
         <Navbar />
         {children}
         <Footer />
+        <FloatingConsultationButton />
+        <CookieConsent />
       </body>
     </html>
   );

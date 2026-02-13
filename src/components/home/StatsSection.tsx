@@ -89,10 +89,11 @@ export function StatsSection() {
                 <div className="grid lg:grid-cols-2 gap-12 items-center">
                     {/* Left Side: Headline */}
                     <div>
-                        <h2 className="text-4xl md:text-5xl font-semibold leading-tight">
+                        <h2 className="text-2xl md:text-3xl font-semibold leading-tight relative inline-block mb-6">
                             <span className="text-ink">Trusted by</span>
                             <br />
                             <span className="text-brand-700">students worldwide</span>
+                            <div className="absolute -bottom-4 left-0 w-1/3 h-1.5 bg-brand-500 rounded-full" />
                         </h2>
                     </div>
 

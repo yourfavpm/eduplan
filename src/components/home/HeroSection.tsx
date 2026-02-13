@@ -42,35 +42,46 @@ export function HeroSection() {
     }, [displayText, isDeleting, phraseIndex]);
 
     return (
-        <section className="relative overflow-hidden bg-gradient-to-b from-white via-brand-50/30 to-white pt-20 pb-16 md:pt-28 md:pb-24">
+        <section className="relative overflow-hidden bg-gradient-to-b from-white via-brand-50/30 to-white pt-10 pb-12 md:pt-28 md:pb-24">
             {/* Decorative Background Elements */}
             <div className="absolute top-20 right-0 w-96 h-96 bg-accent-500/10 rounded-full blur-3xl"></div>
             <div className="absolute bottom-20 left-0 w-96 h-96 bg-brand-500/10 rounded-full blur-3xl"></div>
 
             <div className="container mx-auto px-4 md:px-6 lg:px-8 relative z-10">
-                <div className="grid lg:grid-cols-2 gap-12 lg:gap-16 items-center">
+                <div className="grid lg:grid-cols-2 gap-8 lg:gap-16 items-center">
                     {/* Left: Content */}
                     <div className="text-center lg:text-left">
                         {/* Main Headline with Typewriter Effect */}
-                        <h1 className="text-ink mb-6 min-h-[120px] md:min-h-[100px]">
+                        <h1 className="text-ink mb-4 min-h-[90px] md:min-h-[100px] font-sans font-bold text-3xl md:text-5xl">
                             {displayText}
-                            <span className="inline-block w-1 h-12 md:h-14 bg-brand-700 ml-1 animate-pulse"></span>
+                            <span className="inline-block w-1 h-8 md:h-14 bg-brand-700 ml-1 animate-pulse"></span>
                         </h1>
 
                         {/* Subheading */}
-                        <p className="text-muted leading-relaxed max-w-2xl lg:max-w-none mb-10 animate-fade-in-up" style={{ animationDelay: '0.2s' }}>
+                        <p className="text-muted leading-relaxed max-w-2xl lg:max-w-none mb-6 text-sm md:text-base animate-fade-in-up" style={{ animationDelay: '0.2s' }}>
                             Expert guidance from university selection to visa approval.
-                            We make studying abroad simple, affordable, and achievable for everyone.
+                            We make studying abroad simple, affordable, and achievable.
                         </p>
 
                         {/* CTAs */}
-                        <div className="flex flex-col sm:flex-row gap-4 lg:justify-start justify-center mb-8 animate-fade-in-up" style={{ animationDelay: '0.4s' }}>
+                        <div className="flex flex-col sm:flex-row gap-4 lg:justify-start justify-center mb-6 animate-fade-in-up" style={{ animationDelay: '0.4s' }}>
+
+                            {/* Desktop Button */}
                             <button
                                 onClick={() => window.location.href = '/book-consultation'}
-                                className="group relative inline-flex items-center justify-center gap-2 bg-brand-700 text-white px-8 py-4 rounded-full font-semibold text-base overflow-hidden hover:bg-brand-800 transition-all duration-300 shadow-lg hover:shadow-xl active:scale-[0.98]"
+                                className="hidden md:inline-flex group relative items-center justify-center gap-2 bg-brand-700 text-white px-8 py-4 rounded-full font-semibold text-base overflow-hidden hover:bg-brand-800 transition-all duration-300 shadow-lg hover:shadow-xl active:scale-[0.98]"
                             >
                                 <span className="relative z-10">Start Your Study</span>
                                 <ArrowRight className="w-5 h-5 relative z-10 group-hover:translate-x-1 transition-transform" />
+                            </button>
+
+                            {/* Mobile Button (Simple Underline) */}
+                            <button
+                                onClick={() => window.location.href = '/book-consultation'}
+                                className="md:hidden inline-flex items-center justify-center gap-2 text-brand-700 font-semibold text-base hover:text-brand-800 transition-colors"
+                            >
+                                <span className="underline underline-offset-4">Start Your Study</span>
+                                <ArrowRight className="w-4 h-4" />
                             </button>
 
                             <button
@@ -78,7 +89,7 @@ export function HeroSection() {
                                     const whatsappNumber = process.env.NEXT_PUBLIC_WHATSAPP_NUMBER || '';
                                     window.open(`https://wa.me/${whatsappNumber}`, '_blank');
                                 }}
-                                className="group inline-flex items-center justify-center gap-2 bg-white text-brand-700 border-2 border-brand-200 px-8 py-4 rounded-full font-semibold text-base hover:border-brand-700 hover:bg-brand-50 transition-all duration-300 shadow-sm active:scale-[0.98]"
+                                className="hidden sm:inline-flex group items-center justify-center gap-2 bg-white text-brand-700 border-2 border-brand-200 px-8 py-4 rounded-full font-semibold text-base hover:border-brand-700 hover:bg-brand-50 transition-all duration-300 shadow-sm active:scale-[0.98]"
                             >
                                 <MessageCircle className="w-5 h-5" />
                                 <span>Chat on WhatsApp</span>
@@ -88,9 +99,6 @@ export function HeroSection() {
                         {/* Trust Stats Row - Desktop Only */}
                         <div className="hidden lg:grid grid-cols-3 gap-6 pt-8">
                             <div className="flex items-center gap-3 group">
-                                <div className="w-10 h-10 rounded-xl bg-brand-100 flex items-center justify-center flex-shrink-0 group-hover:scale-110 transition-transform">
-                                    <GraduationCap className="w-5 h-5 text-brand-700" />
-                                </div>
                                 <div>
                                     <div className="text-xl font-bold text-brand-700">95%</div>
                                     <div className="text-xs text-muted">Visa Success</div>
@@ -98,9 +106,6 @@ export function HeroSection() {
                             </div>
 
                             <div className="flex items-center gap-3 group">
-                                <div className="w-10 h-10 rounded-xl bg-accent-100 flex items-center justify-center flex-shrink-0 group-hover:scale-110 transition-transform">
-                                    <Globe className="w-5 h-5 text-accent-700" />
-                                </div>
                                 <div>
                                     <div className="text-xl font-bold text-brand-700">200+</div>
                                     <div className="text-xs text-muted">Universities</div>
@@ -108,19 +113,16 @@ export function HeroSection() {
                             </div>
 
                             <div className="flex items-center gap-3 group">
-                                <div className="w-10 h-10 rounded-xl bg-brand-100 flex items-center justify-center flex-shrink-0 group-hover:scale-110 transition-transform">
-                                    <Star className="w-5 h-5 text-brand-700" />
-                                </div>
                                 <div>
                                     <div className="text-xl font-bold text-brand-700">5,000+</div>
-                                    <div className="text-xs text-muted">Success Stories</div>
+                                    <div className="text-xs text-muted">Applicants</div>
                                 </div>
                             </div>
                         </div>
                     </div>
 
                     {/* Right: Image with Organic Shape */}
-                    <div className="relative h-[400px] md:h-[500px] lg:h-[600px] animate-fade-in-up" style={{ animationDelay: '0.3s' }}>
+                    <div className="relative h-[300px] md:h-[500px] lg:h-[600px] animate-fade-in-up" style={{ animationDelay: '0.3s' }}>
                         {/* Organic Blob Background */}
                         <div className="absolute inset-0 bg-gradient-to-br from-brand-100 to-accent-100"
                             style={{
@@ -196,7 +198,7 @@ export function HeroSection() {
                     </div>
                     <div className="text-center">
                         <div className="text-2xl font-bold text-brand-700 mb-1">5,000+</div>
-                        <div className="text-xs text-muted">Success</div>
+                        <div className="text-xs text-muted">Applicants</div>
                     </div>
                 </div>
             </div>
