@@ -1,26 +1,187 @@
-@import "tailwindcss";
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
 
-:root {
-  --background: #ffffff;
-  --foreground: #171717;
-}
+@import "tailwindcss";
+@import "tw-animate-css";
+@import "shadcn/tailwind.css";
+
+@custom-variant dark (&:is(.dark *));
+
+/* ===========================
+   EDUPLAN360 DESIGN BIBLE
+   Design tokens based on UX strategy
+   =========================== */
 
 @theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+  /* EduPlan360 Brand Colors */
+  --color-brand-50: #EEF2FF;
+  --color-brand-100: #E0E7FF;
+  --color-brand-200: #C7D2FE;
+  --color-brand-300: #A5B4FC;
+  --color-brand-400: #818CF8;
+  --color-brand-500: #3B5BFF;
+  --color-brand-600: #2447F2;
+  --color-brand-700: #0A1FB8;
+  /* Primary anchor */
+  --color-brand-800: #081A98;
+  --color-brand-900: #061572;
+
+  /* Accent (Cyan) Colors */
+  --color-accent-50: #ECFEFF;
+  --color-accent-100: #CFFAFE;
+  --color-accent-200: #A5F3FC;
+  --color-accent-300: #67E8F9;
+  --color-accent-400: #22D3EE;
+  --color-accent-500: #00B3E6;
+  /* Cyan accent */
+  --color-accent-600: #0891B2;
+  --color-accent-700: #0E7490;
+  --color-accent-800: #155E75;
+  --color-accent-900: #164E63;
+
+  /* Semantic Colors */
+  --color-ink: #0F172A;
+  --color-muted: #475569;
+  --color-surface: #F8FAFC;
+  --color-border: #E2E8F0;
+
+  /* Maintain shadcn compatibility */
+  --color-background: oklch(1 0 0);
+  --color-foreground: var(--color-ink);
+  --color-primary: var(--color-brand-700);
+  --color-primary-foreground: oklch(1 0 0);
+  --color-secondary: var(--color-surface);
+  --color-secondary-foreground: var(--color-ink);
+  --color-muted-foreground: var(--color-muted);
+  --color-accent-foreground: var(--color-accent-700);
+  --color-destructive: oklch(0.577 0.245 27.325);
+  --color-input: var(--color-border);
+  --color-ring: var(--color-brand-500);
+  --color-card: oklch(1 0 0);
+  --color-card-foreground: var(--color-ink);
+  --color-popover: oklch(1 0 0);
+  --color-popover-foreground: var(--color-ink);
+
+  /* Custom Border Radius (Hybrid Corners) */
+  --radius-eduTileA: 0rem 1.25rem 0rem 1.25rem;
+  /* TR + BL rounded */
+  --radius-eduTileB: 1.25rem 0rem 1.25rem 0rem;
+  /* TL + BR rounded */
+  --radius-eduTileC: 1.25rem 1.25rem 0rem 0rem;
+  /* Top rounded */
+  --radius-eduTileD: 0rem 0rem 1.25rem 1.25rem;
+  /* Bottom rounded */
+
+  /* Standard Radii */
+  --radius-sm: 0.375rem;
+  --radius-md: 0.5rem;
+  --radius-lg: 0.75rem;
+  --radius-xl: 0.875rem;
+  --radius-2xl: 1.25rem;
+
+  /* Premium Shadows */
+  --shadow-soft: 0 6px 18px rgba(15, 23, 42, 0.06);
+  --shadow-softer: 0 2px 10px rgba(15, 23, 42, 0.05);
+
+  /* Typography */
+  --font-sans: 'Inter', system-ui, sans-serif;
+  --font-poppins: var(--font-poppins), sans-serif;
+  --font-mono: ui-monospace, monospace;
+
+  /* Transitions */
+  --transition-calm: cubic-bezier(0.2, 0.8, 0.2, 1);
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
+:root {
+  font-family: var(--font-sans);
+}
+
+@layer base {
+  * {
+    @apply border-border outline-ring/50;
+  }
+
+  body {
+    @apply bg-white text-ink antialiased;
+    font-family: var(--font-sans);
+  }
+
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6 {
+    @apply font-semibold text-ink;
+    font-family: var(--font-poppins);
+  }
+
+  /* Premium Typography Scale */
+  h1 {
+    @apply text-4xl md:text-5xl leading-tight;
+    font-weight: 700;
+  }
+
+  h2 {
+    @apply text-2xl md:text-3xl leading-snug;
+    font-weight: 600;
+  }
+
+  h3 {
+    @apply text-xl md:text-2xl leading-snug;
+    font-weight: 600;
+  }
+
+  p {
+    @apply text-sm md:text-base leading-relaxed;
+  }
+
+  /* Hero Animation */
+  @keyframes fadeInUp {
+    from {
+      opacity: 0;
+      transform: translateY(30px);
+    }
+
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  .animate-fade-in-up {
+    animation: fadeInUp 0.8s ease-out both;
   }
 }
 
-body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+/* Custom Utility Classes */
+@layer utilities {
+  .transition-calm {
+    transition-timing-function: var(--transition-calm);
+    transition-duration: 200ms;
+  }
+
+  .shadow-soft {
+    box-shadow: var(--shadow-soft);
+  }
+
+  .shadow-softer {
+    box-shadow: var(--shadow-softer);
+  }
+
+  /* Hybrid Corner Utilities */
+  .rounded-eduTileA {
+    border-radius: var(--radius-eduTileA);
+  }
+
+  .rounded-eduTileB {
+    border-radius: var(--radius-eduTileB);
+  }
+
+  .rounded-eduTileC {
+    border-radius: var(--radius-eduTileC);
+  }
+
+  .rounded-eduTileD {
+    border-radius: var(--radius-eduTileD);
+  }
 }

@@ -1,36 +1,118 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# EduPlan360
+
+A production-ready education consultancy platform built with Next.js, TypeScript, and modern web technologies.
+
+## Tech Stack
+
+- **Framework**: Next.js 15 (App Router)
+- **Language**: TypeScript
+- **Styling**: Tailwind CSS v4
+- **Components**: shadcn/ui
+- **Forms**: React Hook Form + Zod validation
+- **Animations**: Framer Motion
+- **Icons**: lucide-react
+- **Database**: Supabase
+- **Auth**: NextAuth.js v5
+- **CMS**: Sanity (for content management)
+- **Email**: Resend
+- **Analytics**: Google Analytics 4 + PostHog
+
+## Project Structure
+
+```
+eduplan/
+├── src/
+│   ├── app/                    # Next.js App Router pages
+│   ├── components/
+│   │   ├── ui/                # shadcn/ui components
+│   │   ├── layout/            # Header, Footer, Navigation
+│   │   └── forms/             # Form components
+│   ├── lib/
+│   │   ├── supabase/          # Database clients
+│   │   ├── sanity/            # CMS configuration
+│   │   ├── auth/              # Authentication config
+│   │   └── utils.ts           # Utility functions
+│   └── types/                 # TypeScript type definitions
+├── public/                     # Static assets
+└── supabase-schema.sql        # Database schema
+```
 
 ## Getting Started
 
-First, run the development server:
+### Prerequisites
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+- Node.js 18+ and npm
+- Supabase account
+- Sanity account
+- Resend account (for emails)
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+### Installation
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+1. Clone the repository
+2. Install dependencies:
+   ```bash
+   npm install
+   ```
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+3. Copy environment variables:
+   ```bash
+   cp .env.local.example .env.local
+   ```
 
-## Learn More
+4. Fill in your environment variables in `.env.local`
 
-To learn more about Next.js, take a look at the following resources:
+5. Set up Supabase database:
+   - Create a new Supabase project
+   - Run the SQL schema from `supabase-schema.sql`
+   - Copy your project URL and anon key to `.env.local`
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+6. Run the development server:
+   ```bash
+   npm run dev
+   ```
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+7. Open [http://localhost:3000](http://localhost:3000)
 
-## Deploy on Vercel
+## Environment Variables
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+See `.env.local.example` for all required environment variables.
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+Key services to configure:
+- **Supabase**: Database and storage
+- **NextAuth**: Authentication
+- **Sanity**: Content management
+- **Resend**: Email notifications
+- **Analytics**: GA4 and PostHog tracking
+
+## Development
+
+- `npm run dev` - Start development server
+- `npm run build` - Build for production
+- `npm run start` - Start production server
+- `npm run lint` - Run ESLint
+
+## Features
+
+- **Student Journey**: From discovery to admission
+- **Consultation Booking**: Contact form with email notifications
+- **Student Portal**: Application tracking and document management
+- **Scholarships**: Search and filter opportunities
+- **Associate Program**: Partner recruitment system
+- **CMS Integration**: Easy content updates via Sanity
+- **Analytics**: Track user behavior and conversions
+
+## Design Philosophy
+
+EduPlan360 follows these core principles:
+- **Human over techy**: Warm, trustworthy, supportive
+- **Simplicity wins**: Guide users step-by-step
+- **Conversion-first**: Every page drives action
+- **Mobile-first**: Responsive and accessible
+
+## License
+
+Proprietary - EduPlan360
+
+## Support
+
+For support, contact: support@eduplan360.com
