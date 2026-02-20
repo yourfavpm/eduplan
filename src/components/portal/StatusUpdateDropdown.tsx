@@ -30,7 +30,7 @@ export default function StatusUpdateDropdown({
 
     // Update application status
     await supabase
-      .from('portal_applications')
+      .from('applications')
       .update({ status: newStatus, updated_at: new Date().toISOString() })
       .eq('id', applicationId)
 

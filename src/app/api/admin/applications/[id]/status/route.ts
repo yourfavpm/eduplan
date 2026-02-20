@@ -13,10 +13,10 @@ export async function PATCH(req: Request, { params }: { params: Promise<{ id: st
   if (!status) return NextResponse.json({ error: 'status is required' }, { status: 400 })
 
   // Get before state
-  const { data: before } = await supabase.from('portal_applications').select('status').eq('id', id).single()
+  const { data: before } = await supabase.from('applications').select('status').eq('id', id).single()
 
   // Update application status
-  const { error } = await supabase.from('portal_applications').update({ status }).eq('id', id)
+  const { error } = await supabase.from('applications').update({ status }).eq('id', id)
   if (error) return NextResponse.json({ error: error.message }, { status: 500 })
 
   // Insert status history

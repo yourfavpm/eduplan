@@ -35,7 +35,7 @@ export default async function AdminApplicationsPage() {
   if (!user) redirect('/portal/sign-in')
 
   const { data: raw } = await supabase
-    .from('portal_applications')
+    .from('applications')
     .select('id, user_id, destination, proposed_course_1, status, created_at, portal_profiles(full_name, email, phone)')
     .order('created_at', { ascending: false })
 

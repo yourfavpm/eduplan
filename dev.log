@@ -299,3 +299,21 @@ TypeError: fetch failed
 ✓ Compiled in 109ms
  GET /portal/dashboard 200 in 1524ms (compile: 16ms, proxy.ts: 992ms, render: 516ms)
  GET /portal/dashboard 200 in 2.8s (compile: 20ms, proxy.ts: 1241ms, render: 1587ms)
+ GET /portal/profile 200 in 1783ms (compile: 54ms, proxy.ts: 787ms, render: 942ms)
+ GET /portal/documents 200 in 2.4s (compile: 972ms, proxy.ts: 770ms, render: 687ms)
+ GET /portal/applications/new 200 in 1365ms (compile: 24ms, proxy.ts: 557ms, render: 784ms)
+ GET /portal/dashboard 200 in 1676ms (compile: 8ms, proxy.ts: 595ms, render: 1073ms)
+ GET /portal/applications/new 200 in 1250ms (compile: 29ms, proxy.ts: 644ms, render: 576ms)
+ POST /api/portal/applications 500 in 3.5s (compile: 71ms, proxy.ts: 705ms, render: 2.7s)
+✓ Compiled in 114ms
+ GET /portal/applications/new 200 in 835ms (compile: 13ms, proxy.ts: 692ms, render: 130ms)
+ GET /portal/dashboard 200 in 1725ms (compile: 10ms, proxy.ts: 777ms, render: 938ms)
+ GET /portal/applications/new 200 in 1076ms (compile: 487ms, proxy.ts: 492ms, render: 97ms)
+ GET /portal/dashboard 200 in 1573ms (compile: 10ms, proxy.ts: 733ms, render: 831ms)
+ GET /portal/dashboard 200 in 1686ms (compile: 87ms, proxy.ts: 982ms, render: 617ms)
+ GET /portal/dashboard 200 in 1733ms (compile: 384ms, proxy.ts: 976ms, render: 373ms)
+ GET /portal/applications/new 200 in 379ms (compile: 5ms, proxy.ts: 309ms, render: 65ms)
+ GET /portal/applications/new 200 in 325ms (compile: 6ms, proxy.ts: 266ms, render: 53ms)
+✓ Compiled in 138ms
+ GET /portal/applications/new 200 in 835ms (compile: 6ms, proxy.ts: 772ms, render: 58ms)
+ GET /portal/dashboard 200 in 977ms (compile: 7ms, proxy.ts: 650ms, render: 319ms)

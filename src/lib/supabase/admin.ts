@@ -13,10 +13,10 @@ export async function getOverviewStats() {
     await Promise.all([
       supabase.from('portal_profiles').select('id', { count: 'exact', head: true }).eq('role', 'student').gte('created_at', sevenDaysAgo),
       supabase.from('application_required_documents').select('id', { count: 'exact', head: true }).eq('status', 'uploaded'),
-      supabase.from('portal_applications').select('id', { count: 'exact', head: true }).eq('status', 'PAY_APPLICATION_FEES'),
-      supabase.from('portal_applications').select('id', { count: 'exact', head: true }).eq('status', 'PREPARE_FOR_INTERVIEW'),
-      supabase.from('portal_applications').select('id', { count: 'exact', head: true }).eq('status', 'PROCESS_VISA'),
-      supabase.from('portal_applications').select('id', { count: 'exact', head: true }),
+      supabase.from('applications').select('id', { count: 'exact', head: true }).eq('status', 'PAY_APPLICATION_FEES'),
+      supabase.from('applications').select('id', { count: 'exact', head: true }).eq('status', 'PREPARE_FOR_INTERVIEW'),
+      supabase.from('applications').select('id', { count: 'exact', head: true }).eq('status', 'PROCESS_VISA'),
+      supabase.from('applications').select('id', { count: 'exact', head: true }),
     ])
 
   return {
@@ -58,7 +58,7 @@ export async function getStudents(filters?: {
     .from('portal_profiles')
     .select(`
       id, full_name, email, phone, location, created_at,
-      portal_applications(id, status)
+      applications(id, status)
     `, { count: 'exact' })
     .eq('role', 'student')
     .order('created_at', { ascending: false })
@@ -72,7 +72,7 @@ export async function getStudents(filters?: {
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const students: AdminStudent[] = (data ?? []).map((row: any) => {
-    const apps = Array.isArray(row.portal_applications) ? row.portal_applications : []
+    const apps = Array.isArray(row.applications) ? row.applications : []
     const latestApp = apps[0] ?? null
     return {
       id: row.id,
@@ -104,7 +104,7 @@ export async function getStudentById(id: string) {
 export async function getApplicationDetails(id: string) {
   const supabase = await createClient()
   const { data } = await supabase
-    .from('portal_applications')
+    .from('applications')
     .select(`*, portal_profiles(full_name, email, phone)`)
     .eq('id', id)
     .single()

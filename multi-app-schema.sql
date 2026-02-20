@@ -469,11 +469,10 @@ CREATE OR REPLACE FUNCTION auto_populate_required_documents()
 RETURNS TRIGGER AS $$
 BEGIN
   IF NEW.qualification_level_id IS NOT NULL THEN
-    INSERT INTO application_required_documents (application_id, document_type_id, source, status)
+    INSERT INTO application_required_documents (application_id, document_type_id, status)
     SELECT
       NEW.id,
       qmd.document_type_id,
-      'auto_qualification',
       'pending'
     FROM qualification_mandatory_documents qmd
     WHERE qmd.qualification_level_id = NEW.qualification_level_id

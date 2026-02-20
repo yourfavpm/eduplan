@@ -8,7 +8,7 @@
 CREATE TABLE IF NOT EXISTS payments (
   id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
   user_id UUID NOT NULL REFERENCES portal_profiles(id) ON DELETE CASCADE,
-  application_id UUID REFERENCES portal_applications(id) ON DELETE SET NULL,
+  application_id UUID REFERENCES applications(id) ON DELETE SET NULL,
   type TEXT NOT NULL, -- 'application_fee' | 'tuition_deposit'
   amount NUMERIC(10,2),
   currency TEXT NOT NULL DEFAULT 'GBP',
@@ -27,7 +27,7 @@ CREATE POLICY "Admins can update payments" ON payments FOR UPDATE USING (is_admi
 -- ─── 2. admin_notes ───────────────────────────────────────
 CREATE TABLE IF NOT EXISTS admin_notes (
   id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
-  application_id UUID NOT NULL REFERENCES portal_applications(id) ON DELETE CASCADE,
+  application_id UUID NOT NULL REFERENCES applications(id) ON DELETE CASCADE,
   author_admin_id UUID NOT NULL REFERENCES portal_profiles(id) ON DELETE CASCADE,
   note TEXT NOT NULL,
   created_at TIMESTAMPTZ NOT NULL DEFAULT NOW()

@@ -37,7 +37,7 @@ CREATE POLICY "Admins can delete document types"
 -- Per-application checklist: admin assigns which doc types are needed
 CREATE TABLE IF NOT EXISTS application_required_documents (
   id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
-  application_id UUID NOT NULL REFERENCES portal_applications(id) ON DELETE CASCADE,
+  application_id UUID NOT NULL REFERENCES applications(id) ON DELETE CASCADE,
   document_type_id UUID NOT NULL REFERENCES document_types(id) ON DELETE CASCADE,
   status TEXT NOT NULL DEFAULT 'pending', -- pending | uploaded | approved | rejected
   rejection_reason TEXT,
@@ -52,7 +52,7 @@ CREATE POLICY "Students can view own required documents"
   ON application_required_documents FOR SELECT
   USING (
     EXISTS (
-      SELECT 1 FROM portal_applications a
+      SELECT 1 FROM applications a
       WHERE a.id = application_id AND a.user_id = auth.uid()
     )
   );
@@ -78,7 +78,7 @@ CREATE POLICY "Students can update own required document status"
   ON application_required_documents FOR UPDATE
   USING (
     EXISTS (
-      SELECT 1 FROM portal_applications a
+      SELECT 1 FROM applications a
       WHERE a.id = application_id AND a.user_id = auth.uid()
     )
   );
@@ -88,7 +88,7 @@ CREATE POLICY "Students can update own required document status"
 CREATE TABLE IF NOT EXISTS documents (
   id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
   user_id UUID NOT NULL REFERENCES portal_profiles(id) ON DELETE CASCADE,
-  application_id UUID REFERENCES portal_applications(id) ON DELETE SET NULL,
+  application_id UUID REFERENCES applications(id) ON DELETE SET NULL,
   document_type_id UUID NOT NULL REFERENCES document_types(id) ON DELETE CASCADE,
   required_document_id UUID REFERENCES application_required_documents(id) ON DELETE SET NULL,
   file_path TEXT NOT NULL,
@@ -148,12 +148,12 @@ BEGIN
 
   -- Get current application status
   SELECT status INTO v_current_status
-  FROM portal_applications
+  FROM applications
   WHERE id = v_app_id;
 
   -- Only advance if we're at INCOMPLETE_DOCUMENTS and all docs are submitted
   IF v_pending_count = 0 AND v_current_status = 'INCOMPLETE_DOCUMENTS' THEN
-    UPDATE portal_applications
+    UPDATE applications
     SET status = 'PAY_APPLICATION_FEES', updated_at = NOW()
     WHERE id = v_app_id;
   END IF;

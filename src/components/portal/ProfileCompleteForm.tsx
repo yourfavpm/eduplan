@@ -45,13 +45,13 @@ export default function ProfileCompleteForm({ userId, existingApplicationId, pre
     // Upsert application
     if (existingApplicationId) {
       const { error: updateErr } = await supabase
-        .from('portal_applications')
+        .from('applications')
         .update({ destination, preferred_university: preferred_university || null, proposed_course_1, proposed_course_2: proposed_course_2 || null, highest_qualification, updated_at: new Date().toISOString() })
         .eq('id', existingApplicationId)
       if (updateErr) { setError(updateErr.message); setLoading(false); return }
     } else {
       const { data: app, error: insertErr } = await supabase
-        .from('portal_applications')
+        .from('applications')
         .insert({ user_id: userId, destination, preferred_university: preferred_university || null, proposed_course_1, proposed_course_2: proposed_course_2 || null, highest_qualification, status: 'INCOMPLETE_DOCUMENTS' })
         .select()
         .single()
