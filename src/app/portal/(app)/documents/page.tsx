@@ -1,106 +1,127 @@
 import { createClient } from '@/lib/supabase/server'
 import { redirect } from 'next/navigation'
-import { getPortalProfile, getPortalApplication, getPortalDocuments } from '@/lib/supabase/portal'
-import DocumentRow from '@/components/portal/DocumentRow'
-import DocumentUploadModal from '@/components/portal/DocumentUploadModal'
+import { getUserApplications } from '@/lib/supabase/portal'
+import { getRequiredDocuments } from '@/lib/supabase/documents'
+import Link from 'next/link'
+import DocumentRequirementRow from '@/components/portal/DocumentRequirementRow'
 import type { Metadata } from 'next'
 
-export const metadata: Metadata = {
-  title: 'Documents | Student Portal — EduPlan360',
-}
+export const metadata: Metadata = { title: 'Documents | EduPlan360' }
 
-export default async function DocumentsPage() {
+export default async function DocumentsPage({
+  searchParams,
+}: {
+  searchParams: Promise<{ app?: string }>
+}) {
+  const { app: selectedAppId } = await searchParams
   const supabase = await createClient()
   const { data: { user } } = await supabase.auth.getUser()
   if (!user) redirect('/portal/sign-in')
 
-  const [profile, application, documents] = await Promise.all([
-    getPortalProfile(user.id),
-    getPortalApplication(user.id),
-    getPortalDocuments(user.id),
-  ])
+  const applications = await getUserApplications(user.id)
+  if (applications.length === 0) {
+    return (
+      <div className="max-w-2xl">
+        <div className="flex items-center gap-3 mb-6">
+          <Link href="/portal/dashboard" className="text-sm font-medium text-slate-500 hover:text-slate-800 transition-colors">
+            Dashboard
+          </Link>
+          <span className="text-slate-300">/</span>
+          <span className="text-sm font-medium text-slate-800">
+            Documents
+          </span>
+        </div>
+        <h1 className="text-2xl font-bold text-slate-900 mb-2">Documents</h1>
+        <p className="text-slate-400 text-sm mb-5">No applications yet.</p>
+        <a href="/portal/applications/new" className="inline-flex items-center gap-1.5 bg-blue-600 text-white px-4 py-2 rounded-xl text-sm font-semibold hover:bg-blue-700 transition-colors">+ Create Application</a>
+      </div>
+    )
+  }
 
-  if (!profile) redirect('/portal/sign-in')
+  const currentAppId = selectedAppId ?? applications[0].id
+  const selectedApp = applications.find(a => a.id === currentAppId) ?? applications[0]
+  const requiredDocs = await getRequiredDocuments(selectedApp.id)
+
+  const pending = requiredDocs.filter(d => d.status === 'pending')
+  const rejected = requiredDocs.filter(d => d.status === 'rejected')
+  const uploaded = requiredDocs.filter(d => d.status === 'uploaded')
+  const approved = requiredDocs.filter(d => d.status === 'approved')
 
   return (
-    <div className="p-6 md:p-8 max-w-3xl mx-auto">
-      {/* Header */}
-      <div className="flex items-start justify-between gap-4 mb-8">
-        <div>
-          <h1 className="text-2xl font-bold text-slate-900">Documents</h1>
-          <p className="text-slate-500 mt-1 text-sm">Upload and manage your application documents.</p>
+    <div className="max-w-2xl">
+      <div className="flex items-center gap-3 mb-6">
+        <Link href="/portal/dashboard" className="text-sm font-medium text-slate-500 hover:text-slate-800 transition-colors">
+          Dashboard
+        </Link>
+        <span className="text-slate-300">/</span>
+        <span className="text-sm font-medium text-slate-800">
+          Documents
+        </span>
+      </div>
+      <div className="mb-6">
+        <h1 className="text-2xl font-bold text-slate-900">Documents</h1>
+        <p className="text-slate-500 text-sm mt-1">Select an application to view its document checklist.</p>
+      </div>
+
+      {/* Application selector */}
+      <div className="mb-6">
+        <label className="block text-xs font-medium text-slate-600 mb-1.5">Application</label>
+        <div className="flex flex-wrap gap-2">
+          {applications.map(app => (
+            <a
+              key={app.id}
+              href={`/portal/documents?app=${app.id}`}
+              className={`px-4 py-2 rounded-xl text-sm font-medium border transition-colors ${
+                app.id === selectedApp.id
+                  ? 'bg-blue-600 text-white border-blue-600'
+                  : 'bg-white text-slate-600 border-slate-200 hover:border-blue-200 hover:text-blue-700'
+              }`}
+            >
+              {app.title || app.study_destination}
+            </a>
+          ))}
         </div>
-        <DocumentUploadModal
-          userId={user.id}
-          applicationId={application?.id}
-        />
       </div>
 
-      {/* Helper text */}
-      <div className="mb-5 px-4 py-3 bg-slate-50 border border-slate-100 rounded-xl flex gap-3 items-start">
-        <svg className="w-4 h-4 text-slate-400 mt-0.5 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
-        </svg>
-        <p className="text-xs text-slate-500 leading-relaxed">
-          Accepted formats: <strong>PDF, JPG, PNG</strong> · Max size: <strong>5MB</strong> per file. 
-          Documents are reviewed by your advisor within 1–2 business days.
-        </p>
+      {/* Stats */}
+      <div className="grid grid-cols-4 gap-3 mb-6">
+        {[
+          { label: 'Pending', count: pending.length, color: 'text-amber-600' },
+          { label: 'Rejected', count: rejected.length, color: 'text-red-600' },
+          { label: 'Uploaded', count: uploaded.length, color: 'text-blue-600' },
+          { label: 'Approved', count: approved.length, color: 'text-green-600' },
+        ].map(s => (
+          <div key={s.label} className="bg-white rounded-xl border border-slate-100 px-3 py-3 text-center">
+            <p className={`text-xl font-bold ${s.color}`}>{s.count}</p>
+            <p className="text-xs text-slate-400">{s.label}</p>
+          </div>
+        ))}
       </div>
 
-      {/* Document list */}
-      <div className="bg-white rounded-2xl border border-slate-100">
-        {documents.length === 0 ? (
-          <div className="py-16 text-center px-6">
-            <div className="w-14 h-14 bg-slate-100 rounded-2xl flex items-center justify-center mx-auto mb-4">
-              <svg className="w-7 h-7 text-slate-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
-              </svg>
-            </div>
-            <h3 className="text-slate-700 font-semibold mb-1">No documents uploaded yet</h3>
-            <p className="text-slate-400 text-sm">
-              Upload your academic transcript, passport, and other required documents to continue.
-            </p>
+      {/* Checklist */}
+      <div className="bg-white rounded-2xl border border-slate-100 overflow-hidden">
+        <div className="px-5 py-4 border-b border-slate-50">
+          <h2 className="text-sm font-semibold text-slate-800">
+            {selectedApp.title || selectedApp.study_destination} — Document Checklist
+          </h2>
+        </div>
+        {requiredDocs.length === 0 ? (
+          <div className="px-5 py-10 text-center">
+            <p className="text-slate-400 text-sm">No documents required for this application yet.</p>
           </div>
         ) : (
-          <div className="px-6 divide-y divide-slate-50">
-            {documents.map((doc) => (
-              <DocumentRow key={doc.id} document={doc} />
+          <div className="divide-y divide-slate-50">
+            {requiredDocs.map(doc => (
+              <DocumentRequirementRow
+                key={doc.id}
+                requiredDoc={doc}
+                userId={user.id}
+                applicationId={selectedApp.id}
+                onUploaded={() => {}}
+              />
             ))}
           </div>
         )}
-      </div>
-
-      {/* Required docs hint */}
-      <div className="mt-6">
-        <h2 className="text-sm font-semibold text-slate-500 uppercase tracking-wide mb-3">Required Documents</h2>
-        <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
-          {[
-            'Passport (data page)',
-            'Academic Transcript',
-            'Statement of Purpose',
-            'Reference Letter × 2',
-            'English Test Result (IELTS/TOEFL)',
-            'CV / Resume',
-          ].map(item => {
-            const uploaded = documents.some(d =>
-              item.toLowerCase().includes(d.doc_type.replace('_', ' '))
-            )
-            return (
-              <div key={item} className="flex items-center gap-2.5 text-sm text-slate-600">
-                <div className={`w-4 h-4 rounded-full flex items-center justify-center shrink-0 ${uploaded ? 'bg-green-100' : 'bg-slate-100'}`}>
-                  {uploaded ? (
-                    <svg className="w-2.5 h-2.5 text-green-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M5 13l4 4L19 7" />
-                    </svg>
-                  ) : (
-                    <div className="w-1.5 h-1.5 bg-slate-300 rounded-full" />
-                  )}
-                </div>
-                <span className={uploaded ? 'text-green-700' : 'text-slate-500'}>{item}</span>
-              </div>
-            )
-          })}
-        </div>
       </div>
     </div>
   )

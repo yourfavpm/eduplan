@@ -3,9 +3,10 @@
 import { createClient } from '@/lib/supabase/server'
 import type {
   PortalProfile,
-  PortalApplication,
-  PortalDocument,
-  PortalStatusHistory,
+  Application,
+  UniversityChoice,
+  CourseChoice,
+  QualificationLevel,
   ApplicationStatus,
 } from '@/types/portal'
 
@@ -13,14 +14,8 @@ import type {
 
 export async function getPortalProfile(userId: string): Promise<PortalProfile | null> {
   const supabase = await createClient()
-  const { data, error } = await supabase
-    .from('portal_profiles')
-    .select('*')
-    .eq('id', userId)
-    .single()
-
-  if (error) return null
-  return data as PortalProfile
+  const { data } = await supabase.from('portal_profiles').select('*').eq('id', userId).single()
+  return data as PortalProfile | null
 }
 
 export async function createPortalProfile(profile: {
@@ -44,11 +39,7 @@ export async function createPortalProfile(profile: {
     })
     .select()
     .single()
-
-  if (error) {
-    console.error('createPortalProfile error:', error)
-    return null
-  }
+  if (error) { console.error('createPortalProfile:', error); return null }
   return data as PortalProfile
 }
 
@@ -57,177 +48,157 @@ export async function updatePortalProfile(
   updates: Partial<Omit<PortalProfile, 'id' | 'created_at' | 'updated_at'>>
 ): Promise<boolean> {
   const supabase = await createClient()
-  const { error } = await supabase
-    .from('portal_profiles')
-    .update(updates)
-    .eq('id', userId)
-
-  if (error) {
-    console.error('updatePortalProfile error:', error)
-    return false
-  }
+  const { error } = await supabase.from('portal_profiles').update(updates).eq('id', userId)
+  if (error) { console.error('updatePortalProfile:', error); return false }
   return true
 }
 
-// ─── Application ──────────────────────────────────────────
+// ─── Qualification Levels ─────────────────────────────────
 
-export async function getPortalApplication(userId: string): Promise<PortalApplication | null> {
+export async function getQualificationLevels(): Promise<QualificationLevel[]> {
   const supabase = await createClient()
-  const { data, error } = await supabase
-    .from('portal_applications')
-    .select('*')
-    .eq('user_id', userId)
-    .order('created_at', { ascending: false })
-    .limit(1)
-    .single()
-
-  if (error) return null
-  return data as PortalApplication
+  const { data } = await supabase.from('qualification_levels').select('*').order('sort_order')
+  return (data ?? []) as QualificationLevel[]
 }
 
-export async function upsertPortalApplication(
-  userId: string,
-  fields: {
-    destination: string
-    preferred_university?: string
-    proposed_course_1: string
-    proposed_course_2?: string
-    highest_qualification: string
-  },
-  existingId?: string
-): Promise<PortalApplication | null> {
+// ─── Applications (multi-app) ────────────────────────────
+
+export async function getUserApplications(userId: string): Promise<Application[]> {
+  const supabase = await createClient()
+  const { data } = await supabase
+    .from('applications')
+    .select(`
+      *,
+      qualification_level:qualification_levels(*),
+      application_university_choices(
+        *, university_course_choices(*)
+      ),
+      application_required_documents(id, status)
+    `)
+    .eq('user_id', userId)
+    .order('created_at', { ascending: false })
+
+  if (!data) return []
+
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  return data.map((row: any) => {
+    const reqDocs = row.application_required_documents ?? []
+    const done = reqDocs.filter((d: { status: string }) => d.status === 'approved' || d.status === 'uploaded').length
+    return {
+      ...row,
+      qualification_level: Array.isArray(row.qualification_level) ? row.qualification_level[0] : row.qualification_level,
+      university_choices: (row.application_university_choices ?? []).map((uc: UniversityChoice & { university_course_choices?: CourseChoice[] }) => ({
+        ...uc,
+        course_choices: uc.university_course_choices ?? [],
+      })).sort((a: UniversityChoice, b: UniversityChoice) => a.priority - b.priority),
+      required_docs_total: reqDocs.length,
+      required_docs_done: done,
+    } as Application
+  })
+}
+
+export async function getApplicationById(id: string): Promise<Application | null> {
+  const supabase = await createClient()
+  const { data } = await supabase
+    .from('applications')
+    .select(`
+      *,
+      qualification_level:qualification_levels(*),
+      application_university_choices(
+        *, university_course_choices(*)
+      ),
+      application_required_documents(id, status)
+    `)
+    .eq('id', id)
+    .single()
+
+  if (!data) return null
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const row = data as any
+  const reqDocs = row.application_required_documents ?? []
+  return {
+    ...row,
+    qualification_level: Array.isArray(row.qualification_level) ? row.qualification_level[0] : row.qualification_level,
+    university_choices: (row.application_university_choices ?? []).map((uc: UniversityChoice & { university_course_choices?: CourseChoice[] }) => ({
+      ...uc,
+      course_choices: (uc.university_course_choices ?? []).sort((a: CourseChoice, b: CourseChoice) => a.priority - b.priority),
+    })).sort((a: UniversityChoice, b: UniversityChoice) => a.priority - b.priority),
+    required_docs_total: reqDocs.length,
+    required_docs_done: reqDocs.filter((d: { status: string }) => d.status === 'approved' || d.status === 'uploaded').length,
+  } as Application
+}
+
+export interface CreateApplicationInput {
+  userId: string
+  title?: string
+  study_destination: string
+  intake_season?: string
+  intake_year?: string
+  qualification_level_id: string
+  universities: {
+    university_name: string
+    university_country?: string
+    courses: string[]
+  }[]
+}
+
+export async function createApplication(input: CreateApplicationInput): Promise<Application | null> {
   const supabase = await createClient()
 
-  if (existingId) {
-    const { data, error } = await supabase
-      .from('portal_applications')
-      .update({ ...fields, updated_at: new Date().toISOString() })
-      .eq('id', existingId)
-      .select()
-      .single()
-    if (error) {
-      console.error('upsertPortalApplication update error:', error)
-      return null
-    }
-    return data as PortalApplication
-  }
-
-  const { data, error } = await supabase
-    .from('portal_applications')
+  // Insert application — the DB trigger auto-populates required_documents
+  const { data: app, error: appError } = await supabase
+    .from('applications')
     .insert({
-      user_id: userId,
-      ...fields,
-      status: 'INCOMPLETE_DOCUMENTS' as ApplicationStatus,
+      user_id: input.userId,
+      title: input.title?.trim() || null,
+      study_destination: input.study_destination,
+      intake_season: input.intake_season ?? null,
+      intake_year: input.intake_year ?? null,
+      qualification_level_id: input.qualification_level_id,
+      status: 'INCOMPLETE_DOCUMENTS',
     })
     .select()
     .single()
 
-  if (error) {
-    console.error('upsertPortalApplication insert error:', error)
-    return null
+  if (appError || !app) { console.error('createApplication:', appError); return null }
+
+  // Insert university choices + courses
+  for (let i = 0; i < Math.min(input.universities.length, 3); i++) {
+    const { university_name, university_country, courses } = input.universities[i]
+    const { data: uniChoice, error: uniError } = await supabase
+      .from('application_university_choices')
+      .insert({
+        application_id: app.id,
+        university_name,
+        university_country: university_country ?? null,
+        priority: (i + 1) as 1 | 2 | 3,
+      })
+      .select()
+      .single()
+
+    if (uniError || !uniChoice) { console.error('createApplication uni choice:', uniError); continue }
+
+    for (let j = 0; j < Math.min(courses.length, 2); j++) {
+      if (!courses[j]?.trim()) continue
+      await supabase.from('university_course_choices').insert({
+        university_choice_id: uniChoice.id,
+        course_name: courses[j].trim(),
+        priority: (j + 1) as 1 | 2,
+      })
+    }
   }
 
-  // Record in status history
-  await supabase.from('portal_status_history').insert({
-    application_id: data.id,
-    status: 'INCOMPLETE_DOCUMENTS',
-    note: 'Application created',
-    changed_by: userId,
-  })
-
-  return data as PortalApplication
-}
-
-// ─── Documents ───────────────────────────────────────────
-
-export async function getPortalDocuments(userId: string): Promise<PortalDocument[]> {
-  const supabase = await createClient()
-  const { data, error } = await supabase
-    .from('portal_documents')
-    .select('*')
-    .eq('user_id', userId)
-    .order('created_at', { ascending: false })
-
-  if (error) return []
-  return (data ?? []) as PortalDocument[]
-}
-
-export async function insertPortalDocument(doc: {
-  user_id: string
-  application_id?: string
-  doc_type: string
-  file_name: string
-  file_path: string
-  file_size?: number
-}): Promise<PortalDocument | null> {
-  const supabase = await createClient()
-  const { data, error } = await supabase
-    .from('portal_documents')
-    .insert({ ...doc, status: 'uploaded' })
-    .select()
-    .single()
-
-  if (error) {
-    console.error('insertPortalDocument error:', error)
-    return null
-  }
-  return data as PortalDocument
+  return getApplicationById(app.id)
 }
 
 // ─── Status History ───────────────────────────────────────
 
-export async function getStatusHistory(applicationId: string): Promise<PortalStatusHistory[]> {
+export async function getApplicationStatusHistory(applicationId: string) {
   const supabase = await createClient()
-  const { data, error } = await supabase
-    .from('portal_status_history')
-    .select('*')
+  const { data } = await supabase
+    .from('status_history')
+    .select(`*, actor:portal_profiles(full_name)`)
     .eq('application_id', applicationId)
-    .order('created_at', { ascending: true })
-
-  if (error) return []
-  return (data ?? []) as PortalStatusHistory[]
-}
-
-export async function updateApplicationStatus(
-  applicationId: string,
-  newStatus: ApplicationStatus,
-  note?: string,
-  adminId?: string
-): Promise<boolean> {
-  const supabase = await createClient()
-
-  const { error: updateErr } = await supabase
-    .from('portal_applications')
-    .update({ status: newStatus, updated_at: new Date().toISOString() })
-    .eq('id', applicationId)
-
-  if (updateErr) {
-    console.error('updateApplicationStatus error:', updateErr)
-    return false
-  }
-
-  await supabase.from('portal_status_history').insert({
-    application_id: applicationId,
-    status: newStatus,
-    note: note ?? null,
-    changed_by: adminId ?? null,
-  })
-
-  return true
-}
-
-// ─── Admin: list all applications ────────────────────────
-
-export async function getAllApplicationsForAdmin(): Promise<
-  (PortalApplication & { profile: PortalProfile })[]
-> {
-  const supabase = await createClient()
-  const { data, error } = await supabase
-    .from('portal_applications')
-    .select(`*, profile:portal_profiles(*)`)
     .order('created_at', { ascending: false })
-
-  if (error) return []
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  return (data ?? []) as any
+  return data ?? []
 }

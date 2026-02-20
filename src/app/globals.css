@@ -1,6 +1,11 @@
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
+@import url("https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap");
 
 @import "tailwindcss";
+@source "../app";
+@source "../components";
+@source "../hooks";
+@source "../lib";
+
 @import "tw-animate-css";
 @import "shadcn/tailwind.css";
 
@@ -13,52 +18,52 @@
 
 @theme inline {
   /* EduPlan360 Brand Colors */
-  --color-brand-50: #EEF2FF;
-  --color-brand-100: #E0E7FF;
-  --color-brand-200: #C7D2FE;
-  --color-brand-300: #A5B4FC;
-  --color-brand-400: #818CF8;
-  --color-brand-500: #3B5BFF;
-  --color-brand-600: #2447F2;
-  --color-brand-700: #0A1FB8;
+  --color-brand-50: #eef2ff;
+  --color-brand-100: #e0e7ff;
+  --color-brand-200: #c7d2fe;
+  --color-brand-300: #a5b4fc;
+  --color-brand-400: #818cf8;
+  --color-brand-500: #3b5bff;
+  --color-brand-600: #2447f2;
+  --color-brand-700: #0a1fb8;
   /* Primary anchor */
-  --color-brand-800: #081A98;
+  --color-brand-800: #081a98;
   --color-brand-900: #061572;
 
   /* Accent (Cyan) Colors */
-  --color-accent-50: #ECFEFF;
-  --color-accent-100: #CFFAFE;
-  --color-accent-200: #A5F3FC;
-  --color-accent-300: #67E8F9;
-  --color-accent-400: #22D3EE;
-  --color-accent-500: #00B3E6;
+  --color-accent-50: #ecfeff;
+  --color-accent-100: #cffafe;
+  --color-accent-200: #a5f3fc;
+  --color-accent-300: #67e8f9;
+  --color-accent-400: #22d3ee;
+  --color-accent-500: #00b3e6;
   /* Cyan accent */
-  --color-accent-600: #0891B2;
-  --color-accent-700: #0E7490;
-  --color-accent-800: #155E75;
-  --color-accent-900: #164E63;
+  --color-accent-600: #0891b2;
+  --color-accent-700: #0e7490;
+  --color-accent-800: #155e75;
+  --color-accent-900: #164e63;
 
   /* Semantic Colors */
-  --color-ink: #0F172A;
+  --color-ink: #0f172a;
   --color-muted: #475569;
-  --color-surface: #F8FAFC;
-  --color-border: #E2E8F0;
+  --color-surface: #f8fafc;
+  --color-border: #e2e8f0;
 
-  /* Maintain shadcn compatibility */
-  --color-background: oklch(1 0 0);
+  /* Maintain shadcn compatibility uses hex fallbacks instead of oklch to fix Safari bugs */
+  --color-background: #ffffff;
   --color-foreground: var(--color-ink);
   --color-primary: var(--color-brand-700);
-  --color-primary-foreground: oklch(1 0 0);
+  --color-primary-foreground: #ffffff;
   --color-secondary: var(--color-surface);
   --color-secondary-foreground: var(--color-ink);
   --color-muted-foreground: var(--color-muted);
   --color-accent-foreground: var(--color-accent-700);
-  --color-destructive: oklch(0.577 0.245 27.325);
+  --color-destructive: #ef4444; /* red-500 equivalent */
   --color-input: var(--color-border);
   --color-ring: var(--color-brand-500);
-  --color-card: oklch(1 0 0);
+  --color-card: #ffffff;
   --color-card-foreground: var(--color-ink);
-  --color-popover: oklch(1 0 0);
+  --color-popover: #ffffff;
   --color-popover-foreground: var(--color-ink);
 
   /* Custom Border Radius (Hybrid Corners) */
@@ -83,7 +88,7 @@
   --shadow-softer: 0 2px 10px rgba(15, 23, 42, 0.05);
 
   /* Typography */
-  --font-sans: var(--font-inter), 'Inter', system-ui, sans-serif;
+  --font-sans: var(--font-inter), "Inter", system-ui, sans-serif;
   --font-poppins: var(--font-poppins), sans-serif;
   --font-mono: ui-monospace, monospace;
 

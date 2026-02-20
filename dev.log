@@ -1,0 +1,289 @@
+
+> eduplan@0.1.0 dev
+> next dev
+
+▲ Next.js 16.1.6 (Turbopack)
+- Local:         http://localhost:3000
+- Network:       http://192.168.0.2:3000
+- Environments: .env.local
+
+✓ Starting...
+⚠ The "middleware" file convention is deprecated. Please use "proxy" instead. Learn more: https://nextjs.org/docs/messages/middleware-to-proxy
+Unhandled Rejection: Error: Both middleware file "./src/middleware.ts" and proxy file "./src/proxy.ts" are detected. Please use "./src/proxy.ts" only. Learn more: https://nextjs.org/docs/messages/middleware-to-proxy
+    at ignore-listed frames
+✓ Ready in 152.3s
+✓ Compiled in 41ms
+✓ Compiled in 1189ms
+ GET / 200 in 1768ms (compile: 1277ms, render: 491ms)
+ GET /portal/sign-in 200 in 1977ms (compile: 979ms, proxy.ts: 500ms, render: 498ms)
+ HEAD / 200 in 141ms (compile: 7ms, proxy.ts: 6ms, render: 128ms)
+ GET / 200 in 2.3s (compile: 5ms, proxy.ts: 2.1s, render: 131ms)
+ GET /portal/dashboard 200 in 2.0s (compile: 187ms, proxy.ts: 411ms, render: 1426ms)
+ GET /portal/documents 200 in 1505ms (compile: 31ms, proxy.ts: 723ms, render: 751ms)
+ GET /portal/sign-in 200 in 31ms (compile: 5ms, proxy.ts: 5ms, render: 20ms)
+ GET /admin/overview 200 in 3.5s (compile: 954ms, proxy.ts: 1126ms, render: 1438ms)
+ GET /admin/overview 200 in 3.8s (compile: 5ms, proxy.ts: 1260ms, render: 2.6s)
+ GET /admin/students 200 in 1922ms (compile: 467ms, proxy.ts: 1137ms, render: 319ms)
+✓ Compiled in 554ms
+ GET /portal/sign-in 200 in 480ms (compile: 316ms, proxy.ts: 8ms, render: 157ms)
+ GET /portal/sign-in 200 in 156ms (compile: 6ms, proxy.ts: 19ms, render: 132ms)
+ GET /portal/sign-in 200 in 159ms (compile: 8ms, proxy.ts: 10ms, render: 142ms)
+ GET /portal/sign-in 200 in 158ms (compile: 8ms, proxy.ts: 8ms, render: 142ms)
+ GET /portal/sign-in 200 in 111ms (compile: 9ms, proxy.ts: 5ms, render: 97ms)
+ GET /portal/sign-in 200 in 60ms (compile: 5ms, proxy.ts: 9ms, render: 45ms)
+ GET /admin/students 200 in 1657ms (compile: 97ms, proxy.ts: 1172ms, render: 387ms)
+ GET /admin/students 200 in 1410ms (compile: 12ms, proxy.ts: 1088ms, render: 310ms)
+ GET /admin/students 200 in 1416ms (compile: 50ms, proxy.ts: 1098ms, render: 268ms)
+ GET /admin/students 200 in 1411ms (compile: 22ms, proxy.ts: 1195ms, render: 194ms)
+ GET /admin/students 200 in 1426ms (compile: 12ms, proxy.ts: 1284ms, render: 130ms)
+ GET /admin/students 200 in 1424ms (compile: 54ms, proxy.ts: 1283ms, render: 88ms)
+ GET /portal/dashboard 200 in 2.1s (compile: 134ms, proxy.ts: 696ms, render: 1283ms)
+ GET /portal/dashboard 200 in 1484ms (compile: 8ms, proxy.ts: 554ms, render: 922ms)
+ GET /admin/students 200 in 2.2s (compile: 8ms, proxy.ts: 1249ms, render: 973ms)
+ GET /portal/applications 200 in 2.1s (compile: 492ms, proxy.ts: 961ms, render: 623ms)
+ GET /portal/applications/new 200 in 1481ms (compile: 588ms, proxy.ts: 269ms, render: 624ms)
+ POST /api/portal/applications 500 in 4.3s (compile: 655ms, proxy.ts: 847ms, render: 2.8s)
+ GET /portal/documents 200 in 1554ms (compile: 148ms, proxy.ts: 738ms, render: 668ms)
+ GET /portal/profile 200 in 2.5s (compile: 123ms, proxy.ts: 1419ms, render: 917ms)
+ GET /admin/students 200 in 2.7s (compile: 9ms, proxy.ts: 1582ms, render: 1069ms)
+ GET /portal/dashboard 200 in 2.9s (compile: 9ms, proxy.ts: 1225ms, render: 1641ms)
+ GET /admin/document-types 200 in 2.1s (compile: 487ms, proxy.ts: 1257ms, render: 311ms)
+getDocumentReviewQueue: {
+  code: 'PGRST200',
+  details: "Searched for a foreign key relationship between 'documents' and 'applications' in the schema 'public', but no matches were found.",
+  hint: "Perhaps you meant 'portal_applications' instead of 'applications'.",
+  message: "Could not find a relationship between 'documents' and 'applications' in the schema cache"
+}
+ GET /admin/documents 200 in 1971ms (compile: 471ms, proxy.ts: 1085ms, render: 415ms)
+ GET /admin/media 200 in 1605ms (compile: 440ms, proxy.ts: 877ms, render: 288ms)
+ GET /portal/applications/new 200 in 3.1s (compile: 10ms, proxy.ts: 1918ms, render: 1170ms)
+ GET /admin/media 200 in 2.3s (compile: 10ms, proxy.ts: 1054ms, render: 1187ms)
+✓ Compiled in 152ms
+ GET /admin/media 200 in 2.1s (compile: 12ms, proxy.ts: 1207ms, render: 926ms)
+✓ Compiled in 241ms
+ GET /admin/overview 200 in 2.5s (compile: 161ms, proxy.ts: 1265ms, render: 1027ms)
+ GET / 200 in 3.3s (compile: 84ms, proxy.ts: 2.8s, render: 367ms)
+ GET /portal/dashboard 200 in 2.0s (compile: 147ms, proxy.ts: 243ms, render: 1615ms)
+ GET /portal/sign-in 200 in 43ms (compile: 10ms, proxy.ts: 4ms, render: 29ms)
+ GET /admin/overview 200 in 1792ms (compile: 12ms, proxy.ts: 963ms, render: 817ms)
+ GET /admin/overview 200 in 2.4s (compile: 5ms, proxy.ts: 1328ms, render: 1104ms)
+ GET /portal/sign-in 200 in 34ms (compile: 4ms, proxy.ts: 10ms, render: 21ms)
+ GET /admin/overview 200 in 2.1s (compile: 6ms, proxy.ts: 933ms, render: 1123ms)
+ GET /admin/overview 200 in 3.7s (compile: 4ms, proxy.ts: 1264ms, render: 2.4s)
+ GET /admin/applications 200 in 2.0s (compile: 50ms, proxy.ts: 1097ms, render: 874ms)
+ GET /admin/applications/0f9f910c-870b-4a5d-bed2-c5c4a7da0119 200 in 3.3s (compile: 1263ms, proxy.ts: 834ms, render: 1219ms)
+ GET /admin/students/cee8275b-d5bf-4367-8a54-8ccaf7c8f382 200 in 2.5s (compile: 976ms, proxy.ts: 857ms, render: 695ms)
+ GET /admin/applications/0f9f910c-870b-4a5d-bed2-c5c4a7da0119?tab=required-docs 200 in 2.3s (compile: 19ms, proxy.ts: 1108ms, render: 1157ms)
+ POST /api/admin/applications/0f9f910c-870b-4a5d-bed2-c5c4a7da0119/required-documents 405 in 1402ms (compile: 783ms, proxy.ts: 605ms, render: 14ms)
+ GET /admin/applications/0f9f910c-870b-4a5d-bed2-c5c4a7da0119?tab=timeline 200 in 1969ms (compile: 14ms, proxy.ts: 910ms, render: 1046ms)
+ GET /admin/applications/0f9f910c-870b-4a5d-bed2-c5c4a7da0119?tab=payments 200 in 1892ms (compile: 10ms, proxy.ts: 729ms, render: 1153ms)
+ GET /admin/applications/0f9f910c-870b-4a5d-bed2-c5c4a7da0119?tab=notes 200 in 1818ms (compile: 11ms, proxy.ts: 645ms, render: 1162ms)
+ GET /admin/applications/0f9f910c-870b-4a5d-bed2-c5c4a7da0119?tab=documents 200 in 1528ms (compile: 9ms, proxy.ts: 653ms, render: 867ms)
+ GET /admin/applications/0f9f910c-870b-4a5d-bed2-c5c4a7da0119?tab=required-docs 200 in 2.4s (compile: 14ms, proxy.ts: 876ms, render: 1487ms)
+ GET /admin/overview 200 in 2.1s (compile: 9ms, proxy.ts: 1102ms, render: 981ms)
+ GET /admin/overview 200 in 1886ms (compile: 7ms, proxy.ts: 998ms, render: 881ms)
+ GET /admin/homepage 200 in 1848ms (compile: 560ms, proxy.ts: 938ms, render: 350ms)
+ GET /admin/destinations 200 in 1920ms (compile: 547ms, proxy.ts: 932ms, render: 441ms)
+ GET /admin/pages 200 in 1307ms (compile: 593ms, proxy.ts: 674ms, render: 40ms)
+ GET /admin/destinations 200 in 1053ms (compile: 3ms, proxy.ts: 689ms, render: 360ms)
+ GET /admin/document-types 200 in 1103ms (compile: 7ms, proxy.ts: 670ms, render: 425ms)
+ PATCH /api/admin/document-types/2b0a4e44-5cc3-4060-9357-53f5e9a28a91 200 in 2.1s (compile: 941ms, proxy.ts: 743ms, render: 370ms)
+ GET /admin/qualification-levels 200 in 1986ms (compile: 534ms, proxy.ts: 1044ms, render: 408ms)
+ GET /admin/qualification-mandatory-docs 200 in 2.1s (compile: 483ms, proxy.ts: 905ms, render: 663ms)
+ POST /api/admin/qualification-mandatory-docs 200 in 1796ms (compile: 178ms, proxy.ts: 734ms, render: 885ms)
+ POST /api/admin/qualification-mandatory-docs 200 in 1170ms (compile: 4ms, proxy.ts: 282ms, render: 884ms)
+ POST /api/admin/qualification-mandatory-docs 200 in 1617ms (compile: 6ms, proxy.ts: 838ms, render: 773ms)
+ POST /api/admin/qualification-mandatory-docs 200 in 1092ms (compile: 4ms, proxy.ts: 257ms, render: 831ms)
+TypeError: fetch failed
+    at ignore-listed frames {
+  [cause]: Error [ConnectTimeoutError]: Connect Timeout Error (attempted address: iddzdbdaovvkiydgqthf.supabase.co:443, timeout: 10000ms)
+      at ignore-listed frames {
+    code: 'UND_ERR_CONNECT_TIMEOUT'
+  }
+}
+TypeError: fetch failed
+    at ignore-listed frames {
+  [cause]: Error [ConnectTimeoutError]: Connect Timeout Error (attempted address: iddzdbdaovvkiydgqthf.supabase.co:443, timeout: 10000ms)
+      at ignore-listed frames {
+    code: 'UND_ERR_CONNECT_TIMEOUT'
+  }
+}
+ GET /portal/sign-in 200 in 10.6s (compile: 5ms, proxy.ts: 10.5s, render: 24ms)
+TypeError: fetch failed
+    at ignore-listed frames {
+  [cause]: Error [ConnectTimeoutError]: Connect Timeout Error (attempted address: iddzdbdaovvkiydgqthf.supabase.co:443, timeout: 10000ms)
+      at ignore-listed frames {
+    code: 'UND_ERR_CONNECT_TIMEOUT'
+  }
+}
+TypeError: fetch failed
+    at ignore-listed frames {
+  [cause]: Error [ConnectTimeoutError]: Connect Timeout Error (attempted address: iddzdbdaovvkiydgqthf.supabase.co:443, timeout: 10000ms)
+      at ignore-listed frames {
+    code: 'UND_ERR_CONNECT_TIMEOUT'
+  }
+}
+ GET /portal/sign-in 200 in 10.6s (compile: 10ms, proxy.ts: 10.5s, render: 21ms)
+TypeError: fetch failed
+    at ignore-listed frames {
+  [cause]: Error [ConnectTimeoutError]: Connect Timeout Error (attempted address: iddzdbdaovvkiydgqthf.supabase.co:443, timeout: 10000ms)
+      at ignore-listed frames {
+    code: 'UND_ERR_CONNECT_TIMEOUT'
+  }
+}
+TypeError: fetch failed
+    at ignore-listed frames {
+  [cause]: Error [ConnectTimeoutError]: Connect Timeout Error (attempted address: iddzdbdaovvkiydgqthf.supabase.co:443, timeout: 10000ms)
+      at ignore-listed frames {
+    code: 'UND_ERR_CONNECT_TIMEOUT'
+  }
+}
+TypeError: fetch failed
+    at ignore-listed frames {
+  [cause]: Error [ConnectTimeoutError]: Connect Timeout Error (attempted address: iddzdbdaovvkiydgqthf.supabase.co:443, timeout: 10000ms)
+      at ignore-listed frames {
+    code: 'UND_ERR_CONNECT_TIMEOUT'
+  }
+}
+ GET /portal/sign-in 200 in 10.5s (compile: 5ms, proxy.ts: 10.5s, render: 18ms)
+TypeError: fetch failed
+    at ignore-listed frames {
+  [cause]: Error [ConnectTimeoutError]: Connect Timeout Error (attempted address: iddzdbdaovvkiydgqthf.supabase.co:443, timeout: 10000ms)
+      at ignore-listed frames {
+    code: 'UND_ERR_CONNECT_TIMEOUT'
+  }
+}
+ GET /portal/sign-in 200 in 10.5s (compile: 9ms, proxy.ts: 10.5s, render: 21ms)
+ GET /portal/dashboard 200 in 6.4s (compile: 11ms, proxy.ts: 1156ms, render: 5.2s)
+ GET /portal/dashboard 200 in 5.9s (compile: 6ms, proxy.ts: 2.7s, render: 3.2s)
+ GET /portal/applications/new 200 in 1981ms (compile: 120ms, proxy.ts: 967ms, render: 894ms)
+✓ Compiled in 211ms
+✓ Compiled in 87ms
+ POST /api/portal/applications 500 in 3.5s (compile: 7ms, proxy.ts: 588ms, render: 2.9s)
+ POST /api/portal/applications 500 in 4.1s (compile: 9ms, proxy.ts: 367ms, render: 3.7s)
+ POST /api/portal/applications 500 in 3.9s (compile: 6ms, proxy.ts: 893ms, render: 3.0s)
+ GET /portal/applications/new 200 in 2.3s (compile: 156ms, proxy.ts: 426ms, render: 1714ms)
+ POST /api/portal/applications 500 in 3.3s (compile: 5ms, proxy.ts: 993ms, render: 2.3s)
+ GET /portal/profile 200 in 1943ms (compile: 165ms, proxy.ts: 813ms, render: 966ms)
+ GET /portal/sign-in 200 in 51ms (compile: 9ms, proxy.ts: 7ms, render: 35ms)
+ GET /portal/sign-up 200 in 334ms (compile: 293ms, proxy.ts: 6ms, render: 35ms)
+✓ Compiled in 108ms
+ GET /portal/sign-up 200 in 57ms (compile: 6ms, proxy.ts: 8ms, render: 43ms)
+ GET /portal/dashboard 200 in 2.4s (compile: 149ms, proxy.ts: 292ms, render: 2.0s)
+ GET /portal/sign-up 200 in 80ms (compile: 27ms, proxy.ts: 5ms, render: 48ms)
+✓ Compiled in 335ms
+ GET /portal/dashboard 200 in 1167ms (compile: 12ms, proxy.ts: 742ms, render: 413ms)
+ GET /portal/sign-in 200 in 32ms (compile: 5ms, proxy.ts: 5ms, render: 22ms)
+ GET /portal/sign-up 200 in 29ms (compile: 7ms, proxy.ts: 5ms, render: 18ms)
+ GET /portal/verify-email 200 in 283ms (compile: 256ms, proxy.ts: 6ms, render: 21ms)
+ GET /portal/sign-in 200 in 27ms (compile: 4ms, proxy.ts: 6ms, render: 17ms)
+ GET /portal/sign-up 200 in 28ms (compile: 4ms, proxy.ts: 6ms, render: 18ms)
+ GET /portal/sign-up 200 in 377ms (compile: 4ms, proxy.ts: 7ms, render: 367ms)
+ GET / 200 in 287ms (compile: 16ms, proxy.ts: 8ms, render: 263ms)
+ GET /images/advisors/advisor-2.jpg 404 in 379ms (compile: 155ms, render: 224ms)
+ GET /images/advisors/advisor-3.jpg 404 in 384ms (compile: 175ms, render: 209ms)
+ GET /images/advisors/advisor-1.jpg 404 in 398ms (compile: 205ms, render: 193ms)
+⨯ The requested resource isn't a valid image for /images/advisors/advisor-1.jpg received null
+⨯ The requested resource isn't a valid image for /images/advisors/advisor-2.jpg received null
+⨯ The requested resource isn't a valid image for /images/advisors/advisor-3.jpg received null
+ GET /signup 404 in 88ms (compile: 7ms, proxy.ts: 14ms, render: 67ms)
+ GET / 200 in 156ms (compile: 10ms, proxy.ts: 4ms, render: 142ms)
+ GET /signup 404 in 85ms (compile: 11ms, proxy.ts: 9ms, render: 64ms)
+ GET / 200 in 141ms (compile: 4ms, proxy.ts: 4ms, render: 134ms)
+ GET /portal/sign-up 200 in 228ms (compile: 22ms, proxy.ts: 4ms, render: 201ms)
+ GET /portal/sign-in 200 in 41ms (compile: 7ms, proxy.ts: 6ms, render: 28ms)
+ GET /portal/dashboard 200 in 1441ms (compile: 5ms, proxy.ts: 534ms, render: 902ms)
+ GET /portal/dashboard 200 in 2.5s (compile: 10ms, proxy.ts: 751ms, render: 1699ms)
+ GET /portal/applications/new 200 in 1827ms (compile: 15ms, proxy.ts: 978ms, render: 833ms)
+✓ Compiled in 2.5s
+✓ Compiled in 123ms
+✓ Compiled in 3.4s
+✓ Compiled in 768ms
+ GET /portal/applications/new 200 in 2.1s (compile: 344ms, proxy.ts: 1485ms, render: 260ms)
+ GET /portal/applications/new 200 in 679ms (compile: 20ms, proxy.ts: 589ms, render: 70ms)
+ GET /portal/applications/new 200 in 2.4s (compile: 184ms, proxy.ts: 1165ms, render: 1052ms)
+ GET /portal/dashboard 200 in 2.6s (compile: 220ms, proxy.ts: 1295ms, render: 1055ms)
+✓ Compiled in 104ms
+ GET /portal/applications/new 200 in 1000ms (compile: 8ms, proxy.ts: 926ms, render: 65ms)
+ GET /portal/dashboard 200 in 1118ms (compile: 7ms, proxy.ts: 732ms, render: 378ms)
+✓ Compiled in 140ms
+ GET /portal/applications/new 200 in 327ms (compile: 4ms, proxy.ts: 264ms, render: 59ms)
+ GET /portal/dashboard 200 in 688ms (compile: 5ms, proxy.ts: 245ms, render: 438ms)
+✓ Compiled in 132ms
+ GET /portal/applications/new 200 in 399ms (compile: 5ms, proxy.ts: 249ms, render: 145ms)
+ GET /portal/dashboard 200 in 562ms (compile: 5ms, proxy.ts: 261ms, render: 296ms)
+✓ Compiled in 119ms
+ GET /portal/dashboard 200 in 2.1s (compile: 9ms, proxy.ts: 791ms, render: 1259ms)
+✓ Compiled in 70ms
+ GET /portal/dashboard 200 in 819ms (compile: 5ms, proxy.ts: 372ms, render: 442ms)
+ GET /portal/dashboard 200 in 1076ms (compile: 7ms, proxy.ts: 717ms, render: 351ms)
+✓ Compiled in 71ms
+ GET /portal/dashboard 200 in 976ms (compile: 6ms, proxy.ts: 565ms, render: 405ms)
+ GET /portal/dashboard 200 in 977ms (compile: 4ms, proxy.ts: 597ms, render: 377ms)
+ GET /portal/profile 200 in 2.7s (compile: 393ms, proxy.ts: 1113ms, render: 1163ms)
+ GET /portal/dashboard 200 in 1704ms (compile: 11ms, proxy.ts: 392ms, render: 1301ms)
+ GET /portal/profile 200 in 1346ms (compile: 9ms, proxy.ts: 545ms, render: 792ms)
+ GET /portal/dashboard 200 in 1700ms (compile: 7ms, proxy.ts: 315ms, render: 1378ms)
+✓ Compiled in 91ms
+ GET /portal/sign-in 200 in 379ms (compile: 254ms, proxy.ts: 83ms, render: 42ms)
+ GET /portal/sign-up 200 in 279ms (compile: 227ms, proxy.ts: 6ms, render: 46ms)
+ GET /portal/sign-in 200 in 39ms (compile: 7ms, proxy.ts: 8ms, render: 24ms)
+ GET /portal/dashboard 200 in 2.1s (compile: 12ms, proxy.ts: 753ms, render: 1343ms)
+ GET /portal/dashboard 200 in 1688ms (compile: 5ms, proxy.ts: 640ms, render: 1043ms)
+ GET /portal/profile 200 in 1102ms (compile: 11ms, proxy.ts: 319ms, render: 771ms)
+ GET /portal/reset-password 200 in 996ms (compile: 598ms, proxy.ts: 365ms, render: 32ms)
+✓ Compiled in 308ms
+ GET /portal/reset-password 200 in 1348ms (compile: 89ms, proxy.ts: 736ms, render: 523ms)
+ GET /portal/reset-password 200 in 500ms (compile: 8ms, proxy.ts: 291ms, render: 200ms)
+ GET /portal/dashboard 200 in 1337ms (compile: 133ms, proxy.ts: 823ms, render: 382ms)
+ GET /portal/reset-password 200 in 286ms (compile: 5ms, proxy.ts: 243ms, render: 38ms)
+ GET /portal/reset-password 200 in 412ms (compile: 9ms, proxy.ts: 347ms, render: 56ms)
+ GET /portal/dashboard 200 in 643ms (compile: 4ms, proxy.ts: 258ms, render: 381ms)
+ GET /portal/reset-password 200 in 781ms (compile: 10ms, proxy.ts: 386ms, render: 385ms)
+ GET /portal/dashboard 200 in 1279ms (compile: 7ms, proxy.ts: 719ms, render: 553ms)
+ GET /portal/dashboard 200 in 1284ms (compile: 33ms, proxy.ts: 730ms, render: 520ms)
+ GET /portal/dashboard 200 in 1430ms (compile: 87ms, proxy.ts: 834ms, render: 509ms)
+ GET /portal/dashboard 200 in 1331ms (compile: 114ms, proxy.ts: 731ms, render: 486ms)
+ GET /portal/dashboard 200 in 1375ms (compile: 58ms, proxy.ts: 740ms, render: 577ms)
+ GET /portal/dashboard 200 in 868ms (compile: 8ms, proxy.ts: 548ms, render: 312ms)
+ GET /portal/reset-password 200 in 444ms (compile: 4ms, proxy.ts: 393ms, render: 47ms)
+ GET /portal/reset-password 200 in 765ms (compile: 210ms, proxy.ts: 495ms, render: 60ms)
+ GET /portal/dashboard 200 in 1049ms (compile: 8ms, proxy.ts: 594ms, render: 446ms)
+ GET /portal/dashboard 200 in 944ms (compile: 60ms, proxy.ts: 489ms, render: 396ms)
+ GET /portal/dashboard 200 in 899ms (compile: 65ms, proxy.ts: 497ms, render: 337ms)
+ GET /portal/dashboard 200 in 988ms (compile: 66ms, proxy.ts: 561ms, render: 361ms)
+ GET /portal/dashboard 200 in 985ms (compile: 86ms, proxy.ts: 525ms, render: 375ms)
+ GET /portal/dashboard 200 in 1397ms (compile: 110ms, proxy.ts: 522ms, render: 765ms)
+ GET /portal/reset-password 200 in 665ms (compile: 53ms, proxy.ts: 353ms, render: 259ms)
+ GET /portal/dashboard 200 in 627ms (compile: 5ms, proxy.ts: 241ms, render: 380ms)
+ GET /portal/dashboard 200 in 622ms (compile: 10ms, proxy.ts: 299ms, render: 313ms)
+ GET /portal/dashboard 200 in 682ms (compile: 30ms, proxy.ts: 303ms, render: 349ms)
+ GET /portal/reset-password 200 in 424ms (compile: 5ms, proxy.ts: 382ms, render: 36ms)
+ GET /portal/dashboard 200 in 889ms (compile: 10ms, proxy.ts: 391ms, render: 489ms)
+ GET /portal/dashboard 200 in 918ms (compile: 149ms, proxy.ts: 271ms, render: 498ms)
+ GET /portal/dashboard 200 in 572ms (compile: 4ms, proxy.ts: 231ms, render: 337ms)
+ GET /portal/reset-password 200 in 369ms (compile: 7ms, proxy.ts: 270ms, render: 93ms)
+ GET /portal/dashboard 200 in 628ms (compile: 7ms, proxy.ts: 259ms, render: 362ms)
+ GET /portal/dashboard 200 in 678ms (compile: 9ms, proxy.ts: 328ms, render: 341ms)
+ GET /portal/reset-password 200 in 362ms (compile: 6ms, proxy.ts: 312ms, render: 43ms)
+ GET /portal/dashboard 200 in 845ms (compile: 30ms, proxy.ts: 265ms, render: 550ms)
+ GET /portal/dashboard 200 in 773ms (compile: 6ms, proxy.ts: 462ms, render: 305ms)
+ GET /portal/reset-password 200 in 260ms (compile: 3ms, proxy.ts: 229ms, render: 28ms)
+ GET /portal/reset-password 200 in 296ms (compile: 5ms, proxy.ts: 256ms, render: 35ms)
+ GET /portal/reset-password 200 in 295ms (compile: 5ms, proxy.ts: 258ms, render: 31ms)
+ GET /portal/reset-password 200 in 307ms (compile: 5ms, proxy.ts: 266ms, render: 36ms)
+ GET /portal/reset-password 200 in 281ms (compile: 4ms, proxy.ts: 246ms, render: 31ms)
+ GET /portal/reset-password 200 in 293ms (compile: 4ms, proxy.ts: 258ms, render: 31ms)
+ GET /portal/reset-password 200 in 315ms (compile: 5ms, proxy.ts: 277ms, render: 33ms)
+ GET /portal/reset-password 200 in 313ms (compile: 6ms, proxy.ts: 251ms, render: 56ms)
+ GET /portal/reset-password 200 in 319ms (compile: 4ms, proxy.ts: 277ms, render: 38ms)
+ GET /portal/reset-password 200 in 377ms (compile: 4ms, proxy.ts: 286ms, render: 87ms)
+ GET /portal/reset-password 200 in 305ms (compile: 5ms, proxy.ts: 264ms, render: 36ms)
+ GET /portal/reset-password 200 in 318ms (compile: 7ms, proxy.ts: 246ms, render: 65ms)
+ GET /portal/reset-password 200 in 290ms (compile: 5ms, proxy.ts: 260ms, render: 25ms)
+✓ Compiled in 129ms
+ GET /portal/profile 200 in 1959ms (compile: 154ms, proxy.ts: 755ms, render: 1051ms)
+ GET /portal/profile 200 in 1151ms (compile: 6ms, proxy.ts: 240ms, render: 905ms)
+ GET /portal/dashboard 200 in 1053ms (compile: 9ms, proxy.ts: 254ms, render: 790ms)
+ GET /portal/applications/new 200 in 1619ms (compile: 152ms, proxy.ts: 752ms, render: 715ms)
+ GET /portal/applications 200 in 1739ms (compile: 290ms, proxy.ts: 732ms, render: 717ms)

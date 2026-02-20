@@ -145,7 +145,7 @@ export function Navbar() {
                             href="/portal/sign-in"
                             className="text-white/90 hover:text-white transition-calm text-[10px] font-bold uppercase tracking-wide"
                         >
-                            Track Application
+                            Login
                         </Link>
                     </div>
 
@@ -246,7 +246,7 @@ export function Navbar() {
                                             className="block bg-brand-700 text-white hover:bg-brand-800 rounded-lg transition-colors font-medium py-3 px-4 text-sm text-center shadow-sm"
                                             onClick={() => setIsMobileMenuOpen(false)}
                                         >
-                                            Track Application
+                                            Login
                                         </Link>
                                     </div>
                                 </motion.div>

@@ -1,7 +1,7 @@
 "use client";
 
 import Image from 'next/image';
-import { ArrowRight, MessageCircle } from 'lucide-react';
+import { ArrowRight } from 'lucide-react';
 
 export function FinalCTASection() {
     return (
@@ -13,7 +13,7 @@ export function FinalCTASection() {
                         {/* Left: Content */}
                         <div className="flex flex-col justify-center">
                             <h2 className="font-semibold text-ink mb-8 relative inline-block">
-                                Let's Build Your Study Abroad Plan
+                                Let&apos;s Build Your Study Abroad Plan
                                 <div className="absolute -bottom-3 left-0 w-1/2 h-1 bg-brand-500 rounded-full" />
                             </h2>
 
@@ -24,7 +24,7 @@ export function FinalCTASection() {
                             {/* CTA */}
                             <div>
                                 <button
-                                    onClick={() => window.location.href = '/signup'}
+                                    onClick={() => window.location.href = '/portal/sign-up'}
                                     className="group inline-flex items-center justify-center gap-2 bg-brand-700 text-white px-6 py-3 rounded-full font-medium hover:bg-brand-800 transition-colors active:scale-[0.98]"
                                 >
                                     <span>Create Student Account</span>
@@ -36,7 +36,7 @@ export function FinalCTASection() {
                         {/* Right: Image with Organic Shape */}
                         <div className="relative h-[300px] lg:h-[500px]">
                             {/* Organic Blob Background */}
-                            <div className="absolute inset-0 bg-gradient-to-br from-brand-100 to-accent-100"
+                            <div className="absolute inset-0 bg-linear-to-br from-brand-100 to-accent-100"
                                 style={{
                                     clipPath: 'polygon(0% 15%, 15% 0%, 85% 0%, 100% 15%, 100% 85%, 85% 100%, 15% 100%, 0% 85%)',
                                     borderRadius: '60% 40% 30% 70% / 60% 30% 70% 40%'
@@ -56,7 +56,7 @@ export function FinalCTASection() {
                                     className="object-cover"
                                     sizes="(max-width: 1024px) 100vw, 50vw"
                                 />
-                                <div className="absolute inset-0 bg-gradient-to-br from-brand-700/20 to-transparent"></div>
+                                <div className="absolute inset-0 bg-linear-to-br from-brand-700/20 to-transparent"></div>
                             </div>
                         </div>
                     </div>

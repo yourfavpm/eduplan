@@ -23,7 +23,7 @@ export default function SignInPage() {
     const password = (form.elements.namedItem('password') as HTMLInputElement).value
 
     const supabase = createClient()
-    const { data, error: signInError } = await supabase.auth.signInWithPassword({ email, password })
+    const { data: authData, error: signInError } = await supabase.auth.signInWithPassword({ email, password })
 
     if (signInError) {
       setError('Invalid email or password. Please try again.')
@@ -31,12 +31,18 @@ export default function SignInPage() {
       return
     }
 
-    if (!data.user.email_confirmed_at) {
-      router.push('/portal/verify-email')
-      return
-    }
+    // Fetch role to route admin to admin portal, students to student portal
+    const { data: profile } = await supabase
+      .from('portal_profiles')
+      .select('role')
+      .eq('id', authData.user.id)
+      .single()
 
-    router.push('/portal/dashboard')
+    if (profile?.role === 'admin') {
+      router.push('/admin/overview')
+    } else {
+      router.push('/portal/dashboard')
+    }
     router.refresh()
   }
 
@@ -56,7 +62,7 @@ export default function SignInPage() {
             />
           </div>
           <h1 className="text-2xl font-bold text-slate-900">Welcome back</h1>
-          <p className="text-slate-500 mt-1 text-sm">Sign in to your student portal</p>
+          <p className="text-slate-500 mt-1 text-sm">Sign in to your portal</p>
         </div>
 
         <div className="bg-white rounded-2xl shadow-sm border border-slate-100 p-8">

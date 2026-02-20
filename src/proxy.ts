@@ -2,7 +2,14 @@ import { createServerClient } from '@supabase/ssr'
 import { NextResponse, type NextRequest } from 'next/server'
 
 export async function proxy(request: NextRequest) {
-  let supabaseResponse = NextResponse.next({ request })
+  const requestHeaders = new Headers(request.headers)
+  requestHeaders.set('x-pathname', request.nextUrl.pathname)
+
+  let supabaseResponse = NextResponse.next({
+    request: {
+      headers: requestHeaders,
+    },
+  })
 
   const supabase = createServerClient(
     process.env.NEXT_PUBLIC_SUPABASE_URL!,
@@ -47,14 +54,8 @@ export async function proxy(request: NextRequest) {
       return NextResponse.redirect(signIn)
     }
 
-    // If authenticated but email not confirmed, only allow verify page
-    if (user && !user.email_confirmed_at && !pathname.startsWith('/portal/verify-email')) {
-      const verify = new URL('/portal/verify-email', request.url)
-      return NextResponse.redirect(verify)
-    }
-
-    // If authenticated and on auth page, go to dashboard
-    if (user && user.email_confirmed_at && isAuthPage) {
+    // If authenticated and on auth page (except reset-password), go to dashboard
+    if (user && isAuthPage && !pathname.startsWith('/portal/reset-password')) {
       const dashboard = new URL('/portal/dashboard', request.url)
       return NextResponse.redirect(dashboard)
     }
@@ -84,8 +85,6 @@ export async function proxy(request: NextRequest) {
 }
 
 export const config = {
-  matcher: [
-    '/portal/:path*',
-    '/admin/:path*',
-  ],
+  // Run on all routes except Next.js internals and static files
+  matcher: ['/((?!_next/static|_next/image|favicon.ico|.*\\.(?:svg|png|jpg|jpeg|gif|webp)$).*)'],
 }

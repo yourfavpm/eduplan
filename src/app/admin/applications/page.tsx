@@ -1,6 +1,6 @@
 import { createClient } from '@/lib/supabase/server'
 import { redirect } from 'next/navigation'
-import StatusUpdateDropdown from '@/components/portal/StatusUpdateDropdown'
+import Link from 'next/link'
 import StatusBadge from '@/components/portal/StatusBadge'
 import type { Metadata } from 'next'
 import type { ApplicationStatus } from '@/types/portal'
@@ -51,12 +51,22 @@ export default async function AdminApplicationsPage() {
 
   return (
     <div>
-      <div className="mb-8">
-        <h1 className="text-2xl font-bold text-slate-900">Student Applications</h1>
-        <p className="text-slate-500 mt-1 text-sm">
-          {apps.length} application{apps.length !== 1 ? 's' : ''} total.
-          Update status to trigger student-facing progress.
-        </p>
+      {/* Header + nav */}
+      <div className="flex items-start justify-between gap-4 mb-8 flex-wrap">
+        <div>
+          <h1 className="text-2xl font-bold text-slate-900">Student Applications</h1>
+          <p className="text-slate-500 mt-1 text-sm">
+            {apps.length} application{apps.length !== 1 ? 's' : ''} total. Click an application to manage required documents.
+          </p>
+        </div>
+        <div className="flex gap-3">
+          <Link href="/admin/document-types" className="text-sm font-medium text-slate-600 border border-slate-200 px-3 py-2 rounded-lg hover:bg-slate-50 transition-colors">
+            Document Types
+          </Link>
+          <Link href="/admin/documents" className="text-sm font-medium text-slate-600 border border-slate-200 px-3 py-2 rounded-lg hover:bg-slate-50 transition-colors">
+            Review Queue
+          </Link>
+        </div>
       </div>
 
       {apps.length === 0 ? (
@@ -66,11 +76,11 @@ export default async function AdminApplicationsPage() {
       ) : (
         <div className="bg-white rounded-2xl border border-slate-100 overflow-hidden">
           {/* Table header */}
-          <div className="grid grid-cols-[2fr_2fr_1.5fr_2fr] gap-4 px-6 py-3 bg-slate-50 border-b border-slate-100 text-xs font-semibold text-slate-500 uppercase tracking-wide">
+          <div className="grid grid-cols-[2fr_2fr_1.5fr_auto] gap-4 px-6 py-3 bg-slate-50 border-b border-slate-100 text-xs font-semibold text-slate-500 uppercase tracking-wide">
             <span>Student</span>
             <span>Application</span>
-            <span>Current Status</span>
-            <span>Update Status</span>
+            <span>Status</span>
+            <span></span>
           </div>
 
           {/* Rows */}
@@ -78,7 +88,7 @@ export default async function AdminApplicationsPage() {
             {apps.map(app => (
               <div
                 key={app.id}
-                className="grid grid-cols-[2fr_2fr_1.5fr_2fr] gap-4 px-6 py-4 items-center hover:bg-slate-50 transition-colors"
+                className="grid grid-cols-[2fr_2fr_1.5fr_auto] gap-4 px-6 py-4 items-center hover:bg-slate-50 transition-colors"
               >
                 {/* Student */}
                 <div>
@@ -98,18 +108,19 @@ export default async function AdminApplicationsPage() {
                   </p>
                 </div>
 
-                {/* Current status */}
+                {/* Status */}
                 <div>
                   <StatusBadge status={app.status} />
                 </div>
 
-                {/* Update */}
+                {/* View */}
                 <div>
-                  <StatusUpdateDropdown
-                    applicationId={app.id}
-                    currentStatus={app.status}
-                    adminId={user.id}
-                  />
+                  <Link
+                    href={`/admin/applications/${app.id}`}
+                    className="text-xs text-blue-600 font-medium hover:underline whitespace-nowrap"
+                  >
+                    View details →
+                  </Link>
                 </div>
               </div>
             ))}
@@ -119,3 +130,4 @@ export default async function AdminApplicationsPage() {
     </div>
   )
 }
+

@@ -31,23 +31,8 @@ CREATE POLICY "Students can insert own profile"
   ON portal_profiles FOR INSERT
   WITH CHECK (auth.uid() = id);
 
-CREATE POLICY "Admins can view all profiles"
-  ON portal_profiles FOR SELECT
-  USING (
-    EXISTS (
-      SELECT 1 FROM portal_profiles p
-      WHERE p.id = auth.uid() AND p.role = 'admin'
-    )
-  );
-
-CREATE POLICY "Admins can update all profiles"
-  ON portal_profiles FOR UPDATE
-  USING (
-    EXISTS (
-      SELECT 1 FROM portal_profiles p
-      WHERE p.id = auth.uid() AND p.role = 'admin'
-    )
-  );
+-- NOTE: Admin policies that self-reference portal_profiles cause infinite recursion (42P17).
+-- Use the is_admin() SECURITY DEFINER function defined below instead.
 
 -- ─── 2. portal_applications ───────────────────────────────
 CREATE TABLE IF NOT EXISTS portal_applications (
@@ -90,21 +75,11 @@ CREATE POLICY "Students can update own application (not status)"
 
 CREATE POLICY "Admins can view all applications"
   ON portal_applications FOR SELECT
-  USING (
-    EXISTS (
-      SELECT 1 FROM portal_profiles p
-      WHERE p.id = auth.uid() AND p.role = 'admin'
-    )
-  );
+  USING (is_admin());
 
 CREATE POLICY "Admins can update all applications"
   ON portal_applications FOR UPDATE
-  USING (
-    EXISTS (
-      SELECT 1 FROM portal_profiles p
-      WHERE p.id = auth.uid() AND p.role = 'admin'
-    )
-  );
+  USING (is_admin());
 
 -- ─── 3. portal_documents ──────────────────────────────────
 CREATE TABLE IF NOT EXISTS portal_documents (
@@ -136,21 +111,11 @@ CREATE POLICY "Students can update own documents"
 
 CREATE POLICY "Admins can view all documents"
   ON portal_documents FOR SELECT
-  USING (
-    EXISTS (
-      SELECT 1 FROM portal_profiles p
-      WHERE p.id = auth.uid() AND p.role = 'admin'
-    )
-  );
+  USING (is_admin());
 
 CREATE POLICY "Admins can update all documents"
   ON portal_documents FOR UPDATE
-  USING (
-    EXISTS (
-      SELECT 1 FROM portal_profiles p
-      WHERE p.id = auth.uid() AND p.role = 'admin'
-    )
-  );
+  USING (is_admin());
 
 -- ─── 4. portal_status_history ─────────────────────────────
 CREATE TABLE IF NOT EXISTS portal_status_history (
@@ -175,23 +140,32 @@ CREATE POLICY "Students can view own status history"
 
 CREATE POLICY "Admins can view all status history"
   ON portal_status_history FOR SELECT
-  USING (
-    EXISTS (
-      SELECT 1 FROM portal_profiles p
-      WHERE p.id = auth.uid() AND p.role = 'admin'
-    )
-  );
+  USING (is_admin());
 
 CREATE POLICY "Admins can insert status history"
   ON portal_status_history FOR INSERT
-  WITH CHECK (
-    EXISTS (
-      SELECT 1 FROM portal_profiles p
-      WHERE p.id = auth.uid() AND p.role = 'admin'
-    )
-  );
+  WITH CHECK (is_admin());
 
--- ─── 5. Indexes ───────────────────────────────────────────
+-- ─── 5. is_admin() helper — MUST be created BEFORE admin policies ──
+-- SECURITY DEFINER runs as the function owner (bypasses RLS), preventing
+-- the infinite recursion that occurs when policies self-reference portal_profiles.
+CREATE OR REPLACE FUNCTION is_admin()
+RETURNS BOOLEAN AS $$
+  SELECT EXISTS (
+    SELECT 1 FROM portal_profiles
+    WHERE id = auth.uid() AND role = 'admin'
+  )
+$$ LANGUAGE sql SECURITY DEFINER STABLE;
+
+CREATE POLICY "Admins can view all profiles"
+  ON portal_profiles FOR SELECT
+  USING (is_admin());
+
+CREATE POLICY "Admins can update all profiles"
+  ON portal_profiles FOR UPDATE
+  USING (is_admin());
+
+-- ─── 6. Indexes ───────────────────────────────────────────
 CREATE INDEX IF NOT EXISTS idx_portal_applications_user_id ON portal_applications(user_id);
 CREATE INDEX IF NOT EXISTS idx_portal_applications_status ON portal_applications(status);
 CREATE INDEX IF NOT EXISTS idx_portal_documents_user_id ON portal_documents(user_id);
@@ -218,6 +192,30 @@ CREATE TRIGGER portal_applications_updated_at
 CREATE TRIGGER portal_documents_updated_at
   BEFORE UPDATE ON portal_documents
   FOR EACH ROW EXECUTE FUNCTION handle_updated_at();
+
+-- ─── 8. Auto-create profile trigger ──────────────────────
+-- Creates a portal_profiles row the moment a user signs up in auth.users.
+-- SECURITY DEFINER bypasses RLS so it always succeeds.
+CREATE OR REPLACE FUNCTION handle_new_user()
+RETURNS TRIGGER AS $$
+BEGIN
+  INSERT INTO public.portal_profiles (id, full_name, email, role, profile_completed)
+  VALUES (
+    NEW.id,
+    COALESCE(NEW.raw_user_meta_data->>'full_name', split_part(NEW.email, '@', 1)),
+    NEW.email,
+    'student',
+    false
+  )
+  ON CONFLICT (id) DO NOTHING;
+  RETURN NEW;
+END;
+$$ LANGUAGE plpgsql SECURITY DEFINER;
+
+DROP TRIGGER IF EXISTS on_auth_user_created ON auth.users;
+CREATE TRIGGER on_auth_user_created
+  AFTER INSERT ON auth.users
+  FOR EACH ROW EXECUTE FUNCTION handle_new_user();
 
 -- ============================================================
 -- STORAGE SETUP (run separately in Supabase Storage UI or via API)

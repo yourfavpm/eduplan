@@ -71,7 +71,8 @@ export default function SignUpPage() {
       })
     }
 
-    router.push('/portal/verify-email')
+    router.push('/portal/dashboard')
+    router.refresh()
   }
 
   return (
@@ -196,7 +197,7 @@ export default function SignUpPage() {
                     const ok = test(password)
                     return (
                       <li key={id} className={`flex items-center gap-2 text-xs transition-colors ${ok ? 'text-green-600' : 'text-slate-400'}`}>
-                        <span className={`flex-shrink-0 w-4 h-4 rounded-full flex items-center justify-center ${ok ? 'bg-green-100' : 'bg-slate-100'}`}>
+                        <span className={`shrink-0 w-4 h-4 rounded-full flex items-center justify-center ${ok ? 'bg-green-100' : 'bg-slate-100'}`}>
                           {ok
                             ? <Check className="w-2.5 h-2.5" />
                             : <X className="w-2.5 h-2.5" />

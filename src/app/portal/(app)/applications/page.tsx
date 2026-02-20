@@ -1,136 +1,122 @@
 import { createClient } from '@/lib/supabase/server'
 import { redirect } from 'next/navigation'
-import {
-  getPortalProfile,
-  getPortalApplication,
-  getStatusHistory,
-} from '@/lib/supabase/portal'
-import { APPLICATION_STATUSES, getStatusIndex } from '@/types/portal'
-import TimelineItem from '@/components/portal/TimelineItem'
-import StatusBadge from '@/components/portal/StatusBadge'
-import type { Metadata } from 'next'
+import { getUserApplications } from '@/lib/supabase/portal'
 import Link from 'next/link'
+import type { Application } from '@/types/portal'
+import { getStatusProgression, getNextAction } from '@/types/portal'
+import type { Metadata } from 'next'
 
-export const metadata: Metadata = {
-  title: 'My Application | Student Portal — EduPlan360',
+export const metadata: Metadata = { title: 'My Applications | EduPlan360' }
+
+const STATUS_LABELS: Record<string, { label: string; className: string }> = {
+  INCOMPLETE_DOCUMENTS: { label: 'In Progress', className: 'bg-amber-50 text-amber-700 border-amber-200' },
+  PAY_APPLICATION_FEES: { label: 'Pay Fee', className: 'bg-orange-50 text-orange-700 border-orange-200' },
+  APPLICATION_SUBMITTED: { label: 'Submitted', className: 'bg-blue-50 text-blue-700 border-blue-200' },
+  OFFER_SENT: { label: 'Offer Received', className: 'bg-indigo-50 text-indigo-700 border-indigo-200' },
+  PREPARE_FOR_INTERVIEW: { label: 'Interview Prep', className: 'bg-purple-50 text-purple-700 border-purple-200' },
+  PAY_TUITION_DEPOSIT: { label: 'Pay Deposit', className: 'bg-pink-50 text-pink-700 border-pink-200' },
+  CAS_ISSUED: { label: 'CAS Issued', className: 'bg-teal-50 text-teal-700 border-teal-200' },
+  PROCESS_VISA: { label: 'Visa Stage', className: 'bg-green-50 text-green-700 border-green-200' },
 }
 
-export default async function ApplicationPage() {
+function AppRow({ app }: { app: Application }) {
+  const s = STATUS_LABELS[app.status] ?? { label: app.status, className: 'bg-slate-50 text-slate-600 border-slate-200' }
+  const progress = getStatusProgression(app.status)
+  const nextAction = getNextAction(app)
+  const updatedAgo = new Date(app.updated_at).toLocaleDateString('en-GB', { day: 'numeric', month: 'short', year: 'numeric' })
+
+  return (
+    <Link
+      href={`/portal/applications/${app.id}`}
+      className="flex items-center gap-4 px-5 py-4 hover:bg-slate-50/70 transition-colors group"
+    >
+      <div className="flex-1 min-w-0">
+        <div className="flex items-center gap-2 flex-wrap mb-0.5">
+          <p className="text-sm font-semibold text-slate-900 group-hover:text-blue-700 transition-colors">
+            {app.title || app.study_destination}
+          </p>
+          <span className={`text-xs font-medium px-2 py-0.5 rounded-full border ${s.className}`}>{s.label}</span>
+        </div>
+        {app.title && <p className="text-xs text-slate-400 mb-1">{app.study_destination}</p>}
+        {nextAction && <p className="text-xs text-blue-600 truncate">{nextAction}</p>}
+      </div>
+      <div className="hidden sm:flex flex-col items-end gap-1.5 shrink-0 text-right">
+        <p className="text-xs text-slate-400">
+          {app.required_docs_done ?? 0}/{app.required_docs_total ?? 0} docs · {progress}%
+        </p>
+        <p className="text-xs text-slate-300">{updatedAgo}</p>
+      </div>
+      <span className="text-slate-400 group-hover:text-blue-600 transition-colors">→</span>
+    </Link>
+  )
+}
+
+export default async function ApplicationsPage() {
   const supabase = await createClient()
   const { data: { user } } = await supabase.auth.getUser()
   if (!user) redirect('/portal/sign-in')
 
-  const [profile, application] = await Promise.all([
-    getPortalProfile(user.id),
-    getPortalApplication(user.id),
-  ])
-
-  if (!profile) redirect('/portal/sign-in')
-
-  const statusHistory = application ? await getStatusHistory(application.id) : []
-  const currentIndex = application ? getStatusIndex(application.status) : -1
-
-  // Build timeline: for each of the 8 stages, find if there's a history entry
-  const historyMap = new Map(statusHistory.map(h => [h.status, h]))
+  const applications = await getUserApplications(user.id)
+  const active = applications.filter(a => a.status !== 'PROCESS_VISA')
+  const completed = applications.filter(a => a.status === 'PROCESS_VISA')
 
   return (
-    <div className="p-6 md:p-8 max-w-3xl mx-auto">
-      <div className="mb-8">
-        <h1 className="text-2xl font-bold text-slate-900">My Application</h1>
-        <p className="text-slate-500 mt-1 text-sm">Full details of your study abroad application.</p>
+    <div className="max-w-3xl">
+      <div className="flex items-center gap-3 mb-6">
+        <Link href="/portal/dashboard" className="text-sm font-medium text-slate-500 hover:text-slate-800 transition-colors">
+          Dashboard
+        </Link>
+        <span className="text-slate-300">/</span>
+        <span className="text-sm font-medium text-slate-800">
+          Applications
+        </span>
+      </div>
+      <div className="flex items-start justify-between gap-4 mb-8">
+        <div>
+          <h1 className="text-2xl font-bold text-slate-900">My Applications</h1>
+          <p className="text-slate-500 text-sm mt-1">
+            {applications.length === 0 ? 'No applications yet.' : `${applications.length} application${applications.length > 1 ? 's' : ''}`}
+          </p>
+        </div>
+        <Link href="/portal/applications/new" className="inline-flex items-center gap-2 bg-blue-600 text-white px-4 py-2 rounded-xl text-sm font-semibold hover:bg-blue-700 transition-colors shrink-0">
+          + New Application
+        </Link>
       </div>
 
-      {!application ? (
-        /* Empty state */
+      {applications.length === 0 ? (
         <div className="bg-white rounded-2xl border border-slate-100 py-16 text-center px-6">
-          <div className="w-14 h-14 bg-slate-100 rounded-2xl flex items-center justify-center mx-auto mb-4">
-            <svg className="w-7 h-7 text-slate-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
-            </svg>
-          </div>
-          <h3 className="text-slate-700 font-semibold mb-2">No application yet</h3>
-          <p className="text-slate-400 text-sm mb-6">
-            Complete your profile to start your application.
-          </p>
-          <Link
-            href="/portal/profile"
-            className="inline-flex items-center gap-2 px-5 py-2.5 bg-blue-600 text-white text-sm font-semibold rounded-xl hover:bg-blue-700 transition-colors"
-          >
-            Complete Profile
+          <p className="text-3xl mb-3">📁</p>
+          <p className="text-slate-700 font-semibold mb-1">No applications yet</p>
+          <p className="text-slate-400 text-sm mb-5">Create your first application to get started.</p>
+          <Link href="/portal/applications/new" className="inline-flex items-center gap-2 bg-blue-600 text-white px-5 py-2.5 rounded-xl text-sm font-semibold hover:bg-blue-700 transition-colors">
+            + Create Application
           </Link>
         </div>
       ) : (
-        <div className="space-y-6">
-          {/* ── Application Summary ─────────────────────── */}
-          <div className="bg-white rounded-2xl border border-slate-100 p-6">
-            <div className="flex items-center justify-between mb-5">
-              <h2 className="text-sm font-semibold text-slate-500 uppercase tracking-wide">Application Summary</h2>
-              <Link href="/portal/profile" className="text-xs text-blue-600 hover:underline font-medium">
-                Edit →
-              </Link>
-            </div>
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
-              <SummaryItem label="Study Destination" value={application.destination ?? '—'} />
-              <SummaryItem label="Preferred University" value={application.preferred_university ?? '—'} />
-              <SummaryItem label="Proposed Course 1" value={application.proposed_course_1 ?? '—'} />
-              <SummaryItem label="Proposed Course 2" value={application.proposed_course_2 ?? '—'} />
-              <SummaryItem label="Highest Qualification" value={application.highest_qualification ?? '—'} />
-              <div>
-                <p className="text-xs text-slate-400 font-medium mb-1">Current Status</p>
-                <StatusBadge status={application.status} size="md" />
+        <>
+          {active.length > 0 && (
+            <div className="bg-white rounded-2xl border border-slate-100 overflow-hidden mb-4">
+              <div className="px-5 py-3 bg-slate-50 border-b border-slate-100">
+                <p className="text-xs font-semibold text-slate-500 uppercase tracking-wide">Active ({active.length})</p>
+              </div>
+              <div className="divide-y divide-slate-50">
+                {active.map(app => <AppRow key={app.id} app={app} />)}
               </div>
             </div>
-          </div>
+          )}
 
-          {/* ── Status Timeline ─────────────────────────── */}
-          <div className="bg-white rounded-2xl border border-slate-100 p-6">
-            <h2 className="text-sm font-semibold text-slate-500 uppercase tracking-wide mb-6">Application Timeline</h2>
-
-            {APPLICATION_STATUSES.map((step, idx) => {
-              const histEntry = historyMap.get(step.value)
-              const isCompleted = idx < currentIndex
-              const isCurrent = idx === currentIndex
-              const isLast = idx === APPLICATION_STATUSES.length - 1
-
-              const date = histEntry
-                ? new Date(histEntry.created_at).toLocaleDateString('en-GB', {
-                    day: 'numeric', month: 'long', year: 'numeric',
-                  })
-                : undefined
-
-              return (
-                <TimelineItem
-                  key={step.value}
-                  label={step.label}
-                  date={date}
-                  status={step.value}
-                  isCompleted={isCompleted}
-                  isCurrent={isCurrent}
-                  isLast={isLast}
-                  note={histEntry?.note ?? undefined}
-                />
-              )
-            })}
-          </div>
-
-          {/* ── Advisor Notes placeholder ───────────────── */}
-          <div className="bg-slate-50 rounded-2xl border border-dashed border-slate-200 p-6">
-            <h2 className="text-sm font-semibold text-slate-500 uppercase tracking-wide mb-2">Advisor Notes</h2>
-            <p className="text-sm text-slate-400">
-              Your advisor hasn&apos;t added any notes yet. Check back after your advisor reviews your application.
-            </p>
-          </div>
-        </div>
+          {completed.length > 0 && (
+            <div className="bg-white rounded-2xl border border-slate-100 overflow-hidden opacity-75">
+              <div className="px-5 py-3 bg-slate-50 border-b border-slate-100">
+                <p className="text-xs font-semibold text-slate-500 uppercase tracking-wide">Completed ({completed.length})</p>
+              </div>
+              <div className="divide-y divide-slate-50">
+                {completed.map(app => <AppRow key={app.id} app={app} />)}
+              </div>
+            </div>
+          )}
+        </>
       )}
-    </div>
-  )
-}
-
-function SummaryItem({ label, value }: { label: string; value: string }) {
-  return (
-    <div>
-      <p className="text-xs text-slate-400 font-medium mb-0.5">{label}</p>
-      <p className="text-sm text-slate-800 font-medium">{value}</p>
     </div>
   )
 }

@@ -1,147 +1,119 @@
 'use client'
 
 import Link from 'next/link'
+import Image from 'next/image'
 import { usePathname } from 'next/navigation'
+import { useState } from 'react'
+import {
+  LayoutDashboard, FolderOpen, PlusCircle, FileText,
+  User, Menu, X, LogOut,
+} from 'lucide-react'
 import { createClient } from '@/lib/supabase/client'
 import { useRouter } from 'next/navigation'
-import {
-  LayoutDashboard,
-  FileText,
-  Upload,
-  CreditCard,
-  User,
-  LogOut,
-  GraduationCap,
-  ShieldCheck,
-} from 'lucide-react'
 
-const NAV_ITEMS = [
-  { href: '/portal/dashboard', label: 'Dashboard', icon: LayoutDashboard },
-  { href: '/portal/application', label: 'My Application', icon: FileText },
-  { href: '/portal/documents', label: 'Documents', icon: Upload },
-  { href: '/portal/payments', label: 'Payments', icon: CreditCard },
-  { href: '/portal/profile', label: 'Profile', icon: User },
+const NAV = [
+  { href: '/portal/dashboard',      label: 'Dashboard',     icon: LayoutDashboard },
+  { href: '/portal/applications',   label: 'Applications',  icon: FolderOpen },
+  { href: '/portal/applications/new', label: 'New Application', icon: PlusCircle },
+  { href: '/portal/documents',      label: 'Documents',     icon: FileText },
+  { href: '/portal/profile',        label: 'My Profile',    icon: User },
 ]
 
-const MOBILE_NAV = [
-  { href: '/portal/dashboard', label: 'Home', icon: LayoutDashboard },
-  { href: '/portal/application', label: 'Application', icon: FileText },
-  { href: '/portal/documents', label: 'Upload', icon: Upload },
-  { href: '/portal/profile', label: 'Profile', icon: User },
-]
-
-interface PortalSidebarProps {
-  firstName: string
-  role: string
+interface Props {
+  profile: { full_name: string; email: string; role: string } | null
 }
 
-export default function PortalSidebar({ firstName, role }: PortalSidebarProps) {
+export default function PortalSidebar({ profile }: Props) {
   const pathname = usePathname()
+  const [open, setOpen] = useState(false)
   const router = useRouter()
 
-  async function handleLogout() {
+  async function logout() {
     const supabase = createClient()
     await supabase.auth.signOut()
     router.push('/portal/sign-in')
-    router.refresh()
   }
 
-  return (
-    <>
-      {/* ── Desktop Sidebar ─────────────────────────────── */}
-      <aside className="hidden md:flex flex-col w-60 bg-white border-r border-slate-100 min-h-screen fixed top-0 left-0 z-20">
-        {/* Logo */}
-        <div className="px-6 py-5 border-b border-slate-100">
-          <div className="flex items-center gap-2.5">
-            <div className="w-8 h-8 bg-blue-600 rounded-lg flex items-center justify-center shrink-0">
-              <GraduationCap className="w-5 h-5 text-white" />
-            </div>
-            <div>
-              <span className="font-bold text-slate-900 text-sm">EduPlan360</span>
-              <p className="text-xs text-slate-400">Student Portal</p>
-            </div>
-          </div>
-        </div>
+  const Sidebar = (
+    <nav className="flex flex-col h-full py-6 px-4">
+      {/* Logo */}
+      <div className="mb-8 px-2">
+        <Link href="/portal/dashboard" onClick={() => setOpen(false)}>
+          <Image src="/eduplan.png" alt="EduPlan360" width={130} height={36} className="h-8 w-auto" priority />
+        </Link>
+        <p className="text-xs text-slate-400 mt-0.5 ml-1 font-medium">Student Portal</p>
+      </div>
 
-        {/* Student info */}
-        <div className="px-6 py-4 border-b border-slate-50">
-          <div className="flex items-center gap-2.5">
-            <div className="w-8 h-8 rounded-full bg-blue-100 flex items-center justify-center text-blue-700 font-semibold text-sm shrink-0">
-              {firstName.charAt(0).toUpperCase()}
-            </div>
-            <div className="min-w-0">
-              <p className="text-sm font-medium text-slate-800 truncate">{firstName}</p>
-              <p className="text-xs text-slate-400">
-                {role === 'admin' ? 'Administrator' : 'Student'}
-              </p>
-            </div>
-          </div>
-        </div>
-
-        {/* Nav */}
-        <nav className="flex-1 px-3 py-4 space-y-0.5">
-          {NAV_ITEMS.map(({ href, label, icon: Icon }) => {
-            const active = pathname.startsWith(href)
-            return (
-              <Link
-                key={href}
-                href={href}
-                className={`flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium transition-colors duration-100 ${
-                  active
-                    ? 'bg-blue-50 text-blue-700'
-                    : 'text-slate-600 hover:bg-slate-50 hover:text-slate-900'
-                }`}
-              >
-                <Icon className={`w-4 h-4 shrink-0 ${active ? 'text-blue-600' : 'text-slate-400'}`} />
-                {label}
-              </Link>
-            )
-          })}
-
-          {role === 'admin' && (
-            <Link
-              href="/admin/applications"
-              className="flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium text-slate-600 hover:bg-slate-50 hover:text-slate-900 transition-colors mt-2"
-            >
-              <ShieldCheck className="w-4 h-4 shrink-0 text-slate-400" />
-              Admin Panel
-            </Link>
-          )}
-        </nav>
-
-        {/* Logout */}
-        <div className="px-3 py-4 border-t border-slate-100">
-          <button
-            onClick={handleLogout}
-            className="flex items-center gap-3 w-full px-3 py-2.5 rounded-lg text-sm font-medium text-slate-500 hover:bg-red-50 hover:text-red-600 transition-colors duration-100"
-          >
-            <LogOut className="w-4 h-4 shrink-0" />
-            Logout
-          </button>
-        </div>
-      </aside>
-
-      {/* Spacer for fixed sidebar */}
-      <div className="hidden md:block w-60 shrink-0" />
-
-      {/* ── Mobile Bottom Nav ───────────────────────────── */}
-      <nav className="fixed bottom-0 left-0 right-0 z-30 md:hidden bg-white border-t border-slate-100 flex items-center justify-around px-2 py-1 safe-area-bottom">
-        {MOBILE_NAV.map(({ href, label, icon: Icon }) => {
-          const active = pathname.startsWith(href)
+      {/* Nav links */}
+      <div className="space-y-1 flex-1 overflow-y-auto min-h-0">
+        {NAV.map(item => {
+          const Icon = item.icon
+          const active = pathname === item.href || (item.href !== '/portal/dashboard' && pathname.startsWith(item.href + (item.href.includes('new') ? '' : '/')))
           return (
             <Link
-              key={href}
-              href={href}
-              className={`flex flex-col items-center gap-0.5 px-3 py-2 rounded-lg transition-colors ${
-                active ? 'text-blue-600' : 'text-slate-400 hover:text-slate-600'
+              key={item.href}
+              href={item.href}
+              onClick={() => setOpen(false)}
+              className={`flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-medium transition-colors ${
+                active ? 'bg-blue-600 text-white' : 'text-slate-600 hover:bg-slate-100 hover:text-slate-900'
               }`}
             >
-              <Icon className="w-5 h-5" />
-              <span className="text-[10px] font-medium">{label}</span>
+              <Icon className="w-4 h-4 shrink-0" />
+              {item.label}
             </Link>
           )
         })}
-      </nav>
+      </div>
+
+      {/* Profile + logout */}
+      <div className="mt-auto pt-4 border-t border-slate-100">
+        {profile && (
+          <div className="flex items-center gap-3 px-3 py-2 mb-1">
+            <div className="w-7 h-7 rounded-full bg-blue-100 flex items-center justify-center text-blue-700 font-semibold text-xs shrink-0">
+              {profile.full_name.charAt(0).toUpperCase()}
+            </div>
+            <div className="flex-1 min-w-0">
+              <p className="text-xs font-semibold text-slate-800 truncate">{profile.full_name}</p>
+              <p className="text-xs text-slate-400 truncate">{profile.email}</p>
+            </div>
+          </div>
+        )}
+        <button
+          onClick={logout}
+          className="w-full flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm text-slate-500 hover:bg-red-50 hover:text-red-600 transition-colors"
+        >
+          <LogOut className="w-4 h-4" /> Sign out
+        </button>
+      </div>
+    </nav>
+  )
+
+  return (
+    <>
+      {/* Desktop sidebar */}
+      <div className="hidden md:flex flex-col w-56 bg-white border-r border-slate-100 fixed top-0 left-0 h-screen z-30">
+        {Sidebar}
+      </div>
+
+      {/* Mobile top bar */}
+      <div className="md:hidden fixed top-0 left-0 right-0 z-40 bg-white border-b border-slate-100 flex items-center justify-between px-4 py-3">
+        <Image src="/eduplan.png" alt="EduPlan360" width={100} height={28} className="h-7 w-auto" />
+        <button onClick={() => setOpen(true)} className="p-1.5 text-slate-600"><Menu className="w-5 h-5" /></button>
+      </div>
+
+      {/* Mobile drawer */}
+      {open && (
+        <>
+          <div className="fixed inset-0 bg-black/30 z-40 md:hidden" onClick={() => setOpen(false)} />
+          <div className="fixed inset-y-0 left-0 w-64 bg-white z-50 md:hidden flex flex-col">
+            <div className="flex items-center justify-between px-4 py-3 border-b border-slate-100">
+              <Image src="/eduplan.png" alt="EduPlan360" width={100} height={28} className="h-7 w-auto" />
+              <button onClick={() => setOpen(false)} className="text-slate-600"><X className="w-5 h-5" /></button>
+            </div>
+            {Sidebar}
+          </div>
+        </>
+      )}
     </>
   )
 }
