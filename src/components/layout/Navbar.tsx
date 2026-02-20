@@ -6,17 +6,11 @@ import { usePathname } from "next/navigation";
 import { useState } from "react";
 import { Menu, X, ChevronDown } from "lucide-react";
 import { AnimatePresence, motion } from "framer-motion";
-import { useEffect } from "react";
 import { createPortal } from "react-dom";
 
 export function Navbar() {
     const pathname = usePathname();
     const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
-    const [mounted, setMounted] = useState(false);
-
-    useEffect(() => {
-        setMounted(true);
-    }, []);
 
     const [expandedMobileItem, setExpandedMobileItem] = useState<string | null>(null);
 
@@ -25,7 +19,7 @@ export function Navbar() {
 
         {
             href: "/about",
-            label: "About EduPlan360",
+            label: "About",
             children: [
                 { href: "/about", label: "Who We Are" },
                 { href: "/why-choose-us", label: "Why You Should Choose Us" }
@@ -59,7 +53,7 @@ export function Navbar() {
         },
         {
             href: "/study-abroad",
-            label: "Study Abroad",
+            label: "Resources",
             hasMegaMenu: true,
             isGrid: true,
             children: [
@@ -89,7 +83,7 @@ export function Navbar() {
     ];
 
     return (
-        <nav className="border-b border-border bg-white sticky top-[42px] z-40 shadow-softer">
+        <nav className="bg-brand-700 shadow-md">
             <div className="container mx-auto px-4 md:px-6 lg:px-8">
                 <div className="flex items-center justify-between h-16 md:h-20">
                     {/* Logo */}
@@ -100,7 +94,7 @@ export function Navbar() {
                             width={180}
                             height={50}
                             priority
-                            className="h-10 w-auto md:h-12"
+                            className="h-10 w-auto md:h-12 brightness-0 invert"
                         />
                     </Link>
 
@@ -110,11 +104,11 @@ export function Navbar() {
                             <div key={link.href} className="relative group">
                                 {link.children ? (
                                     <>
-                                        <button className="flex items-center gap-1 text-ink hover:text-brand-700 transition-calm text-[10px] font-bold uppercase tracking-wide py-2">
+                                        <button className="flex items-center gap-1 text-white/90 hover:text-white transition-calm text-[10px] font-bold uppercase tracking-wide py-2">
                                             {link.label}
                                             <ChevronDown className="w-3 h-3 transition-transform group-hover:rotate-180" />
                                         </button>
-                                        <div className={`absolute top-full left-0 bg-white shadow-xl rounded-xl border border-neutral-100 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 transform translate-y-2 group-hover:translate-y-0 z-50 overflow-hidden ${link.isGrid ? 'w-[600px] p-4' : 'w-64'}`}>
+                                        <div className={`absolute top-full left-0 bg-white shadow-xl rounded-xl border border-neutral-100 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 transform translate-y-1 group-hover:translate-y-0 z-50 overflow-hidden ${link.isGrid ? 'w-[600px] p-4' : 'w-64'}`}>
                                             <div className={`${link.isGrid ? 'grid grid-cols-3 gap-2' : 'py-2'}`}>
                                                 {link.children.map((child) => (
                                                     <Link
@@ -131,7 +125,7 @@ export function Navbar() {
                                 ) : (
                                     <Link
                                         href={link.href}
-                                        className={`text-ink hover:text-brand-700 transition-calm text-[10px] font-bold uppercase tracking-wide ${pathname === link.href ? "text-brand-700" : ""
+                                        className={`text-white/90 hover:text-white transition-calm text-[10px] font-bold uppercase tracking-wide ${pathname === link.href ? "text-white underline underline-offset-4" : ""
                                             }`}
                                     >
                                         {link.label}
@@ -141,15 +135,15 @@ export function Navbar() {
                         ))}
 
                         <Link
-                            href="/book-consultation"
-                            className="bg-brand-700 text-white px-6 py-2.5 rounded-lg hover:bg-brand-800 transition-calm active:scale-[0.98] font-medium"
+                            href="/portal/sign-up"
+                            className="bg-white text-brand-700 px-6 py-2.5 rounded-lg hover:bg-brand-50 transition-calm active:scale-[0.98] font-semibold text-sm"
                         >
                             Start Your Study
                         </Link>
 
                         <Link
-                            href="/track-application"
-                            className="text-ink hover:text-brand-700 transition-calm text-[10px] font-bold uppercase tracking-wide"
+                            href="/portal/sign-in"
+                            className="text-white/90 hover:text-white transition-calm text-[10px] font-bold uppercase tracking-wide"
                         >
                             Track Application
                         </Link>
@@ -157,7 +151,7 @@ export function Navbar() {
 
                     {/* Mobile Menu Button */}
                     <button
-                        className="lg:hidden p-2 text-ink hover:text-brand-700 transition-calm"
+                        className="lg:hidden p-2 text-white hover:text-white/80 transition-calm"
                         onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
                         aria-label="Toggle menu"
                     >
@@ -166,7 +160,7 @@ export function Navbar() {
                 </div>
 
                 {/* Mobile Menu Drawer Portal */}
-                {mounted && createPortal(
+                {typeof document !== 'undefined' && createPortal(
                     <AnimatePresence>
                         {isMobileMenuOpen && (
                             <>
@@ -176,7 +170,7 @@ export function Navbar() {
                                     animate={{ opacity: 1 }}
                                     exit={{ opacity: 0 }}
                                     onClick={() => setIsMobileMenuOpen(false)}
-                                    className="fixed inset-0 bg-black/50 z-[60] lg:hidden backdrop-blur-sm"
+                                    className="fixed inset-0 bg-black/50 z-60 lg:hidden backdrop-blur-sm"
                                 />
 
                                 {/* Drawer */}
@@ -185,7 +179,7 @@ export function Navbar() {
                                     animate={{ x: 0 }}
                                     exit={{ x: "100%" }}
                                     transition={{ type: "spring", damping: 25, stiffness: 200 }}
-                                    className="fixed right-0 top-0 bottom-0 w-[280px] bg-white z-[60] lg:hidden shadow-2xl flex flex-col"
+                                    className="fixed right-0 top-0 bottom-0 w-[280px] bg-white z-60 lg:hidden shadow-2xl flex flex-col"
                                 >
                                     <div className="p-4 border-b border-border flex items-center justify-between">
                                         <span className="font-semibold text-lg text-ink">Menu</span>
@@ -248,7 +242,7 @@ export function Navbar() {
 
                                     <div className="p-4 border-t border-border mt-auto">
                                         <Link
-                                            href="/track-application"
+                                            href="/portal/sign-in"
                                             className="block bg-brand-700 text-white hover:bg-brand-800 rounded-lg transition-colors font-medium py-3 px-4 text-sm text-center shadow-sm"
                                             onClick={() => setIsMobileMenuOpen(false)}
                                         >

@@ -53,8 +53,10 @@ export default function RootLayout({
       <body
         className={`${geistSans.variable} ${geistMono.variable} ${playfair.variable} ${poppins.variable} ${inter.variable} antialiased flex flex-col min-h-screen`}
       >
-        <UtilityBar />
-        <Navbar />
+        <header className="sticky top-0 z-50">
+          <UtilityBar />
+          <Navbar />
+        </header>
         {children}
         <Footer />
         <FloatingConsultationButton />

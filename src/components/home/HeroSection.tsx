@@ -2,22 +2,22 @@
 
 import { useState, useEffect } from 'react';
 import Image from 'next/image';
-import { ArrowRight, Star, Globe, GraduationCap, MessageCircle } from 'lucide-react';
+import { ArrowRight, MessageCircle } from 'lucide-react';
+
+const PHRASES = [
+    "Your journey to world-class education starts here",
+    "Study abroad with expert guidance",
+    "Transform your future with global education",
+    "Get into top universities worldwide"
+];
 
 export function HeroSection() {
     const [displayText, setDisplayText] = useState('');
     const [phraseIndex, setPhraseIndex] = useState(0);
     const [isDeleting, setIsDeleting] = useState(false);
 
-    const phrases = [
-        "Your journey to world-class education starts here",
-        "Study abroad with expert guidance",
-        "Transform your future with global education",
-        "Get into top universities worldwide"
-    ];
-
     useEffect(() => {
-        const currentPhrase = phrases[phraseIndex];
+        const currentPhrase = PHRASES[phraseIndex];
         const timeout = setTimeout(() => {
             if (!isDeleting) {
                 // Typing
@@ -33,7 +33,7 @@ export function HeroSection() {
                     setDisplayText(currentPhrase.slice(0, displayText.length - 1));
                 } else {
                     setIsDeleting(false);
-                    setPhraseIndex((prevIndex) => (prevIndex + 1) % phrases.length);
+                    setPhraseIndex((prevIndex) => (prevIndex + 1) % PHRASES.length);
                 }
             }
         }, isDeleting ? 50 : 100);
@@ -42,7 +42,7 @@ export function HeroSection() {
     }, [displayText, isDeleting, phraseIndex]);
 
     return (
-        <section className="relative overflow-hidden bg-gradient-to-b from-white via-brand-50/30 to-white pt-10 pb-12 md:pt-28 md:pb-24">
+        <section className="relative overflow-hidden bg-linear-to-b from-white via-brand-50/30 to-white pt-10 pb-12 md:pt-28 md:pb-24">
             {/* Decorative Background Elements */}
             <div className="absolute top-20 right-0 w-96 h-96 bg-accent-500/10 rounded-full blur-3xl"></div>
             <div className="absolute bottom-20 left-0 w-96 h-96 bg-brand-500/10 rounded-full blur-3xl"></div>
@@ -68,7 +68,7 @@ export function HeroSection() {
 
                             {/* Desktop Button */}
                             <button
-                                onClick={() => window.location.href = '/book-consultation'}
+                                onClick={() => window.location.href = '/portal/sign-up'}
                                 className="hidden md:inline-flex group relative items-center justify-center gap-2 bg-brand-700 text-white px-8 py-4 rounded-full font-semibold text-base overflow-hidden hover:bg-brand-800 transition-all duration-300 shadow-lg hover:shadow-xl active:scale-[0.98]"
                             >
                                 <span className="relative z-10">Start Your Study</span>
@@ -77,7 +77,7 @@ export function HeroSection() {
 
                             {/* Mobile Button (Simple Underline) */}
                             <button
-                                onClick={() => window.location.href = '/book-consultation'}
+                                onClick={() => window.location.href = '/portal/sign-up'}
                                 className="md:hidden inline-flex items-center justify-center gap-2 text-brand-700 font-semibold text-base hover:text-brand-800 transition-colors"
                             >
                                 <span className="underline underline-offset-4">Start Your Study</span>
@@ -124,7 +124,7 @@ export function HeroSection() {
                     {/* Right: Image with Organic Shape */}
                     <div className="relative h-[300px] md:h-[500px] lg:h-[600px] animate-fade-in-up" style={{ animationDelay: '0.3s' }}>
                         {/* Organic Blob Background */}
-                        <div className="absolute inset-0 bg-gradient-to-br from-brand-100 to-accent-100"
+                        <div className="absolute inset-0 bg-linear-to-br from-brand-100 to-accent-100"
                             style={{
                                 clipPath: 'polygon(0% 15%, 15% 0%, 85% 0%, 100% 15%, 100% 85%, 85% 100%, 15% 100%, 0% 85%)',
                                 borderRadius: '60% 40% 30% 70% / 60% 30% 70% 40%'
@@ -145,42 +145,46 @@ export function HeroSection() {
                                 priority
                                 sizes="(max-width: 1024px) 100vw, 50vw"
                             />
-                            <div className="absolute inset-0 bg-gradient-to-br from-brand-700/20 to-transparent"></div>
+                            <div className="absolute inset-0 bg-linear-to-br from-brand-700/20 to-transparent"></div>
                         </div>
 
-                        {/* Country Tags with Flags */}
-                        <div className="absolute top-8 -right-8 bg-white px-4 py-2 rounded-full shadow-lg border border-border animate-float">
-                            <div className="flex items-center gap-2">
-                                <span className="text-2xl">🇬🇧</span>
-                                <span className="text-sm font-semibold text-ink">UK</span>
+                        {/* UK — top right */}
+                        <div className="absolute top-6 -right-2 md:-right-8 bg-white px-3 py-1.5 md:px-4 md:py-2 rounded-full shadow-lg border border-border animate-float">
+                            <div className="flex items-center gap-1.5">
+                                <span className="text-lg md:text-2xl">🇬🇧</span>
+                                <span className="text-xs md:text-sm font-semibold text-ink">UK</span>
                             </div>
                         </div>
 
-                        <div className="absolute top-32 -left-6 bg-white px-4 py-2 rounded-full shadow-lg border border-border animate-float" style={{ animationDelay: '0.5s' }}>
-                            <div className="flex items-center gap-2">
-                                <span className="text-2xl">🇨🇦</span>
-                                <span className="text-sm font-semibold text-ink">Canada</span>
+                        {/* Canada — upper left */}
+                        <div className="absolute top-24 left-2 md:-left-6 bg-white px-3 py-1.5 md:px-4 md:py-2 rounded-full shadow-lg border border-border animate-float" style={{ animationDelay: '0.5s' }}>
+                            <div className="flex items-center gap-1.5">
+                                <span className="text-lg md:text-2xl">🇨🇦</span>
+                                <span className="text-xs md:text-sm font-semibold text-ink">Canada</span>
                             </div>
                         </div>
 
-                        <div className="absolute top-1/2 -right-12 bg-white px-4 py-2 rounded-full shadow-lg border border-border animate-float" style={{ animationDelay: '1s' }}>
-                            <div className="flex items-center gap-2">
-                                <span className="text-2xl">🇺🇸</span>
-                                <span className="text-sm font-semibold text-ink">USA</span>
+                        {/* USA — middle right */}
+                        <div className="absolute top-1/2 -right-2 md:-right-12 bg-white px-3 py-1.5 md:px-4 md:py-2 rounded-full shadow-lg border border-border animate-float" style={{ animationDelay: '1s' }}>
+                            <div className="flex items-center gap-1.5">
+                                <span className="text-lg md:text-2xl">🇺🇸</span>
+                                <span className="text-xs md:text-sm font-semibold text-ink">USA</span>
                             </div>
                         </div>
 
-                        <div className="absolute bottom-24 -left-8 bg-white px-4 py-2 rounded-full shadow-lg border border-border animate-float" style={{ animationDelay: '1.5s' }}>
-                            <div className="flex items-center gap-2">
-                                <span className="text-2xl">🇦🇺</span>
-                                <span className="text-sm font-semibold text-ink">Australia</span>
+                        {/* Australia — lower left */}
+                        <div className="absolute bottom-16 left-2 md:-left-8 bg-white px-3 py-1.5 md:px-4 md:py-2 rounded-full shadow-lg border border-border animate-float" style={{ animationDelay: '1.5s' }}>
+                            <div className="flex items-center gap-1.5">
+                                <span className="text-lg md:text-2xl">🇦🇺</span>
+                                <span className="text-xs md:text-sm font-semibold text-ink">Australia</span>
                             </div>
                         </div>
 
-                        <div className="absolute bottom-8 right-8 bg-white px-4 py-2 rounded-full shadow-lg border border-border animate-float" style={{ animationDelay: '2s' }}>
-                            <div className="flex items-center gap-2">
-                                <span className="text-2xl">🇩🇪</span>
-                                <span className="text-sm font-semibold text-ink">Germany</span>
+                        {/* Germany — bottom right */}
+                        <div className="absolute bottom-6 right-6 md:right-8 bg-white px-3 py-1.5 md:px-4 md:py-2 rounded-full shadow-lg border border-border animate-float" style={{ animationDelay: '2s' }}>
+                            <div className="flex items-center gap-1.5">
+                                <span className="text-lg md:text-2xl">🇩🇪</span>
+                                <span className="text-xs md:text-sm font-semibold text-ink">Germany</span>
                             </div>
                         </div>
                     </div>
