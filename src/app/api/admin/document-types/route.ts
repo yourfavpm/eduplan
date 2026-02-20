@@ -8,9 +8,9 @@ export async function GET() {
 
 export async function POST(req: Request) {
   const body = await req.json()
-  const { name, description, required } = body
+  const { name, description } = body
   if (!name) return NextResponse.json({ error: 'Name is required' }, { status: 400 })
-  const result = await createDocumentType({ name, description, required: required ?? true })
+  const result = await createDocumentType({ name, description })
   if (!result) return NextResponse.json({ error: 'Failed to create' }, { status: 500 })
   return NextResponse.json(result)
 }

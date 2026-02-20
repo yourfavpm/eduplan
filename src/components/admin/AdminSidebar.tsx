@@ -5,7 +5,7 @@ import Image from 'next/image'
 import { usePathname } from 'next/navigation'
 import { useState } from 'react'
 import {
-  LayoutDashboard, Users, FileText, FolderOpen, CreditCard,
+  LayoutDashboard, Users, FileText,
   Globe, Home, MapPin, Award, CalendarDays, BookOpen,
   Briefcase, UserCheck, ImageIcon, ShieldCheck, KeyRound,
   ClipboardList, Settings, ChevronDown, ChevronRight, Menu, X,
@@ -14,8 +14,8 @@ import {
 
 const NAV_GROUPS = [
   {
-    title: 'OPERATIONS',
-    routes: [
+    label: 'OPERATIONS',
+    items: [
       { href: '/admin/overview', label: 'Overview', icon: LayoutDashboard },
       { href: '/admin/applications', label: 'Applications', icon: FileText },
       { href: '/admin/students', label: 'Students', icon: Users },
@@ -75,19 +75,19 @@ export default function AdminSidebar({ adminName }: Props) {
       {/* Nav */}
       <nav className="flex-1 overflow-y-auto min-h-0 py-4 px-2">
         {NAV_GROUPS.map(group => {
-          const isCollapsed = collapsed[group.label || group.title] // Use group.label or group.title for key
+          const isCollapsed = collapsed[group.label]
           return (
-            <div key={group.label || group.title} className="mb-4">
+            <div key={group.label} className="mb-4">
               <button
-                onClick={() => toggleGroup(group.label || group.title)}
+                onClick={() => toggleGroup(group.label)}
                 className="w-full flex items-center justify-between px-3 py-1.5 mb-1 text-slate-400 hover:bg-slate-800 hover:text-white rounded-lg text-sm font-semibold"
               >
-                {group.title || group.label}
+                {group.label}
                 {isCollapsed ? <ChevronRight className="w-4 h-4" /> : <ChevronDown className="w-4 h-4" />}
               </button>
               {!isCollapsed && (
                 <div className="space-y-0.5">
-                  {(group.routes || group.items).map(item => { // Dynamically use routes or items
+                  {group.items.map(item => {
                     const active = pathname === item.href || pathname.startsWith(item.href + '/')
                     const Icon = item.icon
                     return (

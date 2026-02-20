@@ -114,10 +114,9 @@ export default async function DocumentsPage({
             {requiredDocs.map(doc => (
               <DocumentRequirementRow
                 key={doc.id}
-                requiredDoc={doc}
+                doc={doc}
                 userId={user.id}
                 applicationId={selectedApp.id}
-                onUploaded={() => {}}
               />
             ))}
           </div>
