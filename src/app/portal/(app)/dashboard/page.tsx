@@ -61,26 +61,6 @@ export default async function DashboardPage() {
         </div>
       )}
 
-      {/* Next Actions queue */}
-      {nextActions.length > 0 && (
-        <div className="mb-8">
-          <h2 className="text-sm font-semibold text-slate-700 uppercase tracking-wide mb-4">Next Actions</h2>
-          <div className="bg-white rounded-2xl border border-slate-100 divide-y divide-slate-50">
-            {nextActions.map(({ appId, appTitle, action }) => (
-              <div key={appId} className="flex items-center justify-between gap-4 px-5 py-3.5 hover:bg-slate-50 transition-colors">
-                <div>
-                  <p className="text-sm font-medium text-slate-800">{action}</p>
-                  <p className="text-xs text-slate-500 mt-0.5">for <span className="font-medium text-slate-700">{appTitle}</span></p>
-                </div>
-                <Link href={`/portal/applications/${appId}`} className="shrink-0 text-xs font-medium text-blue-600 border border-blue-200 bg-blue-50 px-4 py-2 rounded-lg hover:bg-blue-100 transition-colors whitespace-nowrap shadow-sm">
-                  Go →
-                </Link>
-              </div>
-            ))}
-          </div>
-        </div>
-      )}
-
       {/* Applications Overview */}
       {hasApps && (
         <div className="mb-8">
@@ -110,6 +90,26 @@ export default async function DashboardPage() {
             <Link href="/portal/applications" className="w-full sm:w-auto text-center shrink-0 inline-flex items-center justify-center gap-2 bg-slate-900 text-white font-medium px-6 py-3 rounded-xl text-sm hover:bg-slate-800 transition-all shadow-sm">
               View All Applications →
             </Link>
+          </div>
+        </div>
+      )}
+
+      {/* Next Actions queue */}
+      {nextActions.length > 0 && (
+        <div className="mb-8">
+          <h2 className="text-sm font-semibold text-slate-700 uppercase tracking-wide mb-4">Next Actions</h2>
+          <div className="bg-white rounded-2xl border border-slate-100 divide-y divide-slate-50">
+            {nextActions.map(({ appId, appTitle, action }) => (
+              <div key={appId} className="flex items-center justify-between gap-4 px-5 py-3.5 hover:bg-slate-50 transition-colors">
+                <div>
+                  <p className="text-sm font-medium text-slate-800">{action}</p>
+                  <p className="text-xs text-slate-500 mt-0.5">for <span className="font-medium text-slate-700">{appTitle}</span></p>
+                </div>
+                <Link href={`/portal/applications/${appId}`} className="shrink-0 text-xs font-medium text-blue-600 border border-blue-200 bg-blue-50 px-4 py-2 rounded-lg hover:bg-blue-100 transition-colors whitespace-nowrap shadow-sm">
+                  Go →
+                </Link>
+              </div>
+            ))}
           </div>
         </div>
       )}

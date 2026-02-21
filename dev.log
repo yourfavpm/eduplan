@@ -387,3 +387,6 @@ Error [AuthApiError]: Invalid Refresh Token: Refresh Token Not Found
 ✓ Compiled in 94ms
  GET /portal/sign-in 200 in 39ms (compile: 7ms, proxy.ts: 3ms, render: 29ms)
  GET /portal/dashboard 200 in 750ms (compile: 112ms, proxy.ts: 523ms, render: 115ms)
+✓ Compiled in 127ms
+ GET /portal/sign-in 200 in 35ms (compile: 4ms, proxy.ts: 4ms, render: 27ms)
+ GET /portal/dashboard 200 in 1124ms (compile: 118ms, proxy.ts: 882ms, render: 125ms)
