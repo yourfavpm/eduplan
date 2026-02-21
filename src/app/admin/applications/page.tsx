@@ -12,21 +12,19 @@ export const metadata: Metadata = {
 interface RawRow {
   id: string
   user_id: string
-  destination: string | null
-  proposed_course_1: string | null
+  study_destination: string | null
   status: string
   created_at: string
-  portal_profiles: { full_name: string; email: string; phone: string | null }[] | null
+  portal_profiles: { full_name: string; email: string; phone: string | null; location: string | null } | null
 }
 
 interface AdminApp {
   id: string
   user_id: string
-  destination: string | null
-  proposed_course_1: string | null
+  study_destination: string | null
   status: ApplicationStatus
   created_at: string
-  profile: { full_name: string; email: string; phone: string | null } | null
+  profile: { full_name: string; email: string; phone: string | null; location: string | null } | null
 }
 
 export default async function AdminApplicationsPage() {
@@ -34,19 +32,22 @@ export default async function AdminApplicationsPage() {
   const { data: { user } } = await supabase.auth.getUser()
   if (!user) redirect('/portal/sign-in')
 
-  const { data: raw } = await supabase
+  const { data: raw, error } = await supabase
     .from('applications')
-    .select('id, user_id, destination, proposed_course_1, status, created_at, portal_profiles(full_name, email, phone)')
+    .select('id, user_id, study_destination, status, created_at, portal_profiles(full_name, email, phone, location)')
     .order('created_at', { ascending: false })
+
+  if (error) {
+    console.error('Error fetching admin applications:', error)
+  }
 
   const apps: AdminApp[] = ((raw ?? []) as unknown as RawRow[]).map(r => ({
     id: r.id,
     user_id: r.user_id,
-    destination: r.destination,
-    proposed_course_1: r.proposed_course_1,
+    study_destination: r.study_destination,
     status: r.status as ApplicationStatus,
     created_at: r.created_at,
-    profile: Array.isArray(r.portal_profiles) ? (r.portal_profiles[0] ?? null) : null,
+    profile: Array.isArray(r.portal_profiles) ? (r.portal_profiles[0] ?? null) : (r.portal_profiles ?? null),
   }))
 
   return (
@@ -95,12 +96,17 @@ export default async function AdminApplicationsPage() {
                   <p className="text-sm font-semibold text-slate-800">{app.profile?.full_name ?? 'Unknown'}</p>
                   <p className="text-xs text-slate-400 mt-0.5">{app.profile?.email ?? '—'}</p>
                   {app.profile?.phone && <p className="text-xs text-slate-400">{app.profile.phone}</p>}
+                  {app.profile?.location && <p className="text-xs text-slate-400">{app.profile.location}</p>}
                 </div>
 
                 {/* Application */}
                 <div>
-                  <p className="text-sm text-slate-700 font-medium">{app.destination ?? '—'}</p>
-                  <p className="text-xs text-slate-400 mt-0.5 truncate">{app.proposed_course_1 ?? '—'}</p>
+                  <p className="text-sm font-semibold text-slate-800">
+                    {app.study_destination ?? 'Destination TBA'}
+                  </p>
+                  <p className="text-xs text-slate-400 mt-0.5">
+                    {app.id.substring(0, 8)}...
+                  </p>
                   <p className="text-xs text-slate-300 mt-0.5">
                     {new Date(app.created_at).toLocaleDateString('en-GB', {
                       day: 'numeric', month: 'short', year: 'numeric',

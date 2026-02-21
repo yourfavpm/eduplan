@@ -1,5 +1,4 @@
-import { getStudentById, getApplicationDetails, getApplicationStatusHistory, getAdminNotes } from '@/lib/supabase/admin'
-import { getRequiredDocuments, getDocumentReviewQueue } from '@/lib/supabase/documents'
+import { getStudentById, getStudentLatestApplication, getApplicationStatusHistory } from '@/lib/supabase/admin'
 import { getPayments } from '@/lib/supabase/admin'
 import { redirect } from 'next/navigation'
 import Link from 'next/link'
@@ -22,17 +21,18 @@ export default async function StudentDetailPage({
   const student = await getStudentById(id)
   if (!student) redirect('/admin/students')
 
+  const userApp = await getStudentLatestApplication(id).catch(() => null)
+  const appId = userApp?.id
+
   // Load tab-specific data
-  const [apps, history, notes, payments] = await Promise.all([
-    getApplicationDetails(id).catch(() => null),
-    tab === 'timeline' ? getApplicationStatusHistory(id) : Promise.resolve([]),
-    tab === 'notes' ? getAdminNotes(id) : Promise.resolve([]),
+  const [history, payments] = await Promise.all([
+    tab === 'timeline' && appId ? getApplicationStatusHistory(appId) : Promise.resolve([]),
     tab === 'payments' ? getPayments('all') : Promise.resolve([]),
   ])
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const app = apps as any
-  const appProfile = app ? (Array.isArray(app.portal_profiles) ? app.portal_profiles[0] : app.portal_profiles) : null
+  const app = userApp as any
+  const appProfile = app ? (Array.isArray(app.portal_profiles) ? app.portal_profiles[0] : (app.portal_profiles ?? null)) : null
   void appProfile
 
   const TABS = [
@@ -112,7 +112,7 @@ export default async function StudentDetailPage({
                 { label: 'Phone', value: student.phone ?? '—' },
                 { label: 'Location', value: student.location ?? '—' },
                 { label: 'Role', value: student.role },
-                { label: 'Profile Complete', value: student.profile_completed ? 'Yes' : 'No' },
+                { label: 'Profile Complete', value: 'Yes' },
               ].map(field => (
                 <div key={field.label} className="bg-slate-50 rounded-xl px-4 py-3">
                   <dt className="text-xs text-slate-400 mb-0.5">{field.label}</dt>
@@ -135,11 +135,10 @@ export default async function StudentDetailPage({
                 </div>
                 <dl className="grid sm:grid-cols-2 gap-4">
                   {[
-                    { label: 'Destination', value: app.destination ?? '—' },
-                    { label: 'Preferred University', value: app.preferred_university ?? '—' },
-                    { label: 'Course 1', value: app.proposed_course_1 ?? '—' },
-                    { label: 'Course 2', value: app.proposed_course_2 ?? '—' },
-                    { label: 'Highest Qualification', value: app.highest_qualification ?? '—' },
+                    { label: 'Destination', value: app.study_destination ?? '—' },
+                    { label: 'Preferred University', value: app.application_university_choices?.[0]?.university_name ?? '—' },
+                    { label: 'Course', value: app.application_university_choices?.[0]?.university_course_choices?.[0]?.course_name ?? '—' },
+                    { label: 'Highest Qualification', value: Array.isArray(app.qualification_level) ? app.qualification_level[0]?.name : (app.qualification_level?.name ?? '—') },
                     { label: 'Status', value: app.status },
                     { label: 'App Fee Paid', value: app.application_fee_paid ? 'Yes' : 'No' },
                     { label: 'Tuition Deposit Paid', value: app.tuition_deposit_paid ? 'Yes' : 'No' },

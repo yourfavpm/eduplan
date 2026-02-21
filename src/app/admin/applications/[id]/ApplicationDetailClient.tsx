@@ -26,6 +26,7 @@ export default function ApplicationDetailClient({
   const [selectedTypeId, setSelectedTypeId] = useState('')
   const [rejectId, setRejectId] = useState<string | null>(null)
   const [rejectReason, setRejectReason] = useState('')
+  const [customDocTitle, setCustomDocTitle] = useState('')
   const [isPending, startTransition] = useTransition()
 
   const assignedTypeIds = new Set(docs.map(d => d.document_type_id))
@@ -37,7 +38,10 @@ export default function ApplicationDetailClient({
       const res = await fetch(`/api/admin/applications/${applicationId}/required-documents`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ documentTypeId: selectedTypeId }),
+        body: JSON.stringify({
+          documentTypeId: selectedTypeId === 'custom' ? undefined : selectedTypeId,
+          customDocTitle: selectedTypeId === 'custom' ? customDocTitle : undefined,
+        }),
       })
       if (res.ok) {
         // Refresh the doc list
@@ -45,8 +49,12 @@ export default function ApplicationDetailClient({
         const data = await refreshed.json()
         if (Array.isArray(data)) setDocs(data)
         else window.location.reload() // fallback
+      } else {
+        const err = await res.json()
+        alert(err.error || 'Failed to assign document')
       }
       setSelectedTypeId('')
+      setCustomDocTitle('')
     })
   }
 
@@ -105,15 +113,26 @@ export default function ApplicationDetailClient({
                 className="appearance-none border border-slate-200 rounded-lg pl-3 pr-8 py-2 text-sm text-slate-700 focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white"
               >
                 <option value="">Select document type…</option>
+                <option value="custom" className="font-semibold">+ Create custom request</option>
                 {availableTypes.map(t => (
                   <option key={t.id} value={t.id}>{t.name} {t.required ? '(Required)' : '(Optional)'}</option>
                 ))}
               </select>
               <ChevronDown className="absolute right-2 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400 pointer-events-none" />
             </div>
+            {selectedTypeId === 'custom' && (
+              <input
+                type="text"
+                placeholder="Name of document to request..."
+                value={customDocTitle}
+                onChange={e => setCustomDocTitle(e.target.value)}
+                className="border border-slate-200 rounded-lg px-3 py-2 text-sm text-slate-700 min-w-[200px] focus:outline-none focus:ring-2 focus:ring-blue-500"
+                onKeyDown={e => e.key === 'Enter' && handleAssign()}
+              />
+            )}
             <button
               onClick={handleAssign}
-              disabled={!selectedTypeId || isPending}
+              disabled={!selectedTypeId || (selectedTypeId === 'custom' && !customDocTitle.trim()) || isPending}
               className="inline-flex items-center gap-1.5 bg-blue-600 text-white px-3 py-2 rounded-lg text-sm font-medium hover:bg-blue-700 disabled:opacity-50 transition-colors"
             >
               <Plus className="w-4 h-4" /> Assign

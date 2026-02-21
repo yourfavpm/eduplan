@@ -2,8 +2,9 @@
 
 import Link from 'next/link'
 import Image from 'next/image'
-import { usePathname } from 'next/navigation'
+import { usePathname, useRouter } from 'next/navigation'
 import { useState } from 'react'
+import { createClient } from '@/lib/supabase/client'
 import {
   LayoutDashboard, Users, FileText,
   Globe, Home, MapPin, Award, CalendarDays, BookOpen,
@@ -56,6 +57,7 @@ interface Props {
 
 export default function AdminSidebar({ adminName }: Props) {
   const pathname = usePathname()
+  const router = useRouter()
   const [open, setOpen] = useState(false)
   const [collapsed, setCollapsed] = useState<Record<string, boolean>>({})
 
@@ -116,9 +118,16 @@ export default function AdminSidebar({ adminName }: Props) {
       {/* Footer */}
       <div className="shrink-0 border-t border-slate-800 px-4 py-3">
         <p className="text-xs text-slate-500 truncate">{adminName}</p>
-        <Link href="/portal/dashboard" className="text-xs text-slate-600 hover:text-slate-400 transition-colors">
-          ← Back to Portal
-        </Link>
+        <button 
+          onClick={async () => {
+            const supabase = createClient()
+            await supabase.auth.signOut()
+            router.push('/portal/sign-in')
+          }}
+          className="text-xs text-red-600 font-medium hover:text-red-500 transition-colors block mt-1"
+        >
+          Sign Out
+        </button>
       </div>
     </div>
   )

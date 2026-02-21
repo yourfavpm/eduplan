@@ -723,3 +723,215 @@ Error [AuthApiError]: Invalid Refresh Token: Refresh Token Not Found
  GET /portal/documents?app=20fa7e6f-acf2-4ac2-804e-6c43ef3e26cd 200 in 405ms (compile: 6ms, proxy.ts: 315ms, render: 84ms)
  GET /portal/documents?app=20fa7e6f-acf2-4ac2-804e-6c43ef3e26cd 200 in 377ms (compile: 5ms, proxy.ts: 305ms, render: 67ms)
  GET /portal/documents?app=20fa7e6f-acf2-4ac2-804e-6c43ef3e26cd 200 in 428ms (compile: 8ms, proxy.ts: 357ms, render: 63ms)
+ GET /portal/applications 200 in 1501ms (compile: 179ms, proxy.ts: 671ms, render: 652ms)
+ GET /portal/applications/d4f22f53-f997-4b40-a8b1-f2b78c3abdb0 200 in 1661ms (compile: 145ms, proxy.ts: 237ms, render: 1280ms)
+ POST /api/portal/applications/d4f22f53-f997-4b40-a8b1-f2b78c3abdb0/withdraw 200 in 3.9s (compile: 1176ms, proxy.ts: 964ms, render: 1800ms)
+ GET /portal/applications/d4f22f53-f997-4b40-a8b1-f2b78c3abdb0 200 in 1761ms (compile: 11ms, proxy.ts: 388ms, render: 1362ms)
+ GET /portal/applications 200 in 1507ms (compile: 5ms, proxy.ts: 671ms, render: 831ms)
+ GET /portal/dashboard 200 in 2.9s (compile: 8ms, proxy.ts: 848ms, render: 2.0s)
+ GET /portal/sign-in 200 in 32ms (compile: 6ms, proxy.ts: 5ms, render: 21ms)
+ GET /admin/overview 200 in 2.1s (compile: 454ms, proxy.ts: 958ms, render: 722ms)
+ GET /admin/overview 200 in 1887ms (compile: 4ms, proxy.ts: 877ms, render: 1006ms)
+ GET /admin/students 200 in 1643ms (compile: 286ms, proxy.ts: 986ms, render: 371ms)
+ GET /admin/students/64d22c9f-1e05-4470-99d7-9e0f0ce3ba7b 200 in 1883ms (compile: 400ms, proxy.ts: 914ms, render: 570ms)
+ GET /admin/students/64d22c9f-1e05-4470-99d7-9e0f0ce3ba7b?tab=application 200 in 1468ms (compile: 11ms, proxy.ts: 928ms, render: 529ms)
+ GET /admin/students/64d22c9f-1e05-4470-99d7-9e0f0ce3ba7b?tab=documents 200 in 1105ms (compile: 9ms, proxy.ts: 537ms, render: 558ms)
+ GET /admin/students/64d22c9f-1e05-4470-99d7-9e0f0ce3ba7b?tab=payments 200 in 1501ms (compile: 10ms, proxy.ts: 500ms, render: 990ms)
+ GET /admin/students/64d22c9f-1e05-4470-99d7-9e0f0ce3ba7b?tab=timeline 200 in 1089ms (compile: 9ms, proxy.ts: 494ms, render: 585ms)
+ GET /admin/students/64d22c9f-1e05-4470-99d7-9e0f0ce3ba7b?tab=overview 200 in 995ms (compile: 8ms, proxy.ts: 467ms, render: 519ms)
+ GET /admin/students 200 in 1262ms (compile: 6ms, proxy.ts: 938ms, render: 319ms)
+ GET /admin/applications 200 in 2.3s (compile: 278ms, proxy.ts: 1295ms, render: 696ms)
+ GET /admin/applications 200 in 1525ms (compile: 4ms, proxy.ts: 971ms, render: 550ms)
+ GET /admin/overview 200 in 1617ms (compile: 5ms, proxy.ts: 881ms, render: 731ms)
+ GET /admin/applications 200 in 1497ms (compile: 5ms, proxy.ts: 914ms, render: 578ms)
+ GET /admin/applications 200 in 1437ms (compile: 5ms, proxy.ts: 901ms, render: 532ms)
+ GET /admin/students 200 in 849ms (compile: 5ms, proxy.ts: 545ms, render: 299ms)
+ GET /admin/applications 200 in 1656ms (compile: 5ms, proxy.ts: 1032ms, render: 619ms)
+ GET /admin/overview 200 in 1310ms (compile: 5ms, proxy.ts: 515ms, render: 789ms)
+ GET /admin/applications 200 in 1725ms (compile: 5ms, proxy.ts: 972ms, render: 748ms)
+ GET /admin/overview 200 in 1946ms (compile: 7ms, proxy.ts: 997ms, render: 942ms)
+ GET /admin/applications 200 in 1817ms (compile: 6ms, proxy.ts: 1094ms, render: 717ms)
+ GET /admin/documents 200 in 1409ms (compile: 319ms, proxy.ts: 695ms, render: 395ms)
+ GET /admin/students 200 in 1221ms (compile: 7ms, proxy.ts: 912ms, render: 302ms)
+ GET /admin/applications 200 in 1302ms (compile: 5ms, proxy.ts: 729ms, render: 568ms)
+✓ Compiled in 115ms
+ GET /admin/applications 200 in 1456ms (compile: 93ms, proxy.ts: 947ms, render: 415ms)
+ GET /portal/sign-in 200 in 42ms (compile: 5ms, proxy.ts: 8ms, render: 29ms)
+✓ Compiled in 92ms
+ GET /portal/sign-in 200 in 29ms (compile: 4ms, proxy.ts: 4ms, render: 21ms)
+ GET /admin/applications 200 in 1901ms (compile: 71ms, proxy.ts: 1746ms, render: 85ms)
+✓ Compiled in 75ms
+ GET /portal/sign-in 200 in 37ms (compile: 3ms, proxy.ts: 13ms, render: 21ms)
+ GET /admin/applications 200 in 1314ms (compile: 71ms, proxy.ts: 1170ms, render: 73ms)
+ GET /admin/applications/db2e75e7-4dbe-4916-a2fc-f24d94cca16c 200 in 3.5s (compile: 379ms, proxy.ts: 1600ms, render: 1490ms)
+ GET /portal/sign-in 200 in 34ms (compile: 5ms, proxy.ts: 3ms, render: 26ms)
+✓ Compiled in 77ms
+ GET /admin/applications/db2e75e7-4dbe-4916-a2fc-f24d94cca16c 200 in 1190ms (compile: 14ms, proxy.ts: 1114ms, render: 62ms)
+ GET /portal/sign-in 200 in 30ms (compile: 4ms, proxy.ts: 3ms, render: 24ms)
+✓ Compiled in 113ms
+ GET /admin/applications/db2e75e7-4dbe-4916-a2fc-f24d94cca16c 200 in 1204ms (compile: 11ms, proxy.ts: 1115ms, render: 77ms)
+ GET /admin/students/d3d62a58-8f73-4b36-98fc-fed91db34547 200 in 1473ms (compile: 13ms, proxy.ts: 927ms, render: 533ms)
+ GET /admin/applications 200 in 1631ms (compile: 79ms, proxy.ts: 971ms, render: 581ms)
+ GET /admin/settings 200 in 2.3s (compile: 1021ms, proxy.ts: 915ms, render: 364ms)
+✓ Compiled in 81ms
+ GET /portal/sign-in 200 in 44ms (compile: 10ms, proxy.ts: 4ms, render: 30ms)
+ GET /portal/sign-in 200 in 38ms (compile: 4ms, proxy.ts: 3ms, render: 30ms)
+ GET /portal/sign-in 200 in 70ms (compile: 6ms, proxy.ts: 6ms, render: 58ms)
+ GET /portal/sign-in 200 in 69ms (compile: 32ms, proxy.ts: 6ms, render: 31ms)
+ GET /admin/settings 200 in 1086ms (compile: 6ms, proxy.ts: 1014ms, render: 66ms)
+ GET /admin/settings 200 in 701ms (compile: 4ms, proxy.ts: 638ms, render: 60ms)
+ GET /portal/sign-in 200 in 36ms (compile: 5ms, proxy.ts: 4ms, render: 28ms)
+ GET /admin/settings 200 in 604ms (compile: 11ms, proxy.ts: 515ms, render: 77ms)
+ GET /admin/settings 200 in 551ms (compile: 16ms, proxy.ts: 486ms, render: 49ms)
+ GET /admin/settings 200 in 544ms (compile: 3ms, proxy.ts: 495ms, render: 45ms)
+ POST /api/admin/cms/site-settings 200 in 2.9s (compile: 408ms, proxy.ts: 776ms, render: 1706ms)
+ GET /admin/document-types 200 in 1767ms (compile: 287ms, proxy.ts: 1112ms, render: 368ms)
+ PATCH /api/admin/document-types/c869fe05-aa54-4576-89da-ac3e2d004ff2 200 in 938ms (compile: 65ms, proxy.ts: 530ms, render: 342ms)
+ GET /admin/qualification-levels 200 in 1783ms (compile: 272ms, proxy.ts: 1048ms, render: 464ms)
+ GET /admin/qualification-mandatory-docs 200 in 1989ms (compile: 316ms, proxy.ts: 981ms, render: 692ms)
+✓ Compiled in 98ms
+ GET /portal/sign-in 200 in 136ms (compile: 7ms, proxy.ts: 5ms, render: 125ms)
+ GET /portal/sign-in 200 in 131ms (compile: 12ms, proxy.ts: 30ms, render: 89ms)
+ GET /portal/sign-in 200 in 110ms (compile: 32ms, proxy.ts: 11ms, render: 67ms)
+ GET /portal/sign-in 200 in 111ms (compile: 47ms, proxy.ts: 13ms, render: 51ms)
+ GET /admin/qualification-mandatory-docs 200 in 952ms (compile: 5ms, proxy.ts: 863ms, render: 84ms)
+ GET /admin/qualification-mandatory-docs 200 in 570ms (compile: 8ms, proxy.ts: 506ms, render: 57ms)
+ GET /admin/qualification-mandatory-docs 200 in 993ms (compile: 9ms, proxy.ts: 930ms, render: 54ms)
+ GET /admin/qualification-mandatory-docs 200 in 546ms (compile: 4ms, proxy.ts: 491ms, render: 52ms)
+ POST /api/admin/qualification-mandatory-docs 200 in 1157ms (compile: 63ms, proxy.ts: 270ms, render: 824ms)
+ POST /api/admin/qualification-mandatory-docs 200 in 1384ms (compile: 4ms, proxy.ts: 626ms, render: 754ms)
+✓ Compiled in 83ms
+ GET /portal/sign-in 200 in 28ms (compile: 3ms, proxy.ts: 3ms, render: 22ms)
+ GET /admin/qualification-mandatory-docs 200 in 1014ms (compile: 5ms, proxy.ts: 961ms, render: 49ms)
+ POST /api/admin/qualification-mandatory-docs 200 in 1774ms (compile: 4ms, proxy.ts: 333ms, render: 1436ms)
+ POST /api/admin/qualification-mandatory-docs 200 in 1325ms (compile: 4ms, proxy.ts: 360ms, render: 961ms)
+ POST /api/admin/qualification-mandatory-docs 200 in 1330ms (compile: 3ms, proxy.ts: 340ms, render: 987ms)
+ POST /api/admin/qualification-mandatory-docs 200 in 1426ms (compile: 4ms, proxy.ts: 383ms, render: 1038ms)
+ POST /api/admin/qualification-mandatory-docs 200 in 1874ms (compile: 5ms, proxy.ts: 1054ms, render: 814ms)
+ POST /api/admin/qualification-mandatory-docs 200 in 1183ms (compile: 4ms, proxy.ts: 263ms, render: 915ms)
+ POST /api/admin/qualification-mandatory-docs 200 in 973ms (compile: 4ms, proxy.ts: 249ms, render: 721ms)
+ POST /api/admin/qualification-mandatory-docs 200 in 957ms (compile: 3ms, proxy.ts: 233ms, render: 721ms)
+ POST /api/admin/qualification-mandatory-docs 200 in 1010ms (compile: 4ms, proxy.ts: 243ms, render: 763ms)
+✓ Compiled in 77ms
+ GET /portal/sign-in 200 in 27ms (compile: 3ms, proxy.ts: 3ms, render: 21ms)
+✓ Compiled in 79ms
+ POST /api/admin/qualification-mandatory-docs 200 in 1032ms (compile: 2ms, proxy.ts: 297ms, render: 733ms)
+ GET /admin/qualification-mandatory-docs 200 in 825ms (compile: 4ms, proxy.ts: 760ms, render: 61ms)
+ POST /api/admin/qualification-mandatory-docs 200 in 960ms (compile: 4ms, proxy.ts: 250ms, render: 706ms)
+ POST /api/admin/qualification-mandatory-docs 200 in 931ms (compile: 4ms, proxy.ts: 232ms, render: 695ms)
+ POST /api/admin/qualification-mandatory-docs 200 in 967ms (compile: 4ms, proxy.ts: 246ms, render: 717ms)
+ POST /api/admin/qualification-mandatory-docs 200 in 1098ms (compile: 4ms, proxy.ts: 314ms, render: 780ms)
+ POST /api/admin/qualification-mandatory-docs 200 in 1003ms (compile: 3ms, proxy.ts: 284ms, render: 716ms)
+ GET /portal/sign-in 200 in 33ms (compile: 5ms, proxy.ts: 4ms, render: 24ms)
+✓ Compiled in 111ms
+ POST /api/admin/qualification-mandatory-docs 200 in 1011ms (compile: 3ms, proxy.ts: 251ms, render: 758ms)
+ GET /admin/qualification-mandatory-docs 200 in 942ms (compile: 4ms, proxy.ts: 839ms, render: 99ms)
+✓ Compiled in 85ms
+ POST /api/admin/qualification-mandatory-docs 200 in 1396ms (compile: 4ms, proxy.ts: 678ms, render: 715ms)
+ POST /api/admin/qualification-mandatory-docs 200 in 1040ms (compile: 3ms, proxy.ts: 262ms, render: 775ms)
+ POST /api/admin/qualification-mandatory-docs 200 in 1113ms (compile: 3ms, proxy.ts: 302ms, render: 808ms)
+✓ Compiled in 85ms
+ POST /api/admin/qualification-mandatory-docs 200 in 1056ms (compile: 2ms, proxy.ts: 333ms, render: 720ms)
+ GET /portal/sign-in 200 in 26ms (compile: 3ms, proxy.ts: 4ms, render: 20ms)
+✓ Compiled in 74ms
+ GET /admin/qualification-mandatory-docs 200 in 623ms (compile: 4ms, proxy.ts: 564ms, render: 55ms)
+ POST /api/admin/qualification-mandatory-docs 200 in 1025ms (compile: 4ms, proxy.ts: 297ms, render: 723ms)
+ POST /api/admin/qualification-mandatory-docs 200 in 963ms (compile: 3ms, proxy.ts: 248ms, render: 713ms)
+ POST /api/admin/qualification-mandatory-docs 200 in 998ms (compile: 5ms, proxy.ts: 252ms, render: 741ms)
+ POST /api/admin/qualification-mandatory-docs 200 in 1010ms (compile: 3ms, proxy.ts: 239ms, render: 768ms)
+ POST /api/admin/qualification-mandatory-docs 200 in 1281ms (compile: 3ms, proxy.ts: 311ms, render: 967ms)
+ POST /api/admin/qualification-mandatory-docs 200 in 1007ms (compile: 4ms, proxy.ts: 251ms, render: 752ms)
+ POST /api/admin/qualification-mandatory-docs 200 in 1007ms (compile: 4ms, proxy.ts: 260ms, render: 743ms)
+ POST /api/admin/qualification-mandatory-docs 200 in 989ms (compile: 4ms, proxy.ts: 259ms, render: 726ms)
+ POST /api/admin/qualification-mandatory-docs 200 in 974ms (compile: 4ms, proxy.ts: 256ms, render: 715ms)
+ POST /api/admin/qualification-mandatory-docs 200 in 957ms (compile: 4ms, proxy.ts: 247ms, render: 707ms)
+ POST /api/admin/qualification-mandatory-docs 200 in 1091ms (compile: 4ms, proxy.ts: 299ms, render: 787ms)
+ POST /api/admin/qualification-mandatory-docs 200 in 1034ms (compile: 4ms, proxy.ts: 318ms, render: 712ms)
+ POST /api/admin/qualification-mandatory-docs 200 in 1050ms (compile: 4ms, proxy.ts: 258ms, render: 788ms)
+ POST /api/admin/qualification-mandatory-docs 200 in 1061ms (compile: 4ms, proxy.ts: 254ms, render: 803ms)
+ POST /api/admin/qualification-mandatory-docs 200 in 1034ms (compile: 4ms, proxy.ts: 242ms, render: 788ms)
+ POST /api/admin/qualification-mandatory-docs 200 in 1018ms (compile: 4ms, proxy.ts: 299ms, render: 715ms)
+ POST /api/admin/qualification-mandatory-docs 200 in 1020ms (compile: 3ms, proxy.ts: 280ms, render: 736ms)
+ POST /api/admin/qualification-mandatory-docs 200 in 1415ms (compile: 4ms, proxy.ts: 689ms, render: 722ms)
+ POST /api/admin/qualification-mandatory-docs 200 in 1048ms (compile: 4ms, proxy.ts: 257ms, render: 787ms)
+ POST /api/admin/qualification-mandatory-docs 200 in 963ms (compile: 4ms, proxy.ts: 250ms, render: 708ms)
+ POST /api/admin/qualification-mandatory-docs 200 in 1226ms (compile: 3ms, proxy.ts: 243ms, render: 979ms)
+ POST /api/admin/qualification-mandatory-docs 200 in 1015ms (compile: 4ms, proxy.ts: 260ms, render: 751ms)
+ POST /api/admin/qualification-mandatory-docs 200 in 985ms (compile: 4ms, proxy.ts: 257ms, render: 724ms)
+ POST /api/admin/qualification-mandatory-docs 200 in 1084ms (compile: 4ms, proxy.ts: 254ms, render: 826ms)
+ POST /api/admin/qualification-mandatory-docs 200 in 1000ms (compile: 4ms, proxy.ts: 255ms, render: 742ms)
+ GET /admin/applications 200 in 1536ms (compile: 8ms, proxy.ts: 945ms, render: 583ms)
+ GET /admin/applications/db2e75e7-4dbe-4916-a2fc-f24d94cca16c 200 in 1558ms (compile: 123ms, proxy.ts: 546ms, render: 888ms)
+ GET /admin/students/d3d62a58-8f73-4b36-98fc-fed91db34547 200 in 1688ms (compile: 130ms, proxy.ts: 965ms, render: 592ms)
+ GET /admin/applications 200 in 1775ms (compile: 4ms, proxy.ts: 1051ms, render: 720ms)
+ GET /admin/students 200 in 1496ms (compile: 130ms, proxy.ts: 915ms, render: 451ms)
+ GET /admin/applications 200 in 1563ms (compile: 6ms, proxy.ts: 982ms, render: 574ms)
+ GET /admin/overview 200 in 1387ms (compile: 130ms, proxy.ts: 544ms, render: 713ms)
+ GET /admin/applications 200 in 2.0s (compile: 4ms, proxy.ts: 1392ms, render: 627ms)
+ GET /admin/applications/f8e392c8-296a-4987-876e-33fead56d771 200 in 1412ms (compile: 9ms, proxy.ts: 548ms, render: 855ms)
+ GET /admin/applications/f8e392c8-296a-4987-876e-33fead56d771?tab=required-docs 200 in 2.2s (compile: 14ms, proxy.ts: 952ms, render: 1190ms)
+ POST /api/admin/applications/f8e392c8-296a-4987-876e-33fead56d771/required-documents 405 in 643ms (compile: 65ms, proxy.ts: 573ms, render: 6ms)
+ GET /admin/applications/f8e392c8-296a-4987-876e-33fead56d771?tab=documents 200 in 1620ms (compile: 12ms, proxy.ts: 890ms, render: 718ms)
+ GET /admin/documents 200 in 1760ms (compile: 10ms, proxy.ts: 876ms, render: 874ms)
+ GET /portal/dashboard 200 in 2.1s (compile: 9ms, proxy.ts: 674ms, render: 1449ms)
+ GET /portal/sign-in 200 in 27ms (compile: 6ms, proxy.ts: 3ms, render: 18ms)
+ GET /portal/dashboard 200 in 1948ms (compile: 9ms, proxy.ts: 717ms, render: 1221ms)
+ GET /portal/dashboard 200 in 1579ms (compile: 3ms, proxy.ts: 669ms, render: 907ms)
+ GET /portal/applications/new 200 in 1738ms (compile: 279ms, proxy.ts: 633ms, render: 825ms)
+✓ Compiled in 481ms
+ POST /api/portal/applications 200 in 3.2s (compile: 82ms, proxy.ts: 544ms, render: 2.6s)
+ GET /portal/applications/568f6a25-364a-4698-abd8-af017ce96405?banner=created 200 in 1757ms (compile: 18ms, proxy.ts: 315ms, render: 1424ms)
+✓ Compiled in 177ms
+uploadDocument storage: Error [StorageApiError]: Bucket not found
+    at ignore-listed frames {
+  __isStorageError: true,
+  namespace: 'storage',
+  status: 400,
+  statusCode: '404'
+}
+ POST /api/portal/documents/upload 500 in 2.0s (compile: 223ms, proxy.ts: 512ms, render: 1305ms)
+uploadDocument storage: Error [StorageApiError]: Bucket not found
+    at ignore-listed frames {
+  __isStorageError: true,
+  namespace: 'storage',
+  status: 400,
+  statusCode: '404'
+}
+ POST /api/portal/documents/upload 500 in 2.5s (compile: 5ms, proxy.ts: 619ms, render: 1845ms)
+✓ Compiled in 214ms
+ GET /portal/sign-in 200 in 43ms (compile: 7ms, proxy.ts: 4ms, render: 33ms)
+ GET /portal/applications/568f6a25-364a-4698-abd8-af017ce96405?banner=created 200 in 1295ms (compile: 155ms, proxy.ts: 1031ms, render: 108ms)
+ GET /portal/applications/568f6a25-364a-4698-abd8-af017ce96405?banner=created 200 in 424ms (compile: 5ms, proxy.ts: 324ms, render: 95ms)
+ GET /portal/sign-in 200 in 105ms (compile: 5ms, proxy.ts: 4ms, render: 96ms)
+ GET /portal/sign-in 200 in 72ms (compile: 5ms, proxy.ts: 6ms, render: 61ms)
+ GET /portal/sign-in 200 in 41ms (compile: 4ms, proxy.ts: 4ms, render: 33ms)
+ GET /portal/sign-in 200 in 26ms (compile: 3ms, proxy.ts: 3ms, render: 21ms)
+ GET /portal/applications/568f6a25-364a-4698-abd8-af017ce96405?banner=created 200 in 409ms (compile: 11ms, proxy.ts: 322ms, render: 77ms)
+ GET /portal/applications/568f6a25-364a-4698-abd8-af017ce96405?banner=created 200 in 509ms (compile: 5ms, proxy.ts: 436ms, render: 68ms)
+ GET /portal/applications/568f6a25-364a-4698-abd8-af017ce96405?banner=created 200 in 442ms (compile: 11ms, proxy.ts: 356ms, render: 75ms)
+uploadDocument storage: Error [StorageApiError]: Bucket not found
+    at ignore-listed frames {
+  __isStorageError: true,
+  namespace: 'storage',
+  status: 400,
+  statusCode: '404'
+}
+ POST /api/portal/documents/upload 500 in 3.6s (compile: 111ms, proxy.ts: 602ms, render: 2.9s)
+ GET /portal/documents 200 in 5.5s (compile: 159ms, proxy.ts: 3.7s, render: 1675ms)
+uploadDocument storage: Error [StorageApiError]: new row violates row-level security policy
+    at ignore-listed frames {
+  __isStorageError: true,
+  namespace: 'storage',
+  status: 400,
+  statusCode: '403'
+}
+ POST /api/portal/documents/upload 500 in 2.3s (compile: 6ms, proxy.ts: 986ms, render: 1282ms)
+ GET /portal/documents 200 in 2.3s (compile: 10ms, proxy.ts: 308ms, render: 1973ms)
+uploadDocument storage: Error [StorageApiError]: new row violates row-level security policy
+    at ignore-listed frames {
+  __isStorageError: true,
+  namespace: 'storage',
+  status: 400,
+  statusCode: '403'
+}
+ POST /api/portal/documents/upload 500 in 1711ms (compile: 5ms, proxy.ts: 806ms, render: 899ms)

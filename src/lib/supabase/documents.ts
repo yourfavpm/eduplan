@@ -177,6 +177,23 @@ export async function uploadDocument(
     .update({ status: 'uploaded', rejection_reason: null })
     .eq('id', requiredDocId)
 
+  // Auto-advance logic: if all required docs for this application are 'uploaded' or 'approved', 
+  // advance application status to 'UNDER_REVIEW'
+  const { data: allDocs } = await supabase
+    .from('application_required_documents')
+    .select('status')
+    .eq('application_id', applicationId)
+
+  const allComplete = allDocs && allDocs.every(d => d.status === 'uploaded' || d.status === 'approved')
+  
+  if (allComplete) {
+    await supabase
+      .from('applications')
+      .update({ status: 'UNDER_REVIEW', updated_at: new Date().toISOString() })
+      .eq('id', applicationId)
+      .in('status', ['INCOMPLETE_DOCUMENTS', 'PENDING']) // Only advance from early stages
+  }
+
   return { success: true }
 }
 

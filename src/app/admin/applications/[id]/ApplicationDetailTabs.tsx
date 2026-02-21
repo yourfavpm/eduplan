@@ -5,7 +5,7 @@ import Link from 'next/link'
 import type { RequiredDocument, DocumentType } from '@/types/portal'
 import StatusUpdateModal from '@/components/admin/StatusUpdateModal'
 import ApplicationDetailClient from './ApplicationDetailClient'
-import { Plus, Check, X, Trash2, ChevronDown } from 'lucide-react'
+import { Plus } from 'lucide-react'
 
 const TABS = [
   { id: 'overview', label: 'Overview' },
@@ -30,8 +30,6 @@ interface Props {
   currentStatus: string
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   app: any
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  profile: any
   requiredDocs: RequiredDocument[]
   allDocumentTypes: DocumentType[]
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -41,12 +39,11 @@ interface Props {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   payments: any[]
   activeTab: string
-  adminId: string
 }
 
 export default function ApplicationDetailTabs({
-  applicationId, currentStatus, app, profile, requiredDocs, allDocumentTypes,
-  statusHistory, notes, payments, activeTab, adminId,
+  applicationId, currentStatus, app, requiredDocs, allDocumentTypes,
+  statusHistory, notes, payments, activeTab,
 }: Props) {
   const [status, setStatus] = useState(currentStatus)
   const [noteText, setNoteText] = useState('')
@@ -95,11 +92,10 @@ export default function ApplicationDetailTabs({
             <h2 className="text-sm font-semibold text-slate-700">Application Form Data</h2>
             <dl className="grid sm:grid-cols-2 gap-3">
               {[
-                ['Destination', app.destination],
-                ['Preferred University', app.preferred_university],
-                ['Course 1', app.proposed_course_1],
-                ['Course 2', app.proposed_course_2],
-                ['Highest Qualification', app.highest_qualification],
+                ['Destination', app.study_destination],
+                ['University', app.application_university_choices?.[0]?.university_name],
+                ['Course', app.application_university_choices?.[0]?.university_course_choices?.[0]?.course_name],
+                ['Highest Qualification', Array.isArray(app.qualification_level) ? app.qualification_level[0]?.name : app.qualification_level?.name],
                 ['App Fee Paid', app.application_fee_paid ? 'Yes ✓' : 'No'],
                 ['Tuition Deposit Paid', app.tuition_deposit_paid ? 'Yes ✓' : 'No'],
                 ['Created', new Date(app.created_at).toLocaleDateString('en-GB', { day: 'numeric', month: 'short', year: 'numeric' })],

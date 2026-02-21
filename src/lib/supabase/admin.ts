@@ -105,8 +105,34 @@ export async function getApplicationDetails(id: string) {
   const supabase = await createClient()
   const { data } = await supabase
     .from('applications')
-    .select(`*, portal_profiles(full_name, email, phone)`)
+    .select(`
+      *,
+      portal_profiles(full_name, email, phone, location),
+      qualification_level:qualification_levels(*),
+      application_university_choices(
+        *, university_course_choices(*)
+      )
+    `)
     .eq('id', id)
+    .single()
+  return data
+}
+
+export async function getStudentLatestApplication(userId: string) {
+  const supabase = await createClient()
+  const { data } = await supabase
+    .from('applications')
+    .select(`
+      *,
+      portal_profiles(full_name, email, phone, location),
+      qualification_level:qualification_levels(*),
+      application_university_choices(
+        *, university_course_choices(*)
+      )
+    `)
+    .eq('user_id', userId)
+    .order('created_at', { ascending: false })
+    .limit(1)
     .single()
   return data
 }

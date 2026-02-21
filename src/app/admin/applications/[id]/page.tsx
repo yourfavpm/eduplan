@@ -59,14 +59,19 @@ export default async function ApplicationDetailPage({
               <h1 className="text-xl font-bold text-slate-900">{profile?.full_name ?? 'Unknown'}</h1>
               <StatusBadge status={app.status as ApplicationStatus} />
             </div>
-            <p className="text-slate-500 text-sm">{profile?.email} {profile?.phone ? `· ${profile.phone}` : ''}</p>
+            <p className="text-slate-500 text-sm">
+              {profile?.email}
+              {profile?.phone ? ` · ${profile.phone}` : ''}
+              {profile?.location ? ` · ${profile.location}` : ''}
+            </p>
           </div>
         </div>
 
-        <div className="grid sm:grid-cols-4 gap-4 mt-5 pt-5 border-t border-slate-50 text-sm">
-          <div><p className="text-xs text-slate-400 mb-0.5">Destination</p><p className="font-medium text-slate-800">{app.destination ?? '—'}</p></div>
-          <div><p className="text-xs text-slate-400 mb-0.5">University</p><p className="font-medium text-slate-800 truncate">{app.preferred_university ?? '—'}</p></div>
-          <div><p className="text-xs text-slate-400 mb-0.5">Course</p><p className="font-medium text-slate-800 truncate">{app.proposed_course_1 ?? '—'}</p></div>
+        <div className="grid sm:grid-cols-5 gap-4 mt-5 pt-5 border-t border-slate-50 text-sm">
+          <div><p className="text-xs text-slate-400 mb-0.5">Destination</p><p className="font-medium text-slate-800">{app.study_destination ?? '—'}</p></div>
+          <div><p className="text-xs text-slate-400 mb-0.5">University</p><p className="font-medium text-slate-800 truncate">{app.application_university_choices?.[0]?.university_name ?? '—'}</p></div>
+          <div><p className="text-xs text-slate-400 mb-0.5">Course</p><p className="font-medium text-slate-800 truncate">{app.application_university_choices?.[0]?.university_course_choices?.[0]?.course_name ?? '—'}</p></div>
+          <div><p className="text-xs text-slate-400 mb-0.5">Level</p><p className="font-medium text-slate-800 truncate">{Array.isArray(app.qualification_level) ? app.qualification_level[0]?.name : (app.qualification_level?.name ?? '—')}</p></div>
           <div>
             <p className="text-xs text-slate-400 mb-0.5">Documents</p>
             <p className="font-medium text-slate-800">{docsTotal > 0 ? `${docsComplete}/${docsTotal}` : 'Not assigned'}</p>
@@ -79,14 +84,12 @@ export default async function ApplicationDetailPage({
         applicationId={id}
         currentStatus={app.status}
         app={app}
-        profile={profile}
         requiredDocs={requiredDocs}
         allDocumentTypes={allDocTypes}
         statusHistory={statusHistory}
         notes={notes}
         payments={payments}
         activeTab={tab}
-        adminId={user.id}
       />
     </div>
   )
