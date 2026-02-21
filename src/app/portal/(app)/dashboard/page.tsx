@@ -3,6 +3,7 @@ import { redirect } from 'next/navigation'
 import { getUserApplications, getPortalProfile, createPortalProfile } from '@/lib/supabase/portal'
 import Link from 'next/link'
 import { getNextAction } from '@/types/portal'
+import type { Metadata } from 'next'
 
 export const metadata: Metadata = { title: 'Dashboard | EduPlan360' }
 
