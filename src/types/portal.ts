@@ -11,6 +11,7 @@ export type ApplicationStatus =
   | 'PAY_TUITION_DEPOSIT'
   | 'CAS_ISSUED'
   | 'PROCESS_VISA'
+  | 'WITHDRAWN'
 
 export type DocumentStatus = 'pending' | 'uploaded' | 'approved' | 'rejected'
 export type RequiredDocSource = 'auto_qualification' | 'manual_admin'

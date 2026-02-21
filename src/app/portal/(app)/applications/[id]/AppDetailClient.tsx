@@ -1,6 +1,8 @@
 'use client'
 
 import Link from 'next/link'
+import { useState } from 'react'
+import { useRouter } from 'next/navigation'
 import type { Application, RequiredDocument } from '@/types/portal'
 import { APPLICATION_STATUSES, getStatusIndex, getNextAction } from '@/types/portal'
 import DocumentRequirementRow from '@/components/portal/DocumentRequirementRow'
@@ -26,6 +28,27 @@ const STATUS_COLORS: Record<string, string> = {
 }
 
 export default function AppDetailClient({ app, requiredDocs, statusHistory, userId, showCreatedBanner }: Props) {
+  const router = useRouter()
+  const [isWithdrawing, setIsWithdrawing] = useState(false)
+  const [showConfirm, setShowConfirm] = useState(false)
+
+  const handleWithdraw = async () => {
+    setIsWithdrawing(true)
+    try {
+      const res = await fetch(`/api/portal/applications/${app.id}/withdraw`, {
+        method: 'POST'
+      })
+      if (!res.ok) throw new Error('Failed to withdraw')
+      router.refresh()
+    } catch (error) {
+      console.error(error)
+      alert("Failed to withdraw application. Please try again.")
+    } finally {
+      setIsWithdrawing(false)
+      setShowConfirm(false)
+    }
+  }
+
   const docs = requiredDocs
   const currentIdx = getStatusIndex(app.status)
   const nextAction = getNextAction({
@@ -61,7 +84,7 @@ export default function AppDetailClient({ app, requiredDocs, statusHistory, user
       )}
 
       {/* Header */}
-      <div className="bg-white rounded-2xl border border-slate-100 p-5 mb-5">
+      <div className="bg-white rounded-2xl border border-slate-100 p-5 mb-5 flex flex-col gap-4">
         <div className="flex items-start justify-between gap-3 flex-wrap">
           <div>
             <h1 className="text-xl font-bold text-slate-900">{app.title || app.study_destination}</h1>
@@ -70,13 +93,49 @@ export default function AppDetailClient({ app, requiredDocs, statusHistory, user
               <p className="text-xs text-slate-400 mt-1">Qualification: {app.qualification_level.name}</p>
             )}
           </div>
-          <span className={`text-xs font-medium px-3 py-1.5 rounded-full border ${STATUS_COLORS[app.status] ?? 'bg-slate-50 text-slate-600 border-slate-200'}`}>
-            {APPLICATION_STATUSES.find(s => s.value === app.status)?.label ?? app.status.replace(/_/g, ' ')}
-          </span>
+          <div className="flex items-center gap-3">
+            {app.status !== 'WITHDRAWN' && (
+              <button
+                onClick={() => setShowConfirm(true)}
+                className="text-xs font-semibold px-3 py-1.5 rounded-full text-slate-500 hover:text-red-600 hover:bg-red-50 transition-colors"
+              >
+                Withdraw
+              </button>
+            )}
+            <span className={`text-xs font-medium px-3 py-1.5 rounded-full border ${app.status === 'WITHDRAWN' ? 'bg-slate-100 text-slate-600 border-slate-200' : STATUS_COLORS[app.status] ?? 'bg-slate-50 text-slate-600 border-slate-200'}`}>
+              {app.status === 'WITHDRAWN' ? 'Withdrawn' : APPLICATION_STATUSES.find(s => s.value === app.status)?.label ?? app.status.replace(/_/g, ' ')}
+            </span>
+          </div>
         </div>
+        
+        {showConfirm && (
+          <div className="bg-red-50 border border-red-100 p-4 rounded-xl flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 mt-2">
+            <div>
+              <p className="text-sm font-semibold text-red-800">Are you sure you want to withdraw this application?</p>
+              <p className="text-xs text-red-600 mt-0.5">This action cannot be undone.</p>
+            </div>
+            <div className="flex items-center gap-2 w-full sm:w-auto">
+              <button 
+                onClick={() => setShowConfirm(false)}
+                className="flex-1 sm:flex-none px-4 py-2 text-sm font-medium text-slate-600 bg-white border border-slate-200 rounded-lg hover:bg-slate-50 transition-colors"
+                disabled={isWithdrawing}
+              >
+                Cancel
+              </button>
+              <button 
+                onClick={handleWithdraw}
+                className="flex-1 sm:flex-none px-4 py-2 text-sm font-medium text-white bg-red-600 rounded-lg hover:bg-red-700 transition-colors disabled:opacity-50"
+                disabled={isWithdrawing}
+              >
+                {isWithdrawing ? 'Withdrawing...' : 'Yes, Withdraw'}
+              </button>
+            </div>
+          </div>
+        )}
       </div>
 
       {/* Progress Stepper */}
+      {app.status !== 'WITHDRAWN' && (
       <div className="bg-white rounded-2xl border border-slate-100 p-5 mb-5">
         <h2 className="text-xs font-semibold text-slate-500 uppercase tracking-wide mb-4">Application Progress</h2>
         {/* Horizontal on desktop */}
@@ -119,9 +178,10 @@ export default function AppDetailClient({ app, requiredDocs, statusHistory, user
           })}
         </div>
       </div>
+      )}
 
       {/* Next Action card */}
-      {nextAction && (
+      {app.status !== 'WITHDRAWN' && nextAction && (
         <div className="bg-blue-50 border border-blue-100 rounded-2xl px-5 py-4 mb-5">
           <p className="text-xs font-semibold text-blue-600 uppercase tracking-wide mb-1">Next Action</p>
           <p className="text-sm font-medium text-blue-900">{nextAction}</p>
