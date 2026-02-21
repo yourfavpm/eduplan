@@ -34,7 +34,7 @@ export default async function DashboardPage() {
   })
 
   return (
-    <div className="max-w-3xl">
+    <div className="max-w-3xl pt-6">
       {/* Greeting */}
       <div className="mb-8">
         <h1 className="text-2xl font-bold text-slate-900">
