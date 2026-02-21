@@ -317,3 +317,70 @@ TypeError: fetch failed
 ✓ Compiled in 138ms
  GET /portal/applications/new 200 in 835ms (compile: 6ms, proxy.ts: 772ms, render: 58ms)
  GET /portal/dashboard 200 in 977ms (compile: 7ms, proxy.ts: 650ms, render: 319ms)
+ POST /api/portal/applications 200 in 3.0s (compile: 5ms, proxy.ts: 753ms, render: 2.3s)
+ GET /portal/applications/db2e75e7-4dbe-4916-a2fc-f24d94cca16c?banner=created 200 in 2.8s (compile: 1564ms, proxy.ts: 262ms, render: 1006ms)
+ GET /portal/dashboard 200 in 1586ms (compile: 20ms, proxy.ts: 729ms, render: 837ms)
+ GET /portal/applications/db2e75e7-4dbe-4916-a2fc-f24d94cca16c 200 in 1899ms (compile: 18ms, proxy.ts: 505ms, render: 1376ms)
+ GET /portal/applications 200 in 4.3s (compile: 81ms, proxy.ts: 2.5s, render: 1663ms)
+TypeError: fetch failed
+    at ignore-listed frames {
+  [cause]: Error: getaddrinfo ENOTFOUND iddzdbdaovvkiydgqthf.supabase.co
+      at ignore-listed frames {
+    errno: -3008,
+    code: 'ENOTFOUND',
+    syscall: 'getaddrinfo',
+    hostname: 'iddzdbdaovvkiydgqthf.supabase.co'
+  }
+}
+TypeError: fetch failed
+    at ignore-listed frames {
+  [cause]: Error: getaddrinfo ENOTFOUND iddzdbdaovvkiydgqthf.supabase.co
+      at ignore-listed frames {
+    errno: -3008,
+    code: 'ENOTFOUND',
+    syscall: 'getaddrinfo',
+    hostname: 'iddzdbdaovvkiydgqthf.supabase.co'
+  }
+}
+ GET /portal/sign-in 200 in 134ms (compile: 21ms, proxy.ts: 40ms, render: 73ms)
+ GET /portal/applications/db2e75e7-4dbe-4916-a2fc-f24d94cca16c 200 in 64s (compile: 71ms, proxy.ts: 653ms, render: 63s)
+ GET /portal/dashboard 200 in 2.9s (compile: 118ms, proxy.ts: 800ms, render: 1992ms)
+ GET /portal/dashboard 200 in 1901ms (compile: 11ms, proxy.ts: 532ms, render: 1358ms)
+ GET /portal/applications 200 in 1327ms (compile: 20ms, proxy.ts: 538ms, render: 769ms)
+ GET /portal/applications/d4f22f53-f997-4b40-a8b1-f2b78c3abdb0 200 in 2.4s (compile: 17ms, proxy.ts: 636ms, render: 1755ms)
+ GET /portal/applications 200 in 4.0s (compile: 6ms, proxy.ts: 2.5s, render: 1489ms)
+ GET /portal/applications/ed2c78e1-0e02-4d17-953b-829c85b11ade 200 in 2.3s (compile: 34ms, proxy.ts: 816ms, render: 1447ms)
+✓ Compiled in 897ms
+ GET /portal/applications/ed2c78e1-0e02-4d17-953b-829c85b11ade 200 in 720ms (compile: 14ms, proxy.ts: 546ms, render: 160ms)
+Error [AuthApiError]: Invalid Refresh Token: Refresh Token Not Found
+    at ignore-listed frames {
+  __isAuthError: true,
+  status: 400,
+  code: 'refresh_token_not_found'
+}
+Error [AuthApiError]: Invalid Refresh Token: Refresh Token Not Found
+    at ignore-listed frames {
+  __isAuthError: true,
+  status: 400,
+  code: 'refresh_token_not_found'
+}
+Error [AuthApiError]: Invalid Refresh Token: Refresh Token Not Found
+    at ignore-listed frames {
+  __isAuthError: true,
+  status: 400,
+  code: 'refresh_token_not_found'
+}
+Error [AuthApiError]: Invalid Refresh Token: Refresh Token Not Found
+    at ignore-listed frames {
+  __isAuthError: true,
+  status: 400,
+  code: 'refresh_token_not_found'
+}
+ GET /portal/sign-in 200 in 428ms (compile: 9ms, proxy.ts: 377ms, render: 42ms)
+ GET /portal/sign-in 200 in 32ms (compile: 4ms, proxy.ts: 4ms, render: 25ms)
+✓ Compiled in 230ms
+ GET /portal/applications/ed2c78e1-0e02-4d17-953b-829c85b11ade 200 in 778ms (compile: 21ms, proxy.ts: 624ms, render: 132ms)
+ GET /portal/dashboard 200 in 2.3s (compile: 425ms, proxy.ts: 733ms, render: 1132ms)
+✓ Compiled in 181ms
+ GET /portal/dashboard 200 in 1281ms (compile: 271ms, proxy.ts: 541ms, render: 469ms)
+ GET /portal/sign-in 200 in 45ms (compile: 8ms, proxy.ts: 4ms, render: 33ms)
