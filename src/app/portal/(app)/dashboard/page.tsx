@@ -3,6 +3,7 @@ import { redirect } from 'next/navigation'
 import { getUserApplications, getPortalProfile, createPortalProfile } from '@/lib/supabase/portal'
 import Link from 'next/link'
 import { getNextAction } from '@/types/portal'
+import DashboardNotifications from './DashboardNotifications'
 import type { Metadata } from 'next'
 
 export const metadata: Metadata = { title: 'Dashboard | EduPlan360' }
@@ -33,8 +34,18 @@ export default async function DashboardPage() {
     return [{ appId: app.id, appTitle: app.title || app.study_destination, action }]
   })
 
+  // Fetch unread notifications
+  const { data: notifications } = await supabase
+    .from('portal_notifications')
+    .select('id, title, message, created_at')
+    .eq('user_id', user.id)
+    .eq('is_read', false)
+    .order('created_at', { ascending: false })
+
   return (
     <div className="max-w-3xl pt-6">
+      <DashboardNotifications initialNotifications={notifications ?? []} />
+
       {/* Greeting */}
       <div className="mb-8">
         <h1 className="text-2xl font-bold text-slate-900">

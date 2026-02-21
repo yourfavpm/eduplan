@@ -1,6 +1,7 @@
 'use client'
 
 import { useRef, useState, useTransition } from 'react'
+import { useRouter } from 'next/navigation'
 import type { RequiredDocument } from '@/types/portal'
 import { Upload, RefreshCw, Check, AlertCircle, Loader2 } from 'lucide-react'
 
@@ -36,6 +37,7 @@ export default function DocumentRequirementRow({ doc, userId, applicationId }: P
   const [rejectionReason, setRejectionReason] = useState(doc.rejection_reason)
   const [error, setError] = useState<string | null>(null)
   const [isPending, startTransition] = useTransition()
+  const router = useRouter()
 
   const cfg = STATUS_CONFIG[status]
 
@@ -78,6 +80,7 @@ export default function DocumentRequirementRow({ doc, userId, applicationId }: P
         setStatus('uploaded')
         setFilename(file.name)
         setRejectionReason(null)
+        router.refresh()
       }
     })
 

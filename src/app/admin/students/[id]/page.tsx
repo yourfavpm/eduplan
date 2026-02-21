@@ -3,6 +3,7 @@ import { getPayments } from '@/lib/supabase/admin'
 import { redirect } from 'next/navigation'
 import Link from 'next/link'
 import StatusBadge from '@/components/portal/StatusBadge'
+import StudentNotificationModal from './StudentNotificationModal'
 import type { Metadata } from 'next'
 import type { ApplicationStatus } from '@/types/portal'
 
@@ -65,6 +66,7 @@ export default async function StudentDetailPage({
           {app?.status && (
             <StatusBadge status={app.status as ApplicationStatus} />
           )}
+          <StudentNotificationModal studentId={id} />
         </div>
         <div className="grid grid-cols-3 gap-4 mt-6 pt-4 border-t border-slate-50 text-sm">
           <div>

@@ -6,7 +6,7 @@ import { usePathname } from 'next/navigation'
 import { useState } from 'react'
 import {
   LayoutDashboard, FolderOpen, PlusCircle, FileText,
-  User, Menu, X, LogOut,
+  User, Menu, X, LogOut, Bell
 } from 'lucide-react'
 import { createClient } from '@/lib/supabase/client'
 import { useRouter } from 'next/navigation'
@@ -16,6 +16,7 @@ const NAV = [
   { href: '/portal/applications',   label: 'Applications',  icon: FolderOpen },
   { href: '/portal/applications/new', label: 'New Application', icon: PlusCircle },
   { href: '/portal/documents',      label: 'Documents',     icon: FileText },
+  { href: '/portal/notifications',  label: 'Notifications', icon: Bell },
   { href: '/portal/profile',        label: 'My Profile',    icon: User },
 ]
 

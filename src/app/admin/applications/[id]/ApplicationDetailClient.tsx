@@ -170,11 +170,20 @@ export default function ApplicationDetailClient({
                     <p className="text-xs text-red-600 mt-1">Rejection reason: {doc.rejection_reason}</p>
                   )}
                   {doc.latest_upload && (
-                    <p className="text-xs text-slate-400 mt-1">
-                      📎 {doc.latest_upload.original_filename}
-                      <span className="mx-1">·</span>
-                      {new Date(doc.latest_upload.created_at).toLocaleDateString('en-GB', { day: 'numeric', month: 'short' })}
-                    </p>
+                    <div className="mt-1 flex items-center gap-3">
+                      <p className="text-xs text-slate-400">
+                        📎 {doc.latest_upload.original_filename}
+                        <span className="mx-1">·</span>
+                        {new Date(doc.latest_upload.created_at).toLocaleDateString('en-GB', { day: 'numeric', month: 'short' })}
+                      </p>
+                      <a 
+                        href={`/api/admin/documents/download?path=${encodeURIComponent(doc.latest_upload.file_path)}`} 
+                        target="_blank" 
+                        className="text-xs font-semibold text-blue-600 hover:text-blue-800 hover:underline inline-flex items-center gap-1 bg-blue-50 px-2 py-0.5 rounded transition-colors"
+                      >
+                        View / Download
+                      </a>
+                    </div>
                   )}
                 </div>
 

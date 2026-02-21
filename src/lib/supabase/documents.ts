@@ -172,10 +172,13 @@ export async function uploadDocument(
 
   if (insertError) { console.error('uploadDocument insert:', insertError); return { success: false, error: 'Failed to save document record.' } }
 
-  await supabase
-    .from('application_required_documents')
-    .update({ status: 'uploaded', rejection_reason: null })
-    .eq('id', requiredDocId)
+  const { data: rpcSuccess, error: reqUpdateError } = await supabase
+    .rpc('mark_document_uploaded', { p_req_doc_id: requiredDocId })
+
+  if (reqUpdateError || !rpcSuccess) {
+    console.error('reqUpdateError or RPC failed:', reqUpdateError)
+    return { success: false, error: 'Database update restricted. Are you sure you own this application?' }
+  }
 
   // Auto-advance logic: if all required docs for this application are 'uploaded' or 'approved', 
   // advance application status to 'UNDER_REVIEW'
@@ -187,11 +190,17 @@ export async function uploadDocument(
   const allComplete = allDocs && allDocs.every(d => d.status === 'uploaded' || d.status === 'approved')
   
   if (allComplete) {
-    await supabase
+    const { error: appUpdateError } = await supabase
       .from('applications')
       .update({ status: 'UNDER_REVIEW', updated_at: new Date().toISOString() })
       .eq('id', applicationId)
       .in('status', ['INCOMPLETE_DOCUMENTS', 'PENDING']) // Only advance from early stages
+      
+    if (appUpdateError) {
+      console.error('appUpdateError:', appUpdateError)
+      // We don't necessarily fail the document upload if this secondary auto-advance fails,
+      // but it's good to log it for debugging.
+    }
   }
 
   return { success: true }
