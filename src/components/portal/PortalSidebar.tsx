@@ -106,9 +106,8 @@ export default function PortalSidebar({ profile }: Props) {
         <>
           <div className="fixed inset-0 bg-black/30 z-40 md:hidden" onClick={() => setOpen(false)} />
           <div className="fixed inset-y-0 left-0 w-64 bg-white z-50 md:hidden flex flex-col">
-            <div className="flex items-center justify-between px-4 py-3 border-b border-slate-100">
-              <Image src="/eduplan.png" alt="EduPlan360" width={100} height={28} className="h-7 w-auto" />
-              <button onClick={() => setOpen(false)} className="text-slate-600"><X className="w-5 h-5" /></button>
+            <div className="flex items-center justify-end px-4 pt-4">
+              <button onClick={() => setOpen(false)} className="text-slate-500 bg-slate-50 p-2 rounded-full hover:bg-slate-100 transition-colors"><X className="w-5 h-5" /></button>
             </div>
             {Sidebar}
           </div>
