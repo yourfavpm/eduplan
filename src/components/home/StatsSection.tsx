@@ -62,24 +62,24 @@ function Counter({ end, duration = 2000, suffix = '' }: CounterProps) {
 export function StatsSection() {
     const stats = [
         {
-            number: 10000,
+            number: 1200,
             suffix: '+',
-            label: "Students Helped"
+            label: "Students Served"
+        },
+        {
+            number: 25,
+            suffix: '',
+            label: "Destinations"
         },
         {
             number: 50,
             suffix: '+',
-            label: "Partner Countries"
-        },
-        {
-            number: 300,
-            suffix: '+',
             label: "University Partners"
         },
         {
-            number: 98,
+            number: 95,
             suffix: '%',
-            label: "Visa Success Rate"
+            label: "Visa Success"
         }
     ];
 

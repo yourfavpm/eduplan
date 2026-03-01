@@ -4,6 +4,7 @@ import { useState, useTransition } from 'react'
 import Link from 'next/link'
 import type { RequiredDocument, DocumentType } from '@/types/portal'
 import StatusUpdateModal from '@/components/admin/StatusUpdateModal'
+import SendNotificationModal from '@/components/admin/SendNotificationModal'
 import ApplicationDetailClient from './ApplicationDetailClient'
 import { Plus } from 'lucide-react'
 
@@ -70,6 +71,12 @@ export default function ApplicationDetailTabs({
       {/* Status + primary actions row */}
       <div className="flex items-center gap-3 mb-4 flex-wrap">
         <StatusUpdateModal applicationId={applicationId} currentStatus={status} onStatusChanged={handleStatusChanged} />
+        <SendNotificationModal 
+          applicationId={applicationId} 
+          userId={app.user_id} 
+          studentName={app.portal_profiles?.[0]?.full_name || app.portal_profiles?.full_name || 'Student'} 
+          appDestination={app.study_destination}
+        />
         <Link href={`/admin/students/${app.user_id}`} className="text-sm text-slate-500 border border-slate-200 rounded-xl px-3 py-2 hover:bg-slate-50 transition-colors">View Student Profile</Link>
       </div>
 

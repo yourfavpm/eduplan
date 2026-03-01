@@ -1,246 +1,342 @@
 "use client";
 
-import { Quote, ChevronLeft, ChevronRight, Star } from 'lucide-react';
-import { useState, useEffect, useRef } from 'react';
-import { cn } from '@/lib/utils';
+import { useEffect, useRef, useState, useCallback } from 'react'
+import { motion, AnimatePresence } from 'framer-motion'
+import { ChevronLeft, ChevronRight, Quote, Globe, GraduationCap } from 'lucide-react'
+import Image from 'next/image'
 
-const testimonialsOriginal = [
-    {
-        name: "Adewale Adebayo",
-        destination: "United Kingdom",
-        university: "University of Manchester",
-        image: "/nigerian_student_portrait_1771012230876.png",
-        quote: "EduPlan360 made my dream of studying in the UK a reality. Their guidance through the visa process was invaluable.",
-        status: "Visa Approved"
-    },
-    {
-        name: "Chioma Okonkwo",
-        destination: "Canada",
-        university: "University of Toronto",
-        image: "/images/testimonials/michael.jpg",
-        quote: "From choosing the right program to getting my study permit, the team supported me every step of the way.",
-        status: "Visa Approved"
-    },
-    {
-        name: "Tunde Bakare",
-        destination: "Australia",
-        university: "University of Melbourne",
-        image: "/images/testimonials/priya.jpg",
-        quote: "The scholarship guidance helped me secure funding. I couldn't have done it without their expertise.",
-        status: "Visa Approved"
-    },
-];
+type Testimonial = {
+  id: string
+  name: string
+  country: string
+  image: string
+  testimonial: string
+  destination: string
+  program: string
+}
 
-// Duplicate 3 times for smoother infinite scroll feel on desktop (always have next items)
-const testimonials = [...testimonialsOriginal, ...testimonialsOriginal, ...testimonialsOriginal];
+const TEST_DATA: Testimonial[] = [
+  {
+    id: '1',
+    name: 'Adewale Adebayo',
+    country: 'Nigeria',
+    image: '/images/testimonials/adewale.png',
+    testimonial:
+      "EduPlan360 guided me from shortlist to visa approval — seamless, professional and caring. I'm now studying at the University of Manchester.",
+    destination: 'United Kingdom',
+    program: 'MSc Management',
+  },
+  {
+    id: '2',
+    name: 'Chioma Okonkwo',
+    country: 'Nigeria',
+    image: '/images/testimonials/chioma.png',
+    testimonial:
+      "Their advisors matched me with the perfect program and helped secure my study permit. Highly recommend EduPlan360.",
+    destination: 'Canada',
+    program: 'BSc Computer Science',
+  },
+  {
+    id: '3',
+    name: 'Tunde Bakare',
+    country: 'Nigeria',
+    image: '/images/testimonials/tunde.png',
+    testimonial:
+      "Scholarship counselling was thorough and effective. I received an award that made studying in Australia possible.",
+    destination: 'Australia',
+    program: 'MA International Relations',
+  },
+  {
+    id: '4',
+    name: 'Maria Fernandes',
+    country: 'Kenya',
+    image: '/images/testimonials/maria.png',
+    testimonial:
+      "From application to arrival, EduPlan360 delivered a premium experience. My advisor was with me every step.",
+    destination: 'Canada',
+    program: 'MSc Data Science',
+  },
+]
 
 export function SuccessStoriesSection() {
-    const [activeIndex, setActiveIndex] = useState(0);
-    const [isPaused, setIsPaused] = useState(false);
-    const scrollContainerRef = useRef<HTMLDivElement>(null);
+  const [index, setIndex] = useState(0)
+  const [direction, setDirection] = useState(0) // 1 for next, -1 for prev
+  const isInteracting = useRef(false)
+  const count = TEST_DATA.length
 
-    // Auto-scroll logic
-    useEffect(() => {
-        if (isPaused) return;
+  const handleNext = useCallback(() => {
+    setDirection(1)
+    setIndex((prev: number) => (prev + 1) % count)
+  }, [count])
 
-        const interval = setInterval(() => {
-            setActiveIndex((prev) => {
-                // If we reach the end of the second set, snap back to start of second set to loop?
-                // Or just loop 0 -> length-1.
-                // Desktop shows 3 items. Max index we can show without empty space is length - 3.
-                // Let's loop from 0 to length - 3.
-                const maxIndex = testimonials.length - 3;
-                return (prev + 1) % (maxIndex + 1);
-            });
-        }, 4000);
+  const handlePrev = useCallback(() => {
+    setDirection(-1)
+    setIndex((prev: number) => (prev - 1 + count) % count)
+  }, [count])
 
-        return () => clearInterval(interval);
-    }, [isPaused]);
+  // Autoplay functionality
+  useEffect(() => {
+    const timer = setInterval(() => {
+      if (!isInteracting.current) {
+        handleNext()
+      }
+    }, 6000)
+    return () => clearInterval(timer)
+  }, [handleNext])
 
-    // Mobile Auto-Scroll Logic
-    useEffect(() => {
-        const container = scrollContainerRef.current;
-        if (!container) return;
+  // Keyboard navigation
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === 'ArrowRight') handleNext()
+      if (e.key === 'ArrowLeft') handlePrev()
+    }
+    window.addEventListener('keydown', handleKeyDown)
+    return () => window.removeEventListener('keydown', handleKeyDown)
+  }, [handleNext, handlePrev])
 
-        // On mobile, activeIndex corresponds to the item index directly
-        // We need to ensure we don't scroll past length on mobile either, 
-        // but mobile shows 1 item. So we can go up to length - 1.
-        // However, we are sharing activeIndex with Desktop which caps at length - 3.
-        // This mismatch is tricky. 
-        // Let's just use the activeIndex as is. Mobile will just loop earlier.
+  const active = TEST_DATA[index]
 
-        const itemWidth = container.offsetWidth * 0.85 + 16; // 85% width + gap (approx)
-        // Better: calculate exactly from child
-        const firstChild = container.firstElementChild as HTMLElement;
-        const scrollWidth = firstChild ? firstChild.offsetWidth + 16 : itemWidth;
+  // Animation variants for the central card
+  const cardVariants = {
+    enter: (direction: number) => ({
+      x: direction > 0 ? 100 : -100,
+      opacity: 0,
+      scale: 0.9,
+      filter: 'blur(10px)',
+    }),
+    center: {
+      x: 0,
+      opacity: 1,
+      scale: 1,
+      filter: 'blur(0px)',
+      transition: {
+        duration: 0.6,
+        type: 'spring' as const,
+        stiffness: 100,
+        damping: 20,
+      },
+    },
+    exit: (direction: number) => ({
+      x: direction > 0 ? -100 : 100,
+      opacity: 0,
+      scale: 0.9,
+      filter: 'blur(10px)',
+      transition: {
+        duration: 0.4,
+      },
+    }),
+  }
 
-        const targetScroll = activeIndex * scrollWidth;
+  return (
+    <section 
+      aria-label="Success Stories" 
+      className="relative py-24 md:py-32 bg-[#F8FAFC] overflow-hidden"
+      onMouseEnter={() => (isInteracting.current = true)}
+      onMouseLeave={() => (isInteracting.current = false)}
+    >
+      {/* Background Decorative Elements */}
+      <div className="absolute top-0 left-0 w-full h-full pointer-events-none overflow-hidden">
+        <div className="absolute top-[-10%] right-[-5%] w-[400px] h-[400px] bg-brand-50 rounded-full blur-[100px] opacity-60" />
+        <div className="absolute bottom-[-10%] left-[-5%] w-[400px] h-[400px] bg-indigo-50 rounded-full blur-[100px] opacity-60" />
+      </div>
 
-        container.scrollTo({
-            left: targetScroll,
-            behavior: 'smooth'
-        });
+      <div className="container mx-auto px-4 relative z-10">
+        <div className="text-center mb-16 md:mb-24">
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.6 }}
+          >
+            <h2 className="text-4xl md:text-5xl font-bold text-slate-900 tracking-tight mb-4">
+              Success Stories
+            </h2>
+            <div className="w-20 h-1.5 bg-brand-500 mx-auto rounded-full mb-6" />
+            <p className="text-slate-600 text-lg md:text-xl max-w-2xl mx-auto font-medium">
+              Real students. Real results. Our community&apos;s journey to international success.
+            </p>
+          </motion.div>
+        </div>
 
-    }, [activeIndex]);
+        <div className="relative mx-auto max-w-6xl">
+          {/* Circular Path SVG - Desktop Only */}
+          <div className="hidden lg:block absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[800px] pointer-events-none">
+            <svg viewBox="0 0 800 800" className="w-full h-full opacity-20">
+              <circle
+                cx="400"
+                cy="400"
+                r="350"
+                fill="none"
+                stroke="url(#pathGradient)"
+                strokeWidth="2"
+                strokeDasharray="8 12"
+              />
+              <defs>
+                <linearGradient id="pathGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+                  <stop offset="0%" stopColor="#6366f1" />
+                  <stop offset="100%" stopColor="#06b6d4" />
+                </linearGradient>
+              </defs>
+            </svg>
+          </div>
 
-    const next = () => {
-        setActiveIndex((prev) => {
-            const maxIndex = testimonials.length - 3;
-            return (prev + 1) % (maxIndex + 1);
-        });
-        setIsPaused(true);
-        setTimeout(() => setIsPaused(false), 10000);
-    };
-
-    const prev = () => {
-        setActiveIndex((prev) => {
-            const maxIndex = testimonials.length - 3;
-            return (prev - 1 + (maxIndex + 1)) % (maxIndex + 1);
-        });
-        setIsPaused(true);
-        setTimeout(() => setIsPaused(false), 10000);
-    };
-
-    return (
-        <section className="py-20 md:py-24 bg-surface overflow-hidden relative">
-            {/* Background decoration */}
-            <div className="absolute top-0 left-0 w-full h-full overflow-hidden pointer-events-none">
-                <div className="absolute top-20 right-0 w-96 h-96 bg-brand-100/50 rounded-full blur-3xl opacity-50" />
-                <div className="absolute bottom-20 left-0 w-96 h-96 bg-accent-100/50 rounded-full blur-3xl opacity-50" />
-            </div>
-
-            <div className="container mx-auto px-4 md:px-6 lg:px-8 relative z-10">
-                <div className="mb-12 flex items-end justify-between text-left">
-                    <div className="max-w-2xl">
-                        <h2 className="font-semibold text-ink mb-6 relative inline-block">
-                            Success Stories
-                            <div className="absolute -bottom-3 left-0 w-1/2 h-1 bg-brand-500 rounded-full" />
-                        </h2>
-                        <p className="text-muted">
-                            Join thousands of students who've achieved their study abroad dreams
-                        </p>
-                    </div>
-
-                    {/* Navigation Buttons - Desktop */}
-                    <div className="hidden md:flex gap-3">
-                        <button
-                            onClick={prev}
-                            className="w-12 h-12 rounded-full border border-border bg-white flex items-center justify-center hover:bg-brand-50 hover:border-brand-200 transition-all active:scale-95 shadow-sm"
-                            aria-label="Previous story"
-                        >
-                            <ChevronLeft className="w-5 h-5 text-ink" />
-                        </button>
-                        <button
-                            onClick={next}
-                            className="w-12 h-12 rounded-full border border-border bg-white flex items-center justify-center hover:bg-brand-50 hover:border-brand-200 transition-all active:scale-95 shadow-sm"
-                            aria-label="Next story"
-                        >
-                            <ChevronRight className="w-5 h-5 text-ink" />
-                        </button>
-                    </div>
-                </div>
-
-                {/* Desktop Carousel (Sliding Row) */}
-                <div
-                    className="hidden md:block overflow-hidden -mx-4 px-4 py-8"
-                    onMouseEnter={() => setIsPaused(true)}
-                    onMouseLeave={() => setIsPaused(false)}
-                >
-                    <div
-                        className="flex gap-6 transition-transform duration-700 ease-[cubic-bezier(0.25,0.1,0.25,1)]"
-                        style={{ transform: `translateX(-${activeIndex * (33.333)}%)` }}
-                    // Note: We use 33.333% because the container is 100% wide and items are roughly 1/3 (minus gap logic handled by flex)
-                    // Actually, since we used calc(33.333%-16px), moving by 33.333% of PARENT should shift by exactly one item + gap?
-                    // Container width W. Item width w = W/3 - gap*2/3.
-                    // Item + Gap = w + gap = W/3 - 2/3 gap + gap = W/3 + 1/3 gap.
-                    // Translate 33.33% = W/3. 
-                    // It will be slightly off (by 1/3 gap per item).
-                    // After 3 items, error = gap.
-                    // To be precise: transform should be `calc(-${activeIndex} * (33.333% + 0.666rem))` assuming gap-6 is 1.5rem? 
-                    // Gap-6 is 24px (1.5rem).
-                    // Let's try just 33.333% for now, visual check usually looks "okay" or "slightly drifting".
-                    // Use calc for better precision if possible, or just strict percentage if we wrap differently.
+          <div className="flex flex-col lg:flex-row items-center justify-center gap-12 lg:gap-24 relative">
+            
+            {/* Left: Avatar Ring (Mobile/Tablet: Horizontal, Desktop: Circular/Arc) */}
+            <div className="order-2 lg:order-1 relative w-full lg:w-[450px] flex justify-center py-8">
+              <div className="flex lg:grid lg:grid-cols-2 gap-4 md:gap-8 overflow-x-auto lg:overflow-visible no-scrollbar px-4">
+                {TEST_DATA.map((item, i) => {
+                  const isActive = i === index
+                  return (
+                    <motion.button
+                      key={item.id}
+                      onClick={() => {
+                        setDirection(i > index ? 1 : -1)
+                        setIndex(i)
+                      }}
+                    className={`relative group shrink-0 lg:shrink`}
+                      initial={false}
+                      animate={{
+                        scale: isActive ? 1.1 : 0.95,
+                        opacity: isActive ? 1 : 0.6,
+                      }}
+                      whileHover={{ scale: 1.05, opacity: 1 }}
                     >
-                        {testimonials.map((t, i) => (
-                            <div
-                                key={i}
-                                className="flex-none w-[calc(33.333%-16px)] bg-white rounded-3xl p-8 shadow-soft border border-border/50 hover:border-brand-200 hover:shadow-lg transition-all duration-300 group"
-                            >
-                                <div className="flex items-center gap-4 mb-6">
-                                    <div className="w-16 h-16 rounded-2xl bg-brand-50 flex items-center justify-center overflow-hidden shrink-0 border-2 border-white shadow-sm group-hover:scale-105 transition-transform duration-300">
-                                        {t.image.includes('portrait') ? (
-                                            <img src={t.image} alt={t.name} className="w-full h-full object-cover" />
-                                        ) : (
-                                            <span className="text-xl font-bold text-brand-700">{t.name.charAt(0)}</span>
-                                        )}
-                                    </div>
-                                    <div>
-                                        <h4 className="font-bold text-ink text-lg">{t.name}</h4>
-                                        <p className="text-sm text-brand-700 font-medium">{t.destination}</p>
-                                    </div>
-                                </div>
-
-                                <div className="mb-6">
-                                    <div className="flex gap-1 mb-3">
-                                        {[1, 2, 3, 4, 5].map(star => (
-                                            <Star key={star} className="w-4 h-4 text-amber-400 fill-amber-400" />
-                                        ))}
-                                    </div>
-                                    <blockquote className="text-muted leading-relaxed italic">
-                                        "{t.quote}"
-                                    </blockquote>
-                                </div>
-
-                                <div className="mt-auto pt-6 border-t border-border flex justify-between items-center">
-                                    <span className="text-xs font-semibold text-muted uppercase tracking-wider">{t.university}</span>
-                                    <span className="text-xs px-2 py-1 bg-green-50 text-green-700 rounded-full font-medium border border-green-100">
-                                        {t.status}
-                                    </span>
-                                </div>
-                            </div>
-                        ))}
-                    </div>
-                </div>
-
-                {/* Mobile Scroll View */}
-                <div
-                    ref={scrollContainerRef}
-                    className="md:hidden flex overflow-x-auto snap-x snap-mandatory gap-4 pb-4 -mx-4 px-4 scrollbar-hide"
-                    onTouchStart={() => setIsPaused(true)}
-                    onTouchEnd={() => setTimeout(() => setIsPaused(false), 3000)}
-                >
-                    {testimonials.map((t, i) => ( // Use full list for mobile too so indices match
-                        <div key={i} className="flex-none w-[85%] snap-center bg-white rounded-3xl p-6 shadow-sm border border-border flex flex-col h-full">
-                            <div className="flex items-center gap-4 mb-4">
-                                <div className="w-14 h-14 rounded-2xl bg-brand-50 flex items-center justify-center overflow-hidden shrink-0 border border-white shadow-sm">
-                                    {t.image.includes('portrait') ? (
-                                        <img src={t.image} alt={t.name} className="w-full h-full object-cover" />
-                                    ) : (
-                                        <span className="text-xl font-bold text-brand-700">{t.name.charAt(0)}</span>
-                                    )}
-                                </div>
-                                <div>
-                                    <h4 className="font-semibold text-ink text-sm">{t.name}</h4>
-                                    <p className="text-xs text-muted line-clamp-1">{t.destination}</p>
-                                </div>
-                            </div>
-
-                            <blockquote className="text-sm text-muted leading-relaxed italic mb-4 flex-grow">
-                                "{t.quote}"
-                            </blockquote>
-
-                            <div className="mt-auto pt-4 border-t border-border flex items-center justify-between">
-                                <p className="text-xs text-ink font-medium truncate max-w-[60%]">
-                                    {t.university}
-                                </p>
-                                <span className="text-[10px] px-2 py-0.5 bg-green-50 text-green-700 rounded-full font-medium border border-green-100 whitespace-nowrap">
-                                    {t.status}
-                                </span>
-                            </div>
-                        </div>
-                    ))}
-                </div>
+                      <div className={`
+                        w-20 h-20 md:w-28 md:h-28 rounded-2xl overflow-hidden 
+                        border-4 transition-all duration-300
+                        ${isActive ? 'border-brand-500 shadow-xl' : 'border-white shadow-md'}
+                      `}>
+                        <Image 
+                          src={item.image} 
+                          alt={item.name} 
+                          width={112}
+                          height={112}
+                          className="w-full h-full object-cover"
+                        />
+                        {isActive && (
+                          <motion.div 
+                            layoutId="active-ring"
+                            className="absolute -inset-2 border-2 border-brand-500 rounded-[28px] opacity-30"
+                            animate={{ scale: [1, 1.05, 1] }}
+                            transition={{ duration: 2, repeat: Infinity }}
+                          />
+                        )}
+                      </div>
+                      <div className={`mt-3 lg:hidden text-center transition-opacity ${isActive ? 'opacity-100' : 'opacity-0'}`}>
+                        <p className="text-sm font-bold text-slate-900 truncate w-20">{item.name}</p>
+                      </div>
+                    </motion.button>
+                  )
+                })}
+              </div>
             </div>
-        </section>
-    );
+
+            {/* Right: Active Card */}
+            <div className="order-1 lg:order-2 w-full lg:w-[600px] relative">
+              <AnimatePresence initial={false} custom={direction} mode="wait">
+                <motion.div
+                  key={active.id}
+                  custom={direction}
+                  variants={cardVariants}
+                  initial="enter"
+                  animate="center"
+                  exit="exit"
+                  drag="x"
+                  dragConstraints={{ left: 0, right: 0 }}
+                  onDragEnd={(_, info) => {
+                    if (info.offset.x > 100) handlePrev()
+                    else if (info.offset.x < -100) handleNext()
+                  }}
+                  className="bg-white rounded-[40px] shadow-[0_20px_50px_rgba(0,0,0,0.08)] border border-slate-100 p-8 md:p-12 relative overflow-hidden cursor-grab active:cursor-grabbing"
+                >
+                  {/* Decorative quote mark */}
+                  <Quote className="absolute top-8 right-8 w-24 h-24 text-slate-50 opacity-10 pointer-events-none" />
+                  
+                  <div className="flex flex-col md:flex-row gap-8 items-center md:items-start text-center md:text-left">
+                    <div className="relative group">
+                      <motion.div
+                        animate={{ y: [0, -8, 0] }}
+                        transition={{ duration: 5, repeat: Infinity, ease: "easeInOut" }}
+                        className="w-32 h-32 md:w-40 md:h-40 rounded-full overflow-hidden border-8 border-slate-50 shadow-inner"
+                      >
+                        <Image 
+                          src={active.image} 
+                          alt={active.name} 
+                          width={160}
+                          height={160}
+                          className="w-full h-full object-cover grayscale-20 group-hover:grayscale-0 transition-all duration-500"
+                        />
+                      </motion.div>
+                      <div className="absolute -bottom-2 -right-2 bg-brand-500 text-white p-2.5 rounded-2xl shadow-lg">
+                        <Globe className="w-5 h-5" />
+                      </div>
+                    </div>
+
+                    <div className="flex-1">
+                      <div className="mb-6">
+                        <h3 className="text-2xl md:text-3xl font-bold text-slate-900 mb-1 leading-tight">
+                          {active.name}
+                        </h3>
+                        <p className="text-brand-600 font-semibold text-sm flex items-center justify-center md:justify-start gap-2">
+                          <span className="w-1.5 h-1.5 rounded-full bg-brand-500" />
+                          {active.country}
+                        </p>
+                      </div>
+
+                      <div className="space-y-4 mb-8">
+                        <div className="flex items-center gap-3 text-slate-500 text-sm font-medium">
+                          <Globe className="w-4 h-4 text-emerald-500" />
+                          <span>Destination: <span className="text-slate-900">{active.destination}</span></span>
+                        </div>
+                        <div className="flex items-center gap-3 text-slate-500 text-sm font-medium">
+                          <GraduationCap className="w-4 h-4 text-indigo-500" />
+                          <span>Program: <span className="text-slate-900">{active.program}</span></span>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div className="relative mt-2">
+                    <div className="absolute top-0 left-0 w-8 h-0.5 bg-brand-200 rounded-full" />
+                    <blockquote className="pt-6 text-slate-600 text-lg md:text-xl leading-relaxed italic font-serif">
+                      &ldquo;{active.testimonial}&rdquo;
+                    </blockquote>
+                  </div>
+
+                  <div className="mt-10 flex items-center justify-between">
+                    <div className="flex gap-2">
+                      {TEST_DATA.map((_, i) => (
+                        <div 
+                          key={i} 
+                          className={`h-1.5 transition-all duration-300 rounded-full ${i === index ? 'w-8 bg-brand-500' : 'w-2 bg-slate-200'}`}
+                        />
+                      ))}
+                    </div>
+                    
+                    <div className="flex gap-3">
+                      <button
+                        onClick={handlePrev}
+                        className="w-12 h-12 rounded-2xl bg-white border border-slate-200 flex items-center justify-center hover:bg-slate-50 hover:border-brand-500 group transition-all"
+                        aria-label="Previous story"
+                      >
+                        <ChevronLeft className="w-5 h-5 text-slate-400 group-hover:text-brand-500" />
+                      </button>
+                      <button
+                        onClick={handleNext}
+                        className="w-12 h-12 rounded-2xl bg-slate-900 flex items-center justify-center hover:bg-brand-600 transition-all shadow-lg"
+                        aria-label="Next story"
+                      >
+                        <ChevronRight className="w-5 h-5 text-white" />
+                      </button>
+                    </div>
+                  </div>
+                </motion.div>
+              </AnimatePresence>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+  )
 }

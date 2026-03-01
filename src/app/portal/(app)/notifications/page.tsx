@@ -10,11 +10,16 @@ export default async function NotificationsPage() {
   const { data: { user } } = await supabase.auth.getUser()
   if (!user) redirect('/portal/sign-in')
 
-  const { data: notifications } = await supabase
+  const { data: rawNotifications } = await supabase
     .from('portal_notifications')
-    .select('*')
+    .select('*, application:applications(id, study_destination)')
     .eq('user_id', user.id)
     .order('created_at', { ascending: false })
+
+  const notifications = (rawNotifications ?? []).map(n => ({
+    ...n,
+    application: Array.isArray(n.application) ? n.application[0] : n.application
+  }))
 
   return (
     <div className="max-w-4xl mx-auto">
@@ -52,7 +57,14 @@ export default async function NotificationsPage() {
                 </div>
                 <div>
                   <h3 className={`font-bold ${n.is_read ? 'text-slate-800' : 'text-blue-900'}`}>{n.title}</h3>
-                  <p className="text-sm mt-1 text-slate-600 whitespace-pre-wrap leading-relaxed">{n.message}</p>
+                  
+                  {n.application && (
+                    <div className="mt-1 inline-flex items-center gap-1.5 text-[10px] font-bold uppercase tracking-wider text-blue-600 bg-blue-50 px-2 py-0.5 rounded-md">
+                      Context: {n.application.study_destination} Application
+                    </div>
+                  )}
+
+                  <p className="text-sm mt-2 text-slate-600 whitespace-pre-wrap leading-relaxed">{n.message}</p>
                   <p className="text-xs text-slate-400 mt-3 font-medium">
                     {new Date(n.created_at).toLocaleDateString('en-GB', { day: 'numeric', month: 'long', year: 'numeric', hour: '2-digit', minute: '2-digit' })}
                   </p>

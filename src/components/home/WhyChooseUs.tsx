@@ -14,14 +14,14 @@ const flagIcons = [
     { country: "NZ", emoji: "🇳🇿" },
 ];
 
-export function WhyChooseUs() {
+export function WhyChooseUsSection() {
     return (
         <section className="py-24 md:py-32 bg-[#F9FAFB] overflow-hidden">
             <div className="container mx-auto px-4 md:px-6 lg:px-8">
                 <div className="max-w-7xl mx-auto">
                     <div className="mb-12 md:mb-16 text-center">
                         <h2 className="text-2xl md:text-3xl font-semibold text-[#0F172A]">
-                            Here's why we're a top choice for students
+                            Here&apos;s why we&apos;re a top choice for students
                         </h2>
                     </div>
 
@@ -40,7 +40,7 @@ export function WhyChooseUs() {
                                 <div className="space-y-2">
                                     <p className="text-white font-medium text-lg">Scholarship Success</p>
                                     <p className="text-white/60 text-sm leading-relaxed max-w-[260px]">
-                                        We've helped students secure over $2M in funding through merit-based and need-based applications worldwide.
+                                        We&apos;ve helped students secure over $2M in funding through merit-based and need-based applications worldwide.
                                     </p>
                                 </div>
                                 <ul className="grid grid-cols-1 gap-2 pt-4">

@@ -8,6 +8,10 @@ interface Notification {
   title: string
   message: string
   created_at: string
+  application?: {
+    id: string
+    study_destination: string
+  } | null
 }
 
 export default function DashboardNotifications({ initialNotifications }: { initialNotifications: Notification[] }) {
@@ -37,7 +41,14 @@ export default function DashboardNotifications({ initialNotifications }: { initi
               <BellDot className="w-5 h-5 text-blue-600 animate-pulse" />
             </div>
             <div>
-              <p className="text-xs font-semibold text-blue-600 mb-1 uppercase tracking-wider">Attention Required</p>
+              <p className="text-xs font-semibold text-blue-600 mb-1 uppercase tracking-wider flex items-center gap-2">
+                Attention Required
+                {n.application && (
+                   <span className="bg-blue-100 px-2 py-0.5 rounded-md lowercase first-letter:uppercase tracking-normal">
+                     · {n.application.study_destination} application
+                   </span>
+                )}
+              </p>
               <h3 className="text-lg font-bold text-slate-900 leading-tight">{n.title}</h3>
               <p className="text-slate-600 text-sm mt-1 leading-relaxed">{n.message}</p>
               <p className="text-xs text-slate-400 mt-2">

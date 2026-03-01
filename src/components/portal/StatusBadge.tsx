@@ -35,6 +35,8 @@ const CONFIG: Record<string, { label: string; className: string }> = {
   PAY_TUITION_DEPOSIT: { label: 'Tuition Deposit', className: 'bg-amber-50 text-amber-700 border-amber-100' },
   CAS_ISSUED: { label: 'CAS Issued', className: 'bg-green-50 text-green-700 border-green-100' },
   PROCESS_VISA: { label: 'Visa Processing', className: 'bg-blue-50 text-blue-700 border-blue-100' },
+  WITHDRAWN: { label: 'Withdrawn', className: 'bg-slate-50 text-slate-700 border-slate-200' },
+  UNSUCCESSFUL: { label: 'Unsuccessful', className: 'bg-red-50 text-red-700 border-red-100' },
 }
 
 export default function StatusBadge({ status, size = 'sm' }: StatusBadgeProps) {

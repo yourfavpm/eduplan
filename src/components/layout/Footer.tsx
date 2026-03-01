@@ -45,30 +45,31 @@ export function Footer() {
                         <h4 className="font-semibold mb-4 text-white">Company</h4>
                         <ul className="space-y-2 text-sm">
                             <li><Link href="/about" className="text-brand-100 hover:text-white transition-colors">About</Link></li>
-                            <li><Link href="/blog" className="text-brand-100 hover:text-white transition-colors">Blog</Link></li>
-                            <li><Link href="/events" className="text-brand-100 hover:text-white transition-colors">Events</Link></li>
+                            <li><Link href="/partner" className="text-brand-100 hover:text-white transition-colors">Partner with us</Link></li>
+                            <li><Link href="/become-associate" className="text-brand-100 hover:text-white transition-colors">Become an associate</Link></li>
                             <li><Link href="/contact" className="text-brand-100 hover:text-white transition-colors">Contact</Link></li>
                         </ul>
                     </div>
 
-                    {/* Resources */}
+                    {/* Services */}
                     <div>
-                        <h4 className="font-semibold mb-4 text-white">Resources</h4>
+                        <h4 className="font-semibold mb-4 text-white">Services</h4>
                         <ul className="space-y-2 text-sm">
+                            <li><Link href="/services" className="text-brand-100 hover:text-white transition-colors">Admission Processing</Link></li>
+                            <li><Link href="/services" className="text-brand-100 hover:text-white transition-colors">Visa Documentation</Link></li>
                             <li><Link href="/english-test" className="text-brand-100 hover:text-white transition-colors">English Test</Link></li>
-                            <li><Link href="/associates" className="text-brand-100 hover:text-white transition-colors">Associates</Link></li>
-                            <li><Link href="/become-associate" className="text-brand-100 hover:text-white transition-colors">Become an Associate</Link></li>
+                            <li><Link href="/scholarships" className="text-brand-100 hover:text-white transition-colors">Scholarships</Link></li>
                         </ul>
                     </div>
 
-                    {/* Legal */}
+                    {/* Quick links */}
                     <div>
-                        <h4 className="font-semibold mb-4 text-white">Legal</h4>
+                        <h4 className="font-semibold mb-4 text-white">Quick links</h4>
                         <ul className="space-y-2 text-sm">
-                            <li><Link href="/policies/privacy" className="text-brand-100 hover:text-white transition-colors">Privacy Policy</Link></li>
-                            <li><Link href="/policies/terms" className="text-brand-100 hover:text-white transition-colors">Terms of Service</Link></li>
-                            <li><Link href="/policies/refund" className="text-brand-100 hover:text-white transition-colors">Refund Policy</Link></li>
-                            <li><Link href="/policies/cookies" className="text-brand-100 hover:text-white transition-colors">Cookie Policy</Link></li>
+                            <li><Link href="/resources" className="text-brand-100 hover:text-white transition-colors">Resources</Link></li>
+                            <li><Link href="/book-consultation" className="text-brand-100 hover:text-white transition-colors">Book an appointment</Link></li>
+                            <li><Link href="/events" className="text-brand-100 hover:text-white transition-colors">Event</Link></li>
+                            <li><Link href="/blog" className="text-brand-100 hover:text-white transition-colors">Blogs</Link></li>
                         </ul>
                     </div>
 

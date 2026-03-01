@@ -35,12 +35,17 @@ export default async function DashboardPage() {
   })
 
   // Fetch unread notifications
-  const { data: notifications } = await supabase
+  const { data: rawNotifications } = await supabase
     .from('portal_notifications')
-    .select('id, title, message, created_at')
+    .select('id, title, message, created_at, application:applications(id, study_destination)')
     .eq('user_id', user.id)
     .eq('is_read', false)
     .order('created_at', { ascending: false })
+
+  const notifications = (rawNotifications ?? []).map(n => ({
+    ...n,
+    application: Array.isArray(n.application) ? n.application[0] : n.application
+  }))
 
   return (
     <div className="max-w-3xl pt-6">

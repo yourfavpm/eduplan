@@ -15,7 +15,6 @@ const inter = Inter({ variable: "--font-inter", subsets: ["latin"], weight: ["40
 export const metadata: Metadata = {
   title: "EduPlan360 | Study Abroad Simplified",
   description: "Expert guidance for your international education journey.",
-  icons: { icon: '/favicon.ico' },
 };
 
 export default async function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {

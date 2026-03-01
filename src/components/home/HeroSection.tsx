@@ -97,7 +97,7 @@ export function HeroSection() {
                         </div>
 
                         {/* Trust Stats Row - Desktop Only */}
-                        <div className="hidden lg:grid grid-cols-3 gap-6 pt-8">
+                        <div className="hidden lg:grid grid-cols-4 gap-6 pt-8">
                             <div className="flex items-center gap-3 group">
                                 <div>
                                     <div className="text-xl font-bold text-brand-700">95%</div>
@@ -107,15 +107,22 @@ export function HeroSection() {
 
                             <div className="flex items-center gap-3 group">
                                 <div>
-                                    <div className="text-xl font-bold text-brand-700">200+</div>
-                                    <div className="text-xs text-muted">Universities</div>
+                                    <div className="text-xl font-bold text-brand-700">1,200+</div>
+                                    <div className="text-xs text-muted">Students Served</div>
                                 </div>
                             </div>
 
                             <div className="flex items-center gap-3 group">
                                 <div>
-                                    <div className="text-xl font-bold text-brand-700">5,000+</div>
-                                    <div className="text-xs text-muted">Applicants</div>
+                                    <div className="text-xl font-bold text-brand-700">25+</div>
+                                    <div className="text-xs text-muted">Destinations</div>
+                                </div>
+                            </div>
+
+                            <div className="flex items-center gap-3 group">
+                                <div>
+                                    <div className="text-xl font-bold text-brand-700">50+</div>
+                                    <div className="text-xs text-muted">Global Partners</div>
                                 </div>
                             </div>
                         </div>
@@ -191,18 +198,22 @@ export function HeroSection() {
                 </div>
 
                 {/* Trust Stats Row - Mobile Only */}
-                <div className="lg:hidden grid grid-cols-3 gap-4 mt-12 max-w-xl mx-auto">
+                <div className="lg:hidden grid grid-cols-2 sm:grid-cols-4 gap-4 mt-12 max-w-2xl mx-auto">
                     <div className="text-center">
                         <div className="text-2xl font-bold text-brand-700 mb-1">95%</div>
                         <div className="text-xs text-muted">Visa Success</div>
                     </div>
                     <div className="text-center">
-                        <div className="text-2xl font-bold text-brand-700 mb-1">200+</div>
-                        <div className="text-xs text-muted">Universities</div>
+                        <div className="text-2xl font-bold text-brand-700 mb-1">1,200+</div>
+                        <div className="text-xs text-muted">Students</div>
                     </div>
                     <div className="text-center">
-                        <div className="text-2xl font-bold text-brand-700 mb-1">5,000+</div>
-                        <div className="text-xs text-muted">Applicants</div>
+                        <div className="text-2xl font-bold text-brand-700 mb-1">25+</div>
+                        <div className="text-xs text-muted">Destinations</div>
+                    </div>
+                    <div className="text-center">
+                        <div className="text-2xl font-bold text-brand-700 mb-1">50+</div>
+                        <div className="text-xs text-muted">Partners</div>
                     </div>
                 </div>
             </div>

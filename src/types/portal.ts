@@ -12,6 +12,7 @@ export type ApplicationStatus =
   | 'CAS_ISSUED'
   | 'PROCESS_VISA'
   | 'WITHDRAWN'
+  | 'UNSUCCESSFUL'
 
 export type DocumentStatus = 'pending' | 'uploaded' | 'approved' | 'rejected'
 export type RequiredDocSource = 'auto_qualification' | 'manual_admin'
@@ -172,6 +173,8 @@ export const APPLICATION_STATUSES: { value: ApplicationStatus; label: string; sh
   { value: 'PAY_TUITION_DEPOSIT',   label: 'Tuition Deposit',    shortLabel: 'Deposit' },
   { value: 'CAS_ISSUED',            label: 'CAS Issued',          shortLabel: 'CAS' },
   { value: 'PROCESS_VISA',          label: 'Visa Application',   shortLabel: 'Visa' },
+  { value: 'WITHDRAWN',             label: 'Withdrawn',           shortLabel: 'Withdrawn' },
+  { value: 'UNSUCCESSFUL',          label: 'Unsuccessful',        shortLabel: 'Closed' },
 ]
 
 export function getStatusIndex(status: ApplicationStatus): number {

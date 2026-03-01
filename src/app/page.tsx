@@ -1,14 +1,14 @@
 import type { Metadata } from "next";
 import { HeroSection } from "@/components/home/HeroSection";
-import { HowItWorks } from "@/components/home/HowItWorks";
+import { ServicesBento } from "@/components/home/ServicesBento";
 import { DestinationsSection } from "@/components/home/DestinationsSection";
-import { ServicesSection } from "@/components/home/ServicesSection";
-import { SuccessStoriesSection } from "@/components/home/SuccessStoriesSection";
-import { AdvisorsSection } from "@/components/home/AdvisorsSection";
+import { SuccessStoriesArc } from "@/components/home/success-stories/SuccessStoriesArc";
 import { StatsSection } from "@/components/home/StatsSection";
-import { WhyChooseUs } from "@/components/home/WhyChooseUs";
+import { WhyChooseUsSection } from "@/components/home/WhyChooseUs";
 import { NextStepsSection } from "@/components/home/NextStepsSection";
 import { FinalCTASection } from "@/components/home/FinalCTASection";
+import { LogoMarquee } from "@/components/home/LogoMarquee";
+import { HigherEdNewsSection } from "@/components/home/news/HigherEdNewsSection";
 
 export const metadata: Metadata = {
   title: "EduPlan360 | Study Abroad Simplified",
@@ -20,20 +20,19 @@ export const metadata: Metadata = {
   }
 };
 
-import { LogoMarquee } from "@/components/home/LogoMarquee";
+
 
 export default function HomePage() {
   return (
     <>
       <HeroSection />
       <LogoMarquee />
-      <HowItWorks />
+      <ServicesBento />
       <DestinationsSection />
-      <ServicesSection />
-      <SuccessStoriesSection />
+      <SuccessStoriesArc />
       <StatsSection />
-      <WhyChooseUs />
-      <AdvisorsSection />
+      <WhyChooseUsSection />
+      <HigherEdNewsSection />
       <NextStepsSection />
       <FinalCTASection />
     </>
