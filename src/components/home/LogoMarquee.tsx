@@ -1,7 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
-import { cn } from "@/lib/utils";
+import React from "react";
 
 // Placeholder data for universities. 
 // In a real scenario, these would be actual logo images.
@@ -29,40 +28,68 @@ export function LogoMarquee() {
                 </p>
             </div>
 
-            <div className="relative flex overflow-hidden group">
-                {/* Gradient overlay for fade effect */}
-                <div className="absolute top-0 bottom-0 left-0 w-16 md:w-32 z-10 bg-gradient-to-r from-white to-transparent" />
-                <div className="absolute top-0 bottom-0 right-0 w-16 md:w-32 z-10 bg-gradient-to-l from-white to-transparent" />
+            <div className="space-y-8">
+                {/* Line 1: Scroll Left */}
+                <div className="relative flex overflow-hidden group">
+                    <div className="absolute top-0 bottom-0 left-0 w-16 md:w-32 z-10 bg-linear-to-r from-white to-transparent" />
+                    <div className="absolute top-0 bottom-0 right-0 w-16 md:w-32 z-10 bg-linear-to-l from-white to-transparent" />
 
-                {/* Marquee Track - Contains two sets of items for seamless loop */}
-                <div className="flex animate-marquee whitespace-nowrap">
-                    {/* Set 1 */}
-                    <div className="flex gap-12 items-center px-6">
-                        {universities.map((uni, idx) => (
-                            <div key={`${uni}-${idx}`} className="text-xl md:text-2xl font-bold text-gray-300 hover:text-brand-500 transition-colors cursor-default select-none">
-                                {uni}
-                            </div>
-                        ))}
+                    <div className="flex animate-marquee whitespace-nowrap">
+                        <div className="flex gap-12 items-center px-6">
+                            {universities.slice(0, universities.length / 2).map((uni, idx) => (
+                                <div key={`${uni}-${idx}`} className="text-xl md:text-2xl font-bold text-gray-300 hover:text-brand-500 transition-colors cursor-default select-none">
+                                    {uni}
+                                </div>
+                            ))}
+                        </div>
+                        <div className="flex gap-12 items-center px-6" aria-hidden="true">
+                            {universities.slice(0, universities.length / 2).map((uni, idx) => (
+                                <div key={`dup-${uni}-${idx}`} className="text-xl md:text-2xl font-bold text-gray-300 hover:text-brand-500 transition-colors cursor-default select-none">
+                                    {uni}
+                                </div>
+                            ))}
+                        </div>
                     </div>
+                </div>
 
-                    {/* Set 2 (Duplicate) */}
-                    <div className="flex gap-12 items-center px-6" aria-hidden="true">
-                        {universities.map((uni, idx) => (
-                            <div key={`dup-${uni}-${idx}`} className="text-xl md:text-2xl font-bold text-gray-300 hover:text-brand-500 transition-colors cursor-default select-none">
-                                {uni}
-                            </div>
-                        ))}
+                {/* Line 2: Scroll Right */}
+                <div className="relative flex overflow-hidden group">
+                    <div className="absolute top-0 bottom-0 left-0 w-16 md:w-32 z-10 bg-linear-to-r from-white to-transparent" />
+                    <div className="absolute top-0 bottom-0 right-0 w-16 md:w-32 z-10 bg-linear-to-l from-white to-transparent" />
+
+                    <div className="flex animate-marquee-reverse whitespace-nowrap">
+                        <div className="flex gap-12 items-center px-6">
+                            {universities.slice(universities.length / 2).map((uni, idx) => (
+                                <div key={`${uni}-${idx}`} className="text-xl md:text-2xl font-bold text-gray-300 hover:text-brand-500 transition-colors cursor-default select-none">
+                                    {uni}
+                                </div>
+                            ))}
+                        </div>
+                        <div className="flex gap-12 items-center px-6" aria-hidden="true">
+                            {universities.slice(universities.length / 2).map((uni, idx) => (
+                                <div key={`dup-${uni}-${idx}`} className="text-xl md:text-2xl font-bold text-gray-300 hover:text-brand-500 transition-colors cursor-default select-none">
+                                    {uni}
+                                </div>
+                            ))}
+                        </div>
                     </div>
                 </div>
             </div>
 
             <style jsx>{`
                 .animate-marquee {
-                    animation: marquee 40s linear infinite;
+                    animation: marquee 50s linear infinite;
+                }
+                .animate-marquee-reverse {
+                    animation: marquee-reverse 50s linear infinite;
                 }
                 @keyframes marquee {
                     0% { transform: translateX(0%); }
                     100% { transform: translateX(-50%); }
+                }
+                @keyframes marquee-reverse {
+                    0% { transform: translateX(-50%); }
+                    100% { transform: translateX(0%); }
                 }
             `}</style>
         </section>

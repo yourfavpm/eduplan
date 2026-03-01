@@ -146,15 +146,24 @@ export const SuccessStoriesArc: React.FC = () => {
         </div>
 
         {/* Arc Content */}
-        <div className="relative max-w-5xl mx-auto h-[120px] md:h-[200px]">
+        <div className="relative max-w-5xl mx-auto h-[160px] md:h-[200px]">
           {/* SVG Path */}
           {!isMobile && <DottedArcPath />}
 
           {/* Avatar Nodes */}
           {TESTIMONIALS.map((item, i) => {
             const isActive = i === index;
-            // For mobile, we might want to hide some nodes or stack them differently
-            // but for now, let's keep the arc positioning as requested.
+            
+            // On mobile, only show active + 2 on each side to prevent squeezing
+            if (isMobile) {
+              const distance = Math.min(
+                Math.abs(i - index),
+                Math.abs(i - index + TESTIMONIALS.length),
+                Math.abs(i - index - TESTIMONIALS.length)
+              );
+              if (distance > 2) return null;
+            }
+
             return (
               <AvatarNode
                 key={item.id}

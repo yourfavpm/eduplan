@@ -66,7 +66,7 @@ export const AvatarNode: React.FC<AvatarNodeProps> = ({
         {/* Avatar Image */}
         <div
           className={`
-            w-16 h-16 md:w-20 md:h-20 rounded-full overflow-hidden border-4 transition-all duration-300
+            w-12 h-12 md:w-20 md:h-20 rounded-full overflow-hidden border-4 transition-all duration-300
             ${isActive ? "border-brand-500 shadow-xl" : "border-white shadow-md group-hover:border-brand-100"}
           `}
         >

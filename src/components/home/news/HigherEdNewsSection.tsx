@@ -94,9 +94,9 @@ const CATEGORIES = ["All", "Visa Updates", "Scholarships", "Admissions Tips", "G
  */
 
 const FeaturedNewsCard = ({ post }: { post: NewsPost }) => (
-  <Link href={`/news/${post.slug}`} className="group block relative overflow-hidden rounded-[32px] border border-slate-100 bg-white shadow-sm">
+  <Link href={`/news/${post.slug}`} className="group block relative overflow-hidden rounded-[32px] border border-white/10 bg-white/5 backdrop-blur-sm shadow-sm transition-all hover:border-white/20">
     <div className="aspect-16/10 overflow-hidden relative">
-      <div className="absolute inset-0 bg-slate-200 animate-pulse group-hover:bg-slate-300 transition-colors" />
+      <div className="absolute inset-0 bg-slate-800 animate-pulse group-hover:bg-slate-700 transition-colors" />
       <motion.div 
         whileHover={{ scale: 1.03 }}
         transition={{ duration: 0.6 }}
@@ -110,21 +110,21 @@ const FeaturedNewsCard = ({ post }: { post: NewsPost }) => (
           onLoadingComplete={(img) => img.classList.remove("opacity-0")}
           unoptimized
         />
-        <div className="absolute inset-0 bg-linear-to-t from-slate-900/60 to-transparent" />
+        <div className="absolute inset-0 bg-linear-to-t from-[#130057]/90 via-[#130057]/20 to-transparent" />
       </motion.div>
       
       <div className="absolute top-6 left-6 z-20">
-        <span className="px-3 py-1 bg-white/90 backdrop-blur-sm text-brand-700 text-xs font-bold uppercase tracking-wider rounded-full border border-white/20">
+        <span className="px-3 py-1 bg-white/10 backdrop-blur-md text-white text-xs font-bold uppercase tracking-wider rounded-full border border-white/20">
           {post.category}
         </span>
       </div>
     </div>
     
     <div className="p-8">
-      <h3 className="text-2xl md:text-3xl font-bold text-slate-900 mb-4 group-hover:text-brand-700 transition-colors line-clamp-2 leading-tight">
+      <h3 className="text-2xl md:text-3xl font-bold text-white mb-4 group-hover:text-brand-400 transition-colors line-clamp-2 leading-tight">
         {post.title}
       </h3>
-      <p className="text-slate-600 mb-6 line-clamp-2 leading-relaxed">
+      <p className="text-slate-300 mb-6 line-clamp-2 leading-relaxed">
         {post.excerpt}
       </p>
       <div className="flex items-center justify-between">
@@ -132,7 +132,7 @@ const FeaturedNewsCard = ({ post }: { post: NewsPost }) => (
           <span className="flex items-center gap-1.5"><Calendar className="w-4 h-4" /> {post.date}</span>
           <span className="flex items-center gap-1.5"><Clock className="w-4 h-4" /> {post.readTime}</span>
         </div>
-        <span className="text-brand-600 font-bold text-sm flex items-center gap-1 group-hover:gap-2 transition-all">
+        <span className="text-brand-400 font-bold text-sm flex items-center gap-1 group-hover:gap-2 transition-all">
           Read article <ArrowRight className="w-4 h-4" />
         </span>
       </div>
@@ -143,9 +143,9 @@ const FeaturedNewsCard = ({ post }: { post: NewsPost }) => (
 const NewsStreamItem = ({ post }: { post: NewsPost }) => (
   <Link 
     href={`/news/${post.slug}`} 
-    className="group flex gap-4 p-4 rounded-2xl hover:bg-slate-50 transition-all border border-transparent hover:border-slate-100"
+    className="group flex gap-4 p-4 rounded-2xl hover:bg-white/5 transition-all border border-transparent hover:border-white/10"
   >
-    <div className="relative w-24 h-24 shrink-0 overflow-hidden rounded-xl bg-slate-100">
+    <div className="relative w-24 h-24 shrink-0 overflow-hidden rounded-xl bg-slate-800">
       <Image 
         src={post.imageUrl} 
         alt={post.title} 
@@ -157,10 +157,10 @@ const NewsStreamItem = ({ post }: { post: NewsPost }) => (
       <div className="absolute inset-0 bg-brand-500/5 group-hover:bg-brand-500/0 transition-colors" />
     </div>
     <div className="flex-1 flex flex-col justify-center">
-      <span className="text-[10px] font-bold uppercase tracking-widest text-brand-600 mb-1">
+      <span className="text-[10px] font-bold uppercase tracking-widest text-brand-400 mb-1">
         {post.category}
       </span>
-      <h4 className="text-slate-900 font-bold leading-snug mb-2 line-clamp-2 group-hover:text-brand-700 transition-colors">
+      <h4 className="text-white font-bold leading-snug mb-2 line-clamp-2 group-hover:text-brand-300 transition-colors">
         {post.title}
       </h4>
       <div className="flex items-center gap-3 text-[10px] text-slate-400 font-medium">
@@ -186,25 +186,25 @@ export function HigherEdNewsSection() {
   const stream = filteredNews.filter(p => p.id !== featured?.id).slice(0, 5);
 
   return (
-    <section className="py-24 md:py-32 bg-white border-t border-slate-50">
+    <section className="py-24 md:py-32 bg-[#130057] border-y border-white/5 overflow-hidden">
       <div className="container mx-auto px-4 md:px-6">
         
         {/* Section Header */}
         <div className="flex flex-col md:flex-row md:items-end justify-between mb-12 md:mb-16 gap-6">
           <div className="space-y-4">
-            <div className="inline-block px-4 py-1.5 bg-brand-50 text-brand-700 rounded-full text-xs font-bold uppercase tracking-widest border border-brand-100">
+            <div className="inline-block px-4 py-1.5 bg-brand-500/20 text-brand-300 rounded-full text-xs font-bold uppercase tracking-widest border border-brand-500/30">
               Higher Education News
             </div>
-            <h2 className="text-2xl md:text-3xl font-semibold text-slate-900 leading-tight">
+            <h2 className="text-2xl md:text-3xl font-semibold text-white leading-tight">
               Updates That Keep You Ahead
             </h2>
-            <p className="text-muted max-w-lg">
+            <p className="text-slate-400 max-w-lg">
               Visa changes, scholarship openings, and admissions insights — all in one place.
             </p>
           </div>
           <Link 
             href="/news" 
-            className="group flex items-center gap-2 text-brand-600 font-bold hover:text-brand-700 transition-colors"
+            className="group flex items-center gap-2 text-brand-400 font-bold hover:text-brand-300 transition-colors"
           >
             View all news
             <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
@@ -220,8 +220,8 @@ export function HigherEdNewsSection() {
               className={cn(
                 "px-6 py-2 rounded-full text-sm font-bold whitespace-nowrap transition-all border",
                 activeCategory === cat 
-                  ? "bg-brand-600 text-white border-brand-600 shadow-lg shadow-brand-600/20" 
-                  : "bg-white text-slate-600 border-slate-200 hover:border-brand-300 hover:text-brand-600"
+                  ? "bg-brand-500 text-white border-brand-500 shadow-lg shadow-brand-500/20" 
+                  : "bg-white/5 text-slate-300 border-white/10 hover:border-brand-500/50 hover:text-white"
               )}
             >
               {cat}
@@ -250,8 +250,8 @@ export function HigherEdNewsSection() {
           </div>
 
           {/* Stream - Right */}
-          <div className="lg:col-span-1 border-l border-slate-100 lg:pl-8">
-            <h3 className="text-xs font-bold text-slate-400 uppercase tracking-widest mb-6">Latest Updates</h3>
+          <div className="lg:col-span-1 border-l border-white/5 lg:pl-8">
+            <h3 className="text-xs font-bold text-slate-500 uppercase tracking-widest mb-6">Latest Updates</h3>
             <div className="space-y-2">
               <AnimatePresence mode="popLayout">
                 {stream.map((post, idx) => (
@@ -269,28 +269,28 @@ export function HigherEdNewsSection() {
             </div>
             
             {stream.length === 0 && (
-              <div className="py-12 text-center text-slate-400 italic text-sm">
+              <div className="py-12 text-center text-slate-500 italic text-sm">
                 No articles in this category yet.
               </div>
             )}
             
             {/* Newsletter Mini-Card */}
-            <div className="mt-8 p-6 rounded-3xl bg-brand-50 border border-brand-100 relative overflow-hidden group">
+            <div className="mt-8 p-6 rounded-3xl bg-white/5 border border-white/10 relative overflow-hidden group shadow-sm">
               <div className="relative z-10">
-                <h4 className="text-slate-900 font-bold mb-2">Join the inner circle</h4>
-                <p className="text-xs text-slate-500 mb-4">Get the latest education updates directly in your inbox.</p>
+                <h4 className="text-white font-bold mb-2">Join the inner circle</h4>
+                <p className="text-xs text-slate-400 mb-4">Get the latest education updates directly in your inbox.</p>
                 <div className="flex gap-2">
                   <input 
                     type="email" 
                     placeholder="Email address" 
-                    className="flex-1 bg-white border border-brand-200 rounded-xl px-3 py-2 text-xs focus:ring-2 focus:ring-brand-500 outline-none"
+                    className="flex-1 bg-white/10 border border-white/10 rounded-xl px-3 py-2 text-xs text-white focus:ring-2 focus:ring-brand-500 outline-none placeholder:text-slate-500"
                   />
-                  <button className="bg-brand-600 text-white p-2 rounded-xl hover:bg-brand-700 transition-colors">
+                  <button className="bg-brand-500 text-white p-2 rounded-xl hover:bg-brand-600 transition-colors">
                     <ArrowRight className="w-4 h-4" />
                   </button>
                 </div>
               </div>
-              <div className="absolute top-0 right-0 w-24 h-24 bg-brand-500/5 rounded-full -mr-12 -mt-12 blur-2xl group-hover:bg-brand-500/10 transition-colors" />
+              <div className="absolute top-0 right-0 w-24 h-24 bg-brand-500/10 rounded-full -mr-12 -mt-12 blur-2xl group-hover:bg-brand-500/20 transition-colors" />
             </div>
           </div>
         </div>
