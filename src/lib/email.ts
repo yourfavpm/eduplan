@@ -1,7 +1,5 @@
 import { Resend } from "resend";
 
-const resend = new Resend(process.env.RESEND_API_KEY);
-
 const ADMIN_EMAIL = "web@eduplan360.com";
 const FROM_EMAIL = "system@eduplan360.com"; // This needs to be a verified domain on Resend
 
@@ -34,10 +32,15 @@ function formatDataToHtml(data: Record<string, string | undefined>) {
 }
 
 export async function sendAdminNotification(payload: EmailPayload) {
-  if (!process.env.RESEND_API_KEY) {
+  const apiKey = process.env.RESEND_API_KEY;
+
+  if (!apiKey) {
     console.warn("RESEND_API_KEY is not defined. Skipping email dispatch.");
     return { success: true, simulated: true };
   }
+
+  // Initialize Resend inside the function to avoid build-time errors when the API key is missing
+  const resend = new Resend(apiKey);
 
   const htmlContent = `
     <div style="background-color: #f8fafc; padding: 40px 20px;">

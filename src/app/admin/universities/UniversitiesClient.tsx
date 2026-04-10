@@ -2,8 +2,9 @@
 
 import { useState, useTransition } from 'react'
 import { Plus, Pencil, Trash2, Check, X, Star, MapPin, Link as LinkIcon, GraduationCap } from 'lucide-react'
+import CurrencySelector from '@/components/shared/CurrencySelector'
 
-type Course = { name: string; level: string; duration: string; fees?: string }
+type Course = { name: string; level: string; duration: string; fees: string; currency: string }
 
 type University = {
   id: string
@@ -64,7 +65,11 @@ export default function UniversitiesClient({ initialItems }: { initialItems: Uni
       admission_requirements: item.admission_requirements ?? '',
       ranking: item.ranking ?? '',
       student_population: item.student_population ?? '',
-      courses: Array.isArray(item.courses) ? item.courses : [],
+      courses: (Array.isArray(item.courses) ? item.courses : []).map(c => ({
+        ...c,
+        fees: c.fees || '',
+        currency: c.currency || 'USD'
+      })),
       intakes: Array.isArray(item.intakes) ? item.intakes : [],
       featured: item.featured,
       published: item.published,
@@ -98,7 +103,7 @@ export default function UniversitiesClient({ initialItems }: { initialItems: Uni
   }
 
   function addCourse() {
-    setForm(f => ({ ...f, courses: [...f.courses, { name: '', level: 'Undergraduate', duration: '' }] }))
+    setForm(f => ({ ...f, courses: [...f.courses, { name: '', level: 'Undergraduate', duration: '', fees: '', currency: 'USD' }] }))
   }
 
   function removeCourse(idx: number) {
@@ -253,8 +258,15 @@ export default function UniversitiesClient({ initialItems }: { initialItems: Uni
                         </select>
                         <input type="text" placeholder="Duration (e.g. 3 Years)" value={course.duration} onChange={e => updateCourse(i, 'duration', e.target.value)}
                           className="w-full border border-slate-200 rounded-lg px-2 py-1 text-xs focus:outline-none" />
-                        <input type="text" placeholder="Estimated Fees" value={course.fees} onChange={e => updateCourse(i, 'fees', e.target.value)}
-                          className="w-full border border-slate-200 rounded-lg px-2 py-1 text-xs focus:outline-none" />
+                        <div className="flex gap-1">
+                          <CurrencySelector 
+                            value={course.currency} 
+                            onChange={(val: string) => updateCourse(i, 'currency', val)}
+                            className="w-24 shrink-0"
+                          />
+                          <input type="text" placeholder="Fees" value={course.fees} onChange={e => updateCourse(i, 'fees', e.target.value)}
+                            className="flex-1 border border-slate-200 rounded-lg px-2 py-1 text-xs focus:outline-none" />
+                        </div>
                       </div>
                       <button onClick={() => removeCourse(i)} className="text-slate-400 hover:text-red-500 p-1"><X className="w-3.5 h-3.5" /></button>
                     </div>
