@@ -3,16 +3,51 @@
 import Link from "next/link";
 import Image from "next/image";
 import { usePathname } from "next/navigation";
-import { useState } from "react";
-import { Menu, X, ChevronDown } from "lucide-react";
+import { useState, useEffect } from "react";
+import { Menu, X, ChevronDown, LayoutDashboard, UserCircle } from "lucide-react";
 import { AnimatePresence, motion } from "framer-motion";
 import { createPortal } from "react-dom";
+import { createClient } from "@/lib/supabase/client";
+import type { Session } from "@supabase/supabase-js";
 
 export function Navbar() {
     const pathname = usePathname();
     const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
-
     const [expandedMobileItem, setExpandedMobileItem] = useState<string | null>(null);
+    const [session, setSession] = useState<Session | null>(null);
+    const [role, setRole] = useState<string | null>(null);
+
+    useEffect(() => {
+        const supabase = createClient();
+        
+        // Initial check
+        supabase.auth.getSession().then(({ data: { session: currentSession } }) => {
+            setSession(currentSession);
+            if (currentSession) {
+                supabase.from('portal_profiles')
+                    .select('role')
+                    .eq('id', currentSession.user.id)
+                    .single()
+                    .then(({ data }) => setRole(data?.role || 'student'));
+            }
+        });
+
+        // Listen for changes
+        const { data: { subscription } } = supabase.auth.onAuthStateChange((_event, session) => {
+            setSession(session);
+            if (session) {
+                supabase.from('portal_profiles')
+                    .select('role')
+                    .eq('id', session.user.id)
+                    .single()
+                    .then(({ data }) => setRole(data?.role || 'student'));
+            } else {
+                setRole(null);
+            }
+        });
+
+        return () => subscription.unsubscribe();
+    }, []);
 
     const navLinks = [
         { href: "/", label: "Home" },
@@ -82,6 +117,16 @@ export function Navbar() {
         },
     ];
 
+    const getDashboardLink = () => {
+        if (!session) return "/portal/sign-in";
+        return role === "admin" ? "/admin/overview" : "/portal/dashboard";
+    };
+
+    const getDashboardLabel = () => {
+        if (!session) return "Login";
+        return role === "admin" ? "Admin Portal" : "Student Dashboard";
+    };
+
     return (
         <nav className="bg-brand-700 shadow-md">
             <div className="container mx-auto px-4 md:px-6 lg:px-8">
@@ -134,18 +179,22 @@ export function Navbar() {
                             </div>
                         ))}
 
-                        <Link
-                            href="/portal/sign-up"
-                            className="bg-white text-brand-700 px-6 py-2.5 rounded-lg hover:bg-brand-50 transition-calm active:scale-[0.98] font-semibold text-sm"
-                        >
-                            Start Your Study
-                        </Link>
+                        {/* Start Your Study / Registration Button - Hidden if logged in */}
+                        {!session && (
+                            <Link
+                                href="/portal/sign-up"
+                                className="bg-white text-brand-700 px-6 py-2.5 rounded-lg hover:bg-brand-50 transition-calm active:scale-[0.98] font-semibold text-sm"
+                            >
+                                Start Your Study
+                            </Link>
+                        )}
 
                         <Link
-                            href="/portal/sign-in"
-                            className="text-white/90 hover:text-white transition-calm text-[10px] font-bold uppercase tracking-wide"
+                            href={getDashboardLink()}
+                            className={`flex items-center gap-2 text-white/90 hover:text-white transition-calm text-[10px] font-bold uppercase tracking-wide px-4 py-2 rounded-lg ${session ? 'bg-white/10' : ''}`}
                         >
-                            Login
+                            {session && (role === "admin" ? <LayoutDashboard className="w-3.5 h-3.5" /> : <UserCircle className="w-3.5 h-3.5" />)}
+                            {getDashboardLabel()}
                         </Link>
                     </div>
 
@@ -240,13 +289,22 @@ export function Navbar() {
                                         ))}
                                     </div>
 
-                                    <div className="p-4 border-t border-border mt-auto">
+                                    <div className="p-4 border-t border-border mt-auto flex flex-col gap-2">
+                                        {!session && (
+                                            <Link
+                                                href="/portal/sign-up"
+                                                className="block bg-white text-brand-700 border border-brand-200 hover:bg-brand-50 rounded-lg transition-colors font-medium py-3 px-4 text-sm text-center"
+                                                onClick={() => setIsMobileMenuOpen(false)}
+                                            >
+                                                Start Your Study
+                                            </Link>
+                                        )}
                                         <Link
-                                            href="/portal/sign-in"
+                                            href={getDashboardLink()}
                                             className="block bg-brand-700 text-white hover:bg-brand-800 rounded-lg transition-colors font-medium py-3 px-4 text-sm text-center shadow-sm"
                                             onClick={() => setIsMobileMenuOpen(false)}
                                         >
-                                            Login
+                                            {getDashboardLabel()}
                                         </Link>
                                     </div>
                                 </motion.div>

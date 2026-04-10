@@ -20,7 +20,7 @@ import { FinalCTASection } from "@/components/home/FinalCTASection";
    ================================================================ */
 function AboutHero() {
   return (
-    <section className="bg-white pt-24 pb-12">
+    <section className="bg-white pt-18 pb-12">
       <div className="w-[96%] max-w-[1440px] mx-auto">
         <motion.div
            initial={{ opacity: 0, y: 20 }}
@@ -34,7 +34,7 @@ function AboutHero() {
               src="/images/why-choose-us/hero-student.png"
               alt="EduPlan360 successful student"
               fill
-              className="object-cover object-right-top"
+              className="object-cover object-top-right"
               priority
             />
           </div>

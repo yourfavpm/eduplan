@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from 'react';
-import { Calendar, Mail, Phone, User, Globe, GraduationCap, BookOpen, CheckCircle2 } from 'lucide-react';
+import { Mail, Phone, User, Globe, GraduationCap, BookOpen, CheckCircle2, Loader2 } from 'lucide-react';
 
 export function NextStepsSection() {
     const [formData, setFormData] = useState({
@@ -20,20 +20,40 @@ export function NextStepsSection() {
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
         setIsSubmitting(true);
+        setSubmitStatus('idle');
 
-        // Simulate API call
-        setTimeout(() => {
-            setIsSubmitting(false);
-            setSubmitStatus('success');
-            setFormData({
-                name: '', email: '', phone: '',
-                countryOfInterest: '', studyLevel: '', courseOfInterest: '',
-                preferredDate: '', message: ''
+        try {
+            const res = await fetch("/api/consultations", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({
+                    full_name: formData.name,
+                    email: formData.email,
+                    phone: formData.phone,
+                    country_of_interest: formData.countryOfInterest,
+                    study_level: formData.studyLevel,
+                    message: formData.message + (formData.courseOfInterest ? ` \nCourse of interest: ${formData.courseOfInterest}` : ''),
+                    source: 'homepage_next_steps'
+                }),
             });
 
-            // Reset success message after 3 seconds
-            setTimeout(() => setSubmitStatus('idle'), 3000);
-        }, 1000);
+            if (res.ok) {
+                setSubmitStatus('success');
+                setFormData({
+                    name: '', email: '', phone: '',
+                    countryOfInterest: '', studyLevel: '', courseOfInterest: '',
+                    preferredDate: '', message: ''
+                });
+            } else {
+                setSubmitStatus('error');
+                alert("Failed to submit. Please try again.");
+            }
+        } catch (error) {
+            console.error("Submission error:", error);
+            setSubmitStatus('error');
+        } finally {
+            setIsSubmitting(false);
+        }
     };
 
     const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
@@ -78,7 +98,7 @@ export function NextStepsSection() {
                                         <CheckCircle2 className="w-8 h-8 text-accent-700" />
                                     </div>
                                     <h4 className="text-xl font-bold text-ink mb-2">Request Received!</h4>
-                                    <p className="text-muted mb-6">We'll be in touch within 24 hours to schedule your session.</p>
+                                    <p className="text-muted mb-6">We&apos;ll be in touch within 24 hours to schedule your session.</p>
                                     <button
                                         onClick={() => setSubmitStatus('idle')}
                                         className="text-brand-700 font-semibold hover:underline"

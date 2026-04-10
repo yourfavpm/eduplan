@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import {
   Clock,
@@ -9,9 +9,7 @@ import {
   CheckCircle,
   Briefcase,
   GraduationCap,
-  ChevronRight,
   ChevronLeft,
-  X,
   Loader2,
   Quote,
   ArrowRight,
@@ -81,8 +79,9 @@ function AssociateHero() {
             initial={{ opacity: 0, scale: 0.95 }}
             animate={{ opacity: 1, scale: 1 }}
             transition={{ duration: 0.5, delay: 0.1 }}
-            className="relative rounded-2xl overflow-hidden aspect-[4/3] bg-slate-100 shadow-xl"
+            className="relative rounded-2xl overflow-hidden aspect-4/3 bg-slate-100 shadow-xl"
           >
+            {/* eslint-disable-next-line @next/next/no-img-element */}
             <img
               src="https://images.unsplash.com/photo-1600880292203-757bb62b4baf?auto=format&fit=crop&q=80&w=1000"
               alt="Professional working remotely"
@@ -291,11 +290,25 @@ function ApplicationSection() {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setIsSubmitting(true);
-    // Simulate API call
-    setTimeout(() => {
-      setIsSubmitting(false);
+    
+    try {
+      const response = await fetch("/api/associate-requests", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(form),
+      });
+
+      if (!response.ok) {
+        throw new Error("Failed to submit application");
+      }
+
       setIsSuccess(true);
-    }, 1500);
+    } catch (error) {
+      console.error(error);
+      alert("Something went wrong while submitting. Please try again.");
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   const inputClasses = "w-full bg-white border border-slate-200 rounded-xl px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-brand-500 transition-colors";

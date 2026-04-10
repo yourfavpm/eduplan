@@ -1,3 +1,5 @@
+import { PublicUniversity, PublicScholarship } from "@/lib/supabase/admin";
+
 export interface CostCategory {
   title: string;
   items: { label: string; value: string }[];
@@ -16,8 +18,10 @@ export interface DestinationContent {
   whyStudy: { title: string; description: string; icon?: React.ReactNode }[];
   popularCourses: string[];
   topUniversities: string[];
-  costs: CostCategory[];
   scholarships: string[];
+  dynamicUniversities?: PublicUniversity[];
+  dynamicScholarships?: PublicScholarship[];
+  costs: CostCategory[];
   intakes?: string[];
   requirements: string[];
   successStories?: { studentName: string; course: string; university: string; quote: string }[];

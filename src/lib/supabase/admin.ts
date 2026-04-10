@@ -226,3 +226,251 @@ export async function getPayments(filter?: string): Promise<AdminPayment[]> {
     profile: Array.isArray(row.portal_profiles) ? row.portal_profiles[0] : row.portal_profiles,
   }))
 }
+
+// ─── Consultations ────────────────────────────────────────
+
+export interface AdminConsultation {
+  id: string
+  full_name: string
+  email: string
+  phone: string
+  study_level: string | null
+  country_of_interest: string | null
+  preferred_date: string | null
+  message: string | null
+  source: string | null
+  status: 'pending' | 'contacted' | 'booked' | 'closed'
+  created_at: string
+}
+
+export async function getConsultations(filters?: {
+  search?: string
+  status?: string
+  page?: number
+  pageSize?: number
+}): Promise<{ consultations: AdminConsultation[]; total: number }> {
+  const supabase = await createClient()
+  const page = filters?.page ?? 1
+  const pageSize = filters?.pageSize ?? 25
+  const from = (page - 1) * pageSize
+  const to = from + pageSize - 1
+
+  let query = supabase
+    .from('consultations')
+    .select('*', { count: 'exact' })
+    .order('created_at', { ascending: false })
+    .range(from, to)
+
+  if (filters?.status) {
+    query = query.eq('status', filters.status)
+  }
+
+  if (filters?.search) {
+    query = query.or(`full_name.ilike.%${filters.search}%,email.ilike.%${filters.search}%`)
+  }
+
+  const { data, count, error } = await query
+  if (error) {
+    console.error('getConsultations error:', error)
+    return { consultations: [], total: 0 }
+  }
+
+  return { consultations: (data ?? []) as AdminConsultation[], total: count ?? 0 }
+}
+
+export async function updateConsultationStatus(id: string, status: AdminConsultation['status']) {
+  const supabase = await createClient()
+  const { error } = await supabase
+    .from('consultations')
+    .update({ status })
+    .eq('id', id)
+  return { success: !error, error }
+}
+
+// ─── Associate Requests ───────────────────────────────────
+
+export interface AdminAssociateRequest {
+  id: string
+  full_name: string
+  email: string
+  phone: string
+  occupation: string | null
+  city: string | null
+  country: string | null
+  gender: string | null
+  qualification: string | null
+  status: 'pending' | 'under_review' | 'approved' | 'rejected'
+  created_at: string
+}
+
+export async function getAssociateRequests(filters?: {
+  search?: string
+  status?: string
+  page?: number
+  pageSize?: number
+}): Promise<{ requests: AdminAssociateRequest[]; total: number }> {
+  const supabase = await createClient()
+  const page = filters?.page ?? 1
+  const pageSize = filters?.pageSize ?? 25
+  const from = (page - 1) * pageSize
+  const to = from + pageSize - 1
+
+  let query = supabase
+    .from('associate_requests')
+    .select('*', { count: 'exact' })
+    .order('created_at', { ascending: false })
+    .range(from, to)
+
+  if (filters?.status) {
+    query = query.eq('status', filters.status)
+  }
+
+  if (filters?.search) {
+    query = query.or(`full_name.ilike.%${filters.search}%,email.ilike.%${filters.search}%`)
+  }
+
+  const { data, count, error } = await query
+  if (error) {
+    console.error('getAssociateRequests error:', error)
+    return { requests: [], total: 0 }
+  }
+
+  return { requests: (data ?? []) as AdminAssociateRequest[], total: count ?? 0 }
+}
+
+export async function updateAssociateStatus(id: string, status: AdminAssociateRequest['status']) {
+  const supabase = await createClient()
+  const { error } = await supabase
+    .from('associate_requests')
+    .update({ status })
+    .eq('id', id)
+  return { success: !error, error }
+}
+
+// ─── Partner Requests ─────────────────────────────────────
+
+export interface AdminPartnerRequest {
+  id: string
+  full_name: string
+  email: string
+  phone: string
+  organization_name: string
+  organization_type: string | null
+  role: string | null
+  country: string | null
+  message: string | null
+  status: 'pending' | 'under_review' | 'approved' | 'rejected'
+  created_at: string
+}
+
+export async function getPartnerRequests(filters?: {
+  search?: string
+  status?: string
+  page?: number
+  pageSize?: number
+}): Promise<{ requests: AdminPartnerRequest[]; total: number }> {
+  const supabase = await createClient()
+  const page = filters?.page ?? 1
+  const pageSize = filters?.pageSize ?? 25
+  const from = (page - 1) * pageSize
+  const to = from + pageSize - 1
+
+  let query = supabase
+    .from('partner_requests')
+    .select('*', { count: 'exact' })
+    .order('created_at', { ascending: false })
+    .range(from, to)
+
+  if (filters?.status) {
+    query = query.eq('status', filters.status)
+  }
+
+  if (filters?.search) {
+    query = query.or(`organization_name.ilike.%${filters.search}%,full_name.ilike.%${filters.search}%`)
+  }
+
+  const { data, count, error } = await query
+  if (error) {
+    console.error('getPartnerRequests error:', error)
+    return { requests: [], total: 0 }
+  }
+
+  return { requests: (data ?? []) as AdminPartnerRequest[], total: count ?? 0 }
+}
+
+export async function updatePartnerStatus(id: string, status: AdminPartnerRequest['status']) {
+  const supabase = await createClient()
+  const { error } = await supabase
+    .from('partner_requests')
+    .update({ status })
+    .eq('id', id)
+  return { success: !error, error }
+}
+
+// --- Public CMS Data Fetches ---
+
+export interface PublicUniversity {
+  id: string
+  name: string
+  slug: string
+  country: string
+  location: string | null
+  logo_url: string | null
+  website_url: string | null
+  description: string | null
+  admission_requirements: string | null
+  ranking: string | null
+  student_population: string | null
+  courses: Array<{ name: string; level: string; duration: string; fees?: string }>
+  intakes: string[]
+  featured: boolean
+}
+
+export interface PublicScholarship {
+  id: string
+  title: string
+  country: string | null
+  level: string | null
+  type: string | null
+  deadline: string | null
+  description: string | null
+  eligibility: string | null
+  link: string | null
+  featured: boolean
+}
+
+export async function getPublicUniversitiesByCountry(countrySlug: string): Promise<PublicUniversity[]> {
+  const supabase = await createClient()
+  const { data, error } = await supabase
+    .from('universities')
+    .select('*')
+    .eq('published', true)
+    .ilike('country', countrySlug)
+    .order('featured', { ascending: false })
+    .order('name', { ascending: true })
+
+  if (error) {
+    console.error('getPublicUniversitiesByCountry error:', error)
+    return []
+  }
+
+  return data as PublicUniversity[]
+}
+
+export async function getPublicScholarshipsByCountry(countrySlug: string): Promise<PublicScholarship[]> {
+  const supabase = await createClient()
+  const { data, error } = await supabase
+    .from('scholarships')
+    .select('*')
+    .eq('published', true)
+    .ilike('country', countrySlug)
+    .order('featured', { ascending: false })
+    .order('title', { ascending: true })
+
+  if (error) {
+    console.error('getPublicScholarshipsByCountry error:', error)
+    return []
+  }
+
+  return data as PublicScholarship[]
+}

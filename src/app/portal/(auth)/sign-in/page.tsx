@@ -1,6 +1,6 @@
 'use client'
 
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import Link from 'next/link'
 import Image from 'next/image'
 import { useRouter } from 'next/navigation'
@@ -10,8 +10,33 @@ import { Eye, EyeOff, Loader2 } from 'lucide-react'
 export default function SignInPage() {
   const router = useRouter()
   const [loading, setLoading] = useState(false)
+  const [checkingSession, setCheckingSession] = useState(true)
   const [error, setError] = useState<string | null>(null)
   const [showPassword, setShowPassword] = useState(false)
+
+  useEffect(() => {
+    async function checkSession() {
+      const supabase = createClient()
+      const { data: { session } } = await supabase.auth.getSession()
+      
+      if (session) {
+        const { data: profile } = await supabase
+          .from('portal_profiles')
+          .select('role')
+          .eq('id', session.user.id)
+          .single()
+
+        if (profile?.role === 'admin') {
+          router.push('/admin/overview')
+        } else {
+          router.push('/portal/dashboard')
+        }
+      } else {
+        setCheckingSession(false)
+      }
+    }
+    checkSession()
+  }, [router])
 
   async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault()
@@ -44,6 +69,17 @@ export default function SignInPage() {
       router.push('/portal/dashboard')
     }
     router.refresh()
+  }
+
+  if (checkingSession) {
+    return (
+      <div className="min-h-screen bg-slate-50 flex items-center justify-center">
+        <div className="text-center">
+          <Loader2 className="w-10 h-10 animate-spin text-brand-600 mx-auto mb-4" />
+          <p className="text-slate-600 font-medium">Validating session...</p>
+        </div>
+      </div>
+    )
   }
 
   return (

@@ -317,14 +317,10 @@ function PartnershipModal({ onClose }: { onClose: () => void }) {
     setIsSubmitting(true);
     
     try {
-      const response = await fetch("/api/send-email", {
+      const response = await fetch("/api/partner-requests", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          type: "PARTNERSHIP",
-          subject: `New Partnership Inquiry from ${form.organization_name}`,
-          data: form,
-        }),
+        body: JSON.stringify(form),
       });
 
       if (!response.ok) {

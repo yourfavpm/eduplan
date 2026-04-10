@@ -1,7 +1,7 @@
 'use client'
 
 import { useState, useTransition } from 'react'
-import { Plus, Pencil, Trash2, Check, X, Star } from 'lucide-react'
+import { Plus, Pencil, Trash2, Check, Star } from 'lucide-react'
 
 type Scholarship = {
   id: string
@@ -102,9 +102,33 @@ export default function ScholarshipsClient({ initialItems }: { initialItems: Sch
                 className="w-full border border-slate-200 rounded-xl px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500" />
             </div>
             <div>
-              <label className="block text-xs font-medium text-slate-600 mb-1">Country</label>
-              <input type="text" value={form.country ?? ''} onChange={e => setForm(f => ({ ...f, country: e.target.value }))}
-                className="w-full border border-slate-200 rounded-xl px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500" />
+              <label className="block text-xs font-medium text-slate-600 mb-1">Country *</label>
+              <select 
+                value={form.country ?? ''} 
+                onChange={e => setForm(f => ({ ...f, country: e.target.value }))}
+                className="w-full border border-slate-200 rounded-xl px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white"
+              >
+                <option value="">Select Country</option>
+                <option value="uk">United Kingdom (UK)</option>
+                <option value="usa">United States (USA)</option>
+                <option value="canada">Canada</option>
+                <option value="australia">Australia</option>
+                <option value="germany">Germany</option>
+                <option value="ireland">Ireland</option>
+                <option value="netherlands">Netherlands</option>
+                <option value="poland">Poland</option>
+                <option value="dubai">Dubai (UAE)</option>
+                <option value="france">France</option>
+                <option value="hungary">Hungary</option>
+                <option value="spain">Spain</option>
+                <option value="greece">Greece</option>
+                <option value="finland">Finland</option>
+                <option value="japan">Japan</option>
+                <option value="south-korea">South Korea</option>
+                <option value="malta">Malta</option>
+                <option value="new-zealand">New Zealand</option>
+                <option value="turkey">Turkey</option>
+              </select>
             </div>
             <div>
               <label className="block text-xs font-medium text-slate-600 mb-1">Level</label>

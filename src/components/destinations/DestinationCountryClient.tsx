@@ -4,7 +4,7 @@ import React, { useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { DestinationContent } from "@/app/destinations/content";
-import { CheckCircle2, ChevronRight, Loader2, Landmark, Trophy, FileCheck } from "lucide-react";
+import { CheckCircle2, ChevronRight, Loader2, Landmark, Trophy, FileCheck, Star, MapPin, Clock } from "lucide-react";
 
 export function DestinationCountryClient({ data }: { data: DestinationContent }) {
   return (
@@ -50,13 +50,13 @@ function LeadForm({ data, title = "Get Free Admission Assessment" }: { data: Des
     const payload = Object.fromEntries(formData.entries());
 
     try {
-      const res = await fetch("/api/send-email", {
+      const res = await fetch("/api/consultations", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
-          type: "GENERAL",
-          subject: `Destination Inquiry: Study in ${data.countryName}`,
-          data: { destination: data.countryName, ...payload },
+          ...payload,
+          country_of_interest: data.countryName,
+          source: `Destination Page: ${data.countryName}`,
         }),
       });
       if (res.ok) setSuccess(true);
@@ -218,14 +218,49 @@ function CoursesAndUnisSection({ data }: { data: DestinationContent }) {
           {/* Unis */}
           <div>
             <h2 className="text-2xl md:text-3xl font-bold text-slate-900 mb-8">Top Universities</h2>
-            <ul className="space-y-4">
-              {data.topUniversities.map((uni, i) => (
-                <li key={i} className="flex items-center gap-3 p-4 border border-slate-200 rounded-xl bg-slate-50">
-                  <Landmark className="w-5 h-5 text-slate-400" />
-                  <span className="font-semibold text-slate-800">{uni}</span>
-                </li>
-              ))}
-            </ul>
+            <div className="space-y-4">
+              {(data.dynamicUniversities && data.dynamicUniversities.length > 0) ? (
+                data.dynamicUniversities.map((uni) => (
+                  <div key={uni.id} className="flex gap-4 p-5 border border-slate-100 rounded-2xl bg-white shadow-sm hover:shadow-md transition-shadow group">
+                    <div className="w-16 h-16 rounded-xl bg-slate-50 flex items-center justify-center border border-slate-100 shrink-0 overflow-hidden">
+                      {uni.logo_url ? (
+                        /* eslint-disable-next-line @next/next/no-img-element */
+                        <img src={uni.logo_url} alt={uni.name} className="w-full h-full object-contain p-2" />
+                      ) : (
+                        <Landmark className="w-8 h-8 text-slate-300" />
+                      )}
+                    </div>
+                    <div className="flex-1 min-w-0">
+                      <div className="flex items-start justify-between gap-2">
+                        <h3 className="font-bold text-slate-900 leading-tight group-hover:text-brand-600 transition-colors truncate">{uni.name}</h3>
+                        {uni.ranking && (
+                          <span className="shrink-0 inline-flex items-center px-2 py-0.5 rounded-md text-[10px] font-bold bg-brand-50 text-brand-700 uppercase tracking-tight">
+                            {uni.ranking}
+                          </span>
+                        )}
+                      </div>
+                      <p className="text-xs text-slate-500 mt-1 flex items-center gap-1">
+                        <MapPin className="w-3 h-3" /> {uni.location || data.countryName}
+                      </p>
+                      {uni.student_population && (
+                        <p className="text-[10px] text-slate-400 mt-2 font-medium uppercase tracking-wider">
+                          {uni.student_population} Students
+                        </p>
+                      )}
+                    </div>
+                  </div>
+                ))
+              ) : (
+                <ul className="space-y-4">
+                  {data.topUniversities.map((uni, i) => (
+                    <li key={i} className="flex items-center gap-3 p-4 border border-slate-200 rounded-xl bg-slate-50">
+                      <Landmark className="w-5 h-5 text-slate-400" />
+                      <span className="font-semibold text-slate-800">{uni}</span>
+                    </li>
+                  ))}
+                </ul>
+              )}
+            </div>
           </div>
         </div>
       </div>
@@ -257,14 +292,59 @@ function CostsAndScholarshipsSection({ data }: { data: DestinationContent }) {
             </div>
           </div>
           <div>
-            <h2 className="text-3xl font-bold mb-8 text-white">Scholarships Available</h2>
-            <div className="grid gap-4">
-              {data.scholarships.map((sch, i) => (
-                <div key={i} className="flex items-center gap-4 bg-slate-800 p-5 rounded-xl border border-slate-700">
-                  <Trophy className="w-6 h-6 text-brand-400 shrink-0" />
-                  <span className="font-bold text-slate-200">{sch}</span>
+            <h2 className="text-3xl font-bold mb-8 text-white text-center">Scholarship Opportunities</h2>
+            <div className="space-y-4">
+              {(data.dynamicScholarships && data.dynamicScholarships.length > 0) ? (
+                data.dynamicScholarships.map((sch) => (
+                  <div key={sch.id} className="bg-white/5 border border-white/10 p-6 rounded-2xl hover:bg-white/10 transition-colors">
+                    <div className="flex justify-between items-start gap-4 mb-4">
+                      <div>
+                        <h3 className="font-bold text-lg text-white leading-tight">{sch.title}</h3>
+                        <div className="flex gap-3 mt-2">
+                           {sch.type && (
+                             <span className="px-2 py-0.5 rounded bg-brand-500/20 text-brand-300 text-[10px] font-bold uppercase">
+                               {sch.type.replace('_', ' ')}
+                             </span>
+                           )}
+                           {sch.level && (
+                             <span className="px-2 py-0.5 rounded bg-white/10 text-slate-300 text-[10px] font-bold uppercase">
+                               {sch.level}
+                             </span>
+                           )}
+                        </div>
+                      </div>
+                      {sch.featured && <Star className="w-5 h-5 text-brand-400 fill-brand-400 shrink-0" />}
+                    </div>
+                    {sch.description && (
+                      <p className="text-sm text-slate-300 mb-6 line-clamp-2 leading-relaxed">{sch.description}</p>
+                    )}
+                    <div className="flex items-center justify-between gap-4 pt-4 border-t border-white/5">
+                      <div className="flex items-center gap-2 text-[10px] text-slate-400 uppercase font-bold tracking-wider">
+                        <Clock className="w-3.5 h-3.5 text-brand-400" />
+                        Deadline: {sch.deadline || 'Ongoing'}
+                      </div>
+                      {sch.link ? (
+                        <a href={sch.link} target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-1.5 text-xs font-bold text-brand-400 hover:text-white transition-colors">
+                          Apply Now <ChevronRight className="w-4 h-4" />
+                        </a>
+                      ) : (
+                        <button onClick={() => window.scrollTo({top: document.body.scrollHeight, behavior: 'smooth'})} className="inline-flex items-center gap-1.5 text-xs font-bold text-brand-400 hover:text-white transition-colors">
+                          Enquire Now <ChevronRight className="w-4 h-4" />
+                        </button>
+                      )}
+                    </div>
+                  </div>
+                ))
+              ) : (
+                <div className="grid sm:grid-cols-2 gap-4">
+                  {data.scholarships.map((s, i) => (
+                    <div key={i} className="flex items-center gap-3 p-4 border border-white/10 rounded-xl bg-white/5">
+                      <Trophy className="w-5 h-5 text-brand-400" />
+                      <span className="font-medium text-sm">{s}</span>
+                    </div>
+                  ))}
                 </div>
-              ))}
+              )}
             </div>
           </div>
         </div>

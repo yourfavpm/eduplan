@@ -11,7 +11,8 @@ import {
   Globe, Home, MapPin, Award, CalendarDays, BookOpen,
   Briefcase, UserCheck, ImageIcon, ShieldCheck, KeyRound,
   ClipboardList, Settings, ChevronDown, ChevronRight, Menu, X,
-  GraduationCap, ListChecks, Search,
+  GraduationCap, ListChecks, Search, MessageSquare,
+  UserPlus, Handshake,
 } from 'lucide-react'
 
 const NAV_GROUPS = [
@@ -19,6 +20,9 @@ const NAV_GROUPS = [
     label: 'OPERATIONS',
     items: [
       { href: '/admin/overview', label: 'Overview', icon: LayoutDashboard },
+      { href: '/admin/consultations', label: 'Consultations', icon: MessageSquare },
+      { href: '/admin/associate-requests', label: 'Associate Requests', icon: UserPlus },
+      { href: '/admin/partner-requests', label: 'Partner Requests', icon: Handshake },
       { href: '/admin/applications', label: 'Applications', icon: FileText },
       { href: '/admin/students', label: 'Students', icon: Users },
       { href: '/admin/documents', label: 'Document Review', icon: Search },
