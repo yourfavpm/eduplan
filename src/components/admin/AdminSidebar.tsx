@@ -86,9 +86,9 @@ export default function AdminSidebar({ adminName }: Props) {
   const SidebarContent = () => (
     <div className="flex flex-col h-full">
       {/* Logo */}
-      <div className="px-5 py-4 border-b border-slate-800 shrink-0">
+      <div className="px-5 py-5 border-b border-slate-800 shrink-0">
         <Link href="/admin/overview" onClick={() => setOpen(false)}>
-          <Image src="/eduplan.png" alt="EduPlan360" width={130} height={36} className="h-8 w-auto brightness-0 invert" priority />
+          <Image src="/eduplan.png" alt="EduPlan360" width={160} height={44} className="h-10 w-auto brightness-0 invert contrast-125" priority />
         </Link>
       </div>
 
@@ -156,7 +156,9 @@ export default function AdminSidebar({ adminName }: Props) {
 
       {/* Mobile top bar */}
       <div className="md:hidden fixed top-0 left-0 right-0 z-40 bg-slate-900 border-b border-slate-800 px-4 py-3 flex items-center justify-between">
-        <Image src="/eduplan.png" alt="EduPlan360" width={100} height={28} className="h-7 w-auto brightness-0 invert" />
+        <Link href="/admin/overview">
+          <Image src="/eduplan.png" alt="EduPlan360" width={130} height={36} className="h-9 w-auto brightness-0 invert contrast-125" />
+        </Link>
         <button onClick={() => setOpen(v => !v)} className="text-slate-400 hover:text-white p-1">
           {open ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
         </button>

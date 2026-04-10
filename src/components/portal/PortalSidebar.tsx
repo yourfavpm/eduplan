@@ -44,7 +44,7 @@ export default function PortalSidebar({ profile }: Props) {
       {/* Logo */}
       <div className="mb-8 px-2">
         <Link href="/portal/dashboard" onClick={() => setOpen(false)}>
-          <Image src="/eduplan.png" alt="EduPlan360" width={130} height={36} className="h-8 w-auto brightness-0 invert" priority />
+          <Image src="/eduplan.png" alt="EduPlan360" width={160} height={44} className="h-10 w-auto brightness-0 invert contrast-125" priority />
         </Link>
         <p className="text-[10px] text-slate-500 mt-1 ml-1 font-bold uppercase tracking-widest opacity-80">Student Portal</p>
       </div>
@@ -105,7 +105,7 @@ export default function PortalSidebar({ profile }: Props) {
       {/* Mobile top bar */}
       <div className="md:hidden fixed top-0 left-0 right-0 z-40 bg-slate-900 border-b border-slate-800 flex items-center justify-between px-4 py-3">
         <Link href="/portal/dashboard">
-          <Image src="/eduplan.png" alt="EduPlan360" width={110} height={30} className="h-7 w-auto brightness-0 invert" />
+          <Image src="/eduplan.png" alt="EduPlan360" width={130} height={36} className="h-9 w-auto brightness-0 invert contrast-125" />
         </Link>
         <button onClick={() => setOpen(true)} className="p-2 text-slate-400 hover:text-white transition-colors">
           <Menu className="w-5 h-5" />
