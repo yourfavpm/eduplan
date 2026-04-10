@@ -8,16 +8,25 @@ type Scholarship = {
   title: string
   country: string | null
   level: string | null
+  type: string | null
   deadline: string | null
   description: string | null
+  eligibility: string | null
   link: string | null
   featured: boolean
   published: boolean
 }
 
 const EMPTY: Omit<Scholarship, 'id' | 'featured' | 'published'> = {
-  title: '', country: '', level: '', deadline: '', description: '', link: '',
+  title: '', country: '', level: '', type: 'full', deadline: '', description: '', eligibility: '', link: '',
 }
+
+const LEVEL_OPTIONS = ['Undergraduate', 'Master\'s', 'PhD', 'All Levels']
+const TYPE_OPTIONS = [
+  { value: 'full', label: 'Full Scholarship' },
+  { value: 'partial', label: 'Partial Scholarship' },
+  { value: 'tuition_discount', label: 'Tuition Discount' },
+]
 
 export default function ScholarshipsClient({ initialItems }: { initialItems: Scholarship[] }) {
   const [items, setItems] = useState(initialItems)
@@ -27,7 +36,22 @@ export default function ScholarshipsClient({ initialItems }: { initialItems: Sch
   const [isPending, startTransition] = useTransition()
 
   function openNew() { setForm({ ...EMPTY, featured: false, published: true }); setEditing(null); setShowForm(true) }
-  function openEdit(item: Scholarship) { setForm({ title: item.title, country: item.country ?? '', level: item.level ?? '', deadline: item.deadline ?? '', description: item.description ?? '', link: item.link ?? '', featured: item.featured, published: item.published }); setEditing(item); setShowForm(true) }
+  function openEdit(item: Scholarship) {
+    setForm({
+      title: item.title,
+      country: item.country ?? '',
+      level: item.level ?? '',
+      type: item.type ?? 'full',
+      deadline: item.deadline ?? '',
+      description: item.description ?? '',
+      eligibility: item.eligibility ?? '',
+      link: item.link ?? '',
+      featured: item.featured,
+      published: item.published,
+    })
+    setEditing(item)
+    setShowForm(true)
+  }
 
   function save() {
     startTransition(async () => {
@@ -52,12 +76,16 @@ export default function ScholarshipsClient({ initialItems }: { initialItems: Sch
     })
   }
 
+  function typeLabel(t: string | null) {
+    return TYPE_OPTIONS.find(o => o.value === t)?.label ?? t ?? '—'
+  }
+
   return (
-    <div className="max-w-4xl">
+    <div className="max-w-5xl">
       <div className="flex items-start justify-between gap-4 mb-8">
         <div>
           <h1 className="text-2xl font-bold text-slate-900">Scholarships</h1>
-          <p className="text-slate-500 text-sm mt-1">{items.length} scholarships</p>
+          <p className="text-slate-500 text-sm mt-1">{items.length} scholarships · Manage listings displayed on the public site</p>
         </div>
         <button onClick={openNew} className="inline-flex items-center gap-2 bg-blue-600 text-white px-4 py-2 rounded-xl text-sm font-medium hover:bg-blue-700 transition-colors">
           <Plus className="w-4 h-4" /> Add Scholarship
@@ -68,16 +96,50 @@ export default function ScholarshipsClient({ initialItems }: { initialItems: Sch
         <div className="bg-blue-50 border border-blue-100 rounded-2xl p-6 mb-6">
           <h3 className="text-sm font-semibold text-slate-800 mb-4">{editing ? 'Edit Scholarship' : 'New Scholarship'}</h3>
           <div className="grid sm:grid-cols-2 gap-4">
-            {([['title', 'Title *'], ['country', 'Country'], ['level', 'Level (e.g. Postgraduate)'], ['deadline', 'Deadline'], ['link', 'Application Link']] as [keyof typeof form, string][]).map(([key, label]) => (
-              <div key={key}>
-                <label className="block text-xs font-medium text-slate-600 mb-1">{label}</label>
-                <input type={key === 'deadline' ? 'date' : 'text'} value={form[key] as string} onChange={e => setForm(f => ({ ...f, [key]: e.target.value }))}
-                  className="w-full border border-slate-200 rounded-xl px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500" />
-              </div>
-            ))}
+            <div>
+              <label className="block text-xs font-medium text-slate-600 mb-1">Title *</label>
+              <input type="text" value={form.title} onChange={e => setForm(f => ({ ...f, title: e.target.value }))}
+                className="w-full border border-slate-200 rounded-xl px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500" />
+            </div>
+            <div>
+              <label className="block text-xs font-medium text-slate-600 mb-1">Country</label>
+              <input type="text" value={form.country ?? ''} onChange={e => setForm(f => ({ ...f, country: e.target.value }))}
+                className="w-full border border-slate-200 rounded-xl px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500" />
+            </div>
+            <div>
+              <label className="block text-xs font-medium text-slate-600 mb-1">Level</label>
+              <select value={form.level ?? ''} onChange={e => setForm(f => ({ ...f, level: e.target.value }))}
+                className="w-full border border-slate-200 rounded-xl px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white">
+                <option value="">Select level</option>
+                {LEVEL_OPTIONS.map(l => <option key={l} value={l}>{l}</option>)}
+              </select>
+            </div>
+            <div>
+              <label className="block text-xs font-medium text-slate-600 mb-1">Type</label>
+              <select value={form.type ?? 'full'} onChange={e => setForm(f => ({ ...f, type: e.target.value }))}
+                className="w-full border border-slate-200 rounded-xl px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white">
+                {TYPE_OPTIONS.map(t => <option key={t.value} value={t.value}>{t.label}</option>)}
+              </select>
+            </div>
+            <div>
+              <label className="block text-xs font-medium text-slate-600 mb-1">Deadline</label>
+              <input type="date" value={form.deadline ?? ''} onChange={e => setForm(f => ({ ...f, deadline: e.target.value }))}
+                className="w-full border border-slate-200 rounded-xl px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500" />
+            </div>
+            <div>
+              <label className="block text-xs font-medium text-slate-600 mb-1">Application Link</label>
+              <input type="text" value={form.link ?? ''} onChange={e => setForm(f => ({ ...f, link: e.target.value }))}
+                className="w-full border border-slate-200 rounded-xl px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500" />
+            </div>
             <div className="sm:col-span-2">
               <label className="block text-xs font-medium text-slate-600 mb-1">Description</label>
               <textarea rows={3} value={form.description ?? ''} onChange={e => setForm(f => ({ ...f, description: e.target.value }))}
+                className="w-full border border-slate-200 rounded-xl px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 resize-none" />
+            </div>
+            <div className="sm:col-span-2">
+              <label className="block text-xs font-medium text-slate-600 mb-1">Eligibility Requirements</label>
+              <textarea rows={2} value={form.eligibility ?? ''} onChange={e => setForm(f => ({ ...f, eligibility: e.target.value }))}
+                placeholder="e.g. Open to students from African countries with a minimum GPA of 3.0"
                 className="w-full border border-slate-200 rounded-xl px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 resize-none" />
             </div>
           </div>
@@ -105,7 +167,12 @@ export default function ScholarshipsClient({ initialItems }: { initialItems: Sch
                     {item.featured && <Star className="w-3.5 h-3.5 text-amber-500" />}
                     {!item.published && <span className="text-xs text-slate-400 bg-slate-100 px-2 py-0.5 rounded-full">Draft</span>}
                   </div>
-                  <p className="text-xs text-slate-400 mt-0.5">{[item.country, item.level, item.deadline].filter(Boolean).join(' · ')}</p>
+                  <p className="text-xs text-slate-400 mt-0.5">
+                    {[item.country, item.level, typeLabel(item.type), item.deadline].filter(Boolean).join(' · ')}
+                  </p>
+                  {item.eligibility && (
+                    <p className="text-xs text-slate-500 mt-1 line-clamp-1">{item.eligibility}</p>
+                  )}
                 </div>
                 <div className="flex gap-1 shrink-0">
                   <button onClick={() => openEdit(item)} className="p-1.5 text-slate-400 hover:text-blue-600 hover:bg-blue-50 rounded-lg transition-colors"><Pencil className="w-4 h-4" /></button>

@@ -1,5 +1,7 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
+import { DESTINATION_DETAILS } from "../content";
+import { DestinationCountryClient } from "@/components/destinations/DestinationCountryClient";
 
 type Props = {
     params: Promise<{ country: string }>;
@@ -7,30 +9,27 @@ type Props = {
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
     const { country } = await params;
-    const countryName = country.replace(/-/g, ' ').replace(/\b\w/g, l => l.toUpperCase());
+    const data = DESTINATION_DETAILS[country];
+
+    if (!data) return { title: "Destination Not Found" };
 
     return {
-        title: `Study in ${countryName} | EduPlan360`,
-        description: `Discover universities, scholarships, and admission requirements for studying in ${countryName}.`,
+        title: `Study in ${data.countryName} | EduPlan360`,
+        description: data.hero.text,
     };
 }
 
 export default async function CountryPage({ params }: Props) {
     const { country } = await params;
-    const countryName = country.replace(/-/g, ' ').replace(/\b\w/g, l => l.toUpperCase());
+    const data = DESTINATION_DETAILS[country];
+
+    if (!data) {
+        notFound();
+    }
 
     return (
         <main>
-            <h1>Study in {countryName}</h1>
-            <p>Country-specific information will go here</p>
-            <ul>
-                <li>Overview</li>
-                <li>Top Universities</li>
-                <li>Popular Courses</li>
-                <li>Tuition & Cost of Living</li>
-                <li>Visa Requirements</li>
-                <li>Intakes</li>
-            </ul>
+           <DestinationCountryClient data={data} />
         </main>
     );
 }

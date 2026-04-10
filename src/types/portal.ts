@@ -26,8 +26,12 @@ export interface PortalProfile {
   email: string
   phone: string | null
   location: string | null
+  gender: 'male' | 'female' | null
+  highest_qualification: string | null
   role: UserRole
   profile_completed: boolean
+  status: 'active' | 'suspended'
+  deleted_at: string | null
   created_at: string
   updated_at: string
 }

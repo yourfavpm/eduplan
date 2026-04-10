@@ -37,6 +37,9 @@ export interface AdminStudent {
   email: string
   phone: string | null
   location: string | null
+  gender: 'male' | 'female' | null
+  highest_qualification: string | null
+  status: 'active' | 'suspended'
   created_at: string
   applicationStatus: ApplicationStatus | null
   applicationId: string | null
@@ -57,10 +60,11 @@ export async function getStudents(filters?: {
   let query = supabase
     .from('portal_profiles')
     .select(`
-      id, full_name, email, phone, location, created_at,
+      id, full_name, email, phone, location, gender, highest_qualification, status, created_at,
       applications(id, status)
     `, { count: 'exact' })
     .eq('role', 'student')
+    .is('deleted_at', null)
     .order('created_at', { ascending: false })
     .range(from, to)
 
@@ -80,6 +84,9 @@ export async function getStudents(filters?: {
       email: row.email,
       phone: row.phone,
       location: row.location,
+      gender: row.gender,
+      highest_qualification: row.highest_qualification,
+      status: row.status ?? 'active',
       created_at: row.created_at,
       applicationStatus: latestApp?.status ?? null,
       applicationId: latestApp?.id ?? null,
@@ -97,6 +104,35 @@ export async function getStudentById(id: string) {
     .eq('id', id)
     .single()
   return data
+}
+
+// ─── Student Management ───────────────────────────────────
+
+export async function suspendStudent(userId: string) {
+  const supabase = await createClient()
+  const { error } = await supabase
+    .from('portal_profiles')
+    .update({ status: 'suspended' })
+    .eq('id', userId)
+  return { success: !error, error }
+}
+
+export async function reactivateStudent(userId: string) {
+  const supabase = await createClient()
+  const { error } = await supabase
+    .from('portal_profiles')
+    .update({ status: 'active' })
+    .eq('id', userId)
+  return { success: !error, error }
+}
+
+export async function softDeleteStudent(userId: string) {
+  const supabase = await createClient()
+  const { error } = await supabase
+    .from('portal_profiles')
+    .update({ deleted_at: new Date().toISOString() })
+    .eq('id', userId)
+  return { success: !error, error }
 }
 
 // ─── Applications (admin view) ────────────────────────────

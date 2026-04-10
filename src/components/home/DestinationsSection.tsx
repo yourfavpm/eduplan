@@ -6,7 +6,7 @@ const destinations = [
     {
         flag: "🇬🇧",
         name: "United Kingdom",
-        slug: "united-kingdom",
+        slug: "uk",
         description: "World-class universities and rich academic tradition",
         variant: "A" as const,
         image: "/images/destinations/uk.png"
@@ -14,7 +14,7 @@ const destinations = [
     {
         flag: "🇺🇸",
         name: "United States",
-        slug: "united-states",
+        slug: "usa",
         description: "Premier research institutions and diverse programs",
         variant: "B" as const,
         image: "/images/destinations/usa.png"

@@ -4,8 +4,9 @@ import { redirect } from 'next/navigation'
 import Link from 'next/link'
 import StatusBadge from '@/components/portal/StatusBadge'
 import StudentNotificationModal from './StudentNotificationModal'
+import AdminStudentActions from './AdminStudentActions'
 import type { Metadata } from 'next'
-import type { ApplicationStatus } from '@/types/portal'
+import type { ApplicationStatus, PortalProfile } from '@/types/portal'
 
 export const metadata: Metadata = { title: 'Student Detail | Admin — EduPlan360' }
 
@@ -19,8 +20,9 @@ export default async function StudentDetailPage({
   const { id } = await params
   const { tab = 'overview' } = await searchParams
 
-  const student = await getStudentById(id)
-  if (!student) redirect('/admin/students')
+  const studentData = await getStudentById(id)
+  if (!studentData) redirect('/admin/students')
+  const student = studentData as unknown as PortalProfile
 
   const userApp = await getStudentLatestApplication(id).catch(() => null)
   const appId = userApp?.id
@@ -33,8 +35,6 @@ export default async function StudentDetailPage({
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const app = userApp as any
-  const appProfile = app ? (Array.isArray(app.portal_profiles) ? app.portal_profiles[0] : (app.portal_profiles ?? null)) : null
-  void appProfile
 
   const TABS = [
     { id: 'overview', label: 'Overview' },
@@ -48,9 +48,12 @@ export default async function StudentDetailPage({
   return (
     <div className="max-w-4xl">
       {/* Back */}
-      <Link href="/admin/students" className="inline-flex items-center gap-1.5 text-sm text-slate-500 hover:text-slate-800 mb-6 transition-colors">
-        ← Back to Students
-      </Link>
+      <div className="flex items-center justify-between mb-6">
+        <Link href="/admin/students" className="inline-flex items-center gap-1.5 text-sm text-slate-500 hover:text-slate-800 transition-colors">
+          ← Back to Students
+        </Link>
+        <AdminStudentActions studentId={id} status={student.status} />
+      </div>
 
       {/* Header */}
       <div className="bg-white rounded-2xl border border-slate-100 p-6 mb-6">
@@ -59,7 +62,14 @@ export default async function StudentDetailPage({
             {student.full_name.charAt(0).toUpperCase()}
           </div>
           <div className="flex-1">
-            <h1 className="text-xl font-bold text-slate-900">{student.full_name}</h1>
+            <div className="flex items-center gap-2">
+              <h1 className="text-xl font-bold text-slate-900">{student.full_name}</h1>
+              {student.status === 'suspended' && (
+                <span className="bg-red-50 text-red-700 border border-red-200 text-[10px] px-2 py-0.5 rounded-full font-bold uppercase tracking-wider">
+                  Suspended
+                </span>
+              )}
+            </div>
             <p className="text-slate-500 text-sm">{student.email}</p>
             {student.phone && <p className="text-slate-400 text-xs mt-0.5">{student.phone}</p>}
           </div>
@@ -71,16 +81,17 @@ export default async function StudentDetailPage({
         <div className="grid grid-cols-3 gap-4 mt-6 pt-4 border-t border-slate-50 text-sm">
           <div>
             <p className="text-xs text-slate-400 mb-0.5">Location</p>
-            <p className="text-slate-700">{student.location ?? '—'}</p>
+            <p className="text-slate-700 font-medium">{student.location ?? '—'}</p>
           </div>
           <div>
             <p className="text-xs text-slate-400 mb-0.5">Joined</p>
-            <p className="text-slate-700">{new Date(student.created_at).toLocaleDateString('en-GB', { day: 'numeric', month: 'short', year: 'numeric' })}</p>
+            <p className="text-slate-700 font-medium">{new Date(student.created_at).toLocaleDateString('en-GB', { day: 'numeric', month: 'short', year: 'numeric' })}</p>
           </div>
           {app?.id && (
             <div>
-              <Link href={`/admin/applications/${app.id}`} className="inline-flex items-center gap-1 text-xs text-blue-600 font-medium hover:underline mt-4">
-                Open Application →
+              <p className="text-xs text-slate-400 mb-0.5">Active App</p>
+              <Link href={`/admin/applications/${app.id}`} className="inline-flex items-center gap-1 text-xs text-blue-600 font-medium hover:underline">
+                View Application →
               </Link>
             </div>
           )}
@@ -106,19 +117,21 @@ export default async function StudentDetailPage({
       <div className="bg-white rounded-2xl border border-slate-100 p-6">
         {tab === 'overview' && (
           <div className="space-y-4">
-            <h2 className="text-sm font-semibold text-slate-700">Profile Details</h2>
+            <h2 className="text-sm font-semibold text-slate-700 uppercase tracking-wider mb-4">Student Profile</h2>
             <dl className="grid sm:grid-cols-2 gap-4">
               {[
                 { label: 'Full Name', value: student.full_name },
-                { label: 'Email', value: student.email },
-                { label: 'Phone', value: student.phone ?? '—' },
+                { label: 'Email Address', value: student.email },
+                { label: 'Phone Number', value: student.phone ?? '—' },
                 { label: 'Location', value: student.location ?? '—' },
-                { label: 'Role', value: student.role },
-                { label: 'Profile Complete', value: 'Yes' },
+                { label: 'Gender', value: student.gender ? student.gender.charAt(0).toUpperCase() + student.gender.slice(1) : '—' },
+                { label: 'Highest Qualification', value: student.highest_qualification ?? '—' },
+                { label: 'Account Status', value: student.status.charAt(0).toUpperCase() + student.status.slice(1) },
+                { label: 'Profile Complete', value: student.profile_completed ? 'Yes' : 'No' },
               ].map(field => (
-                <div key={field.label} className="bg-slate-50 rounded-xl px-4 py-3">
-                  <dt className="text-xs text-slate-400 mb-0.5">{field.label}</dt>
-                  <dd className="text-sm font-medium text-slate-800">{field.value}</dd>
+                <div key={field.label} className="bg-slate-50 border border-slate-100 rounded-xl px-5 py-3">
+                  <dt className="text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-0.5">{field.label}</dt>
+                  <dd className="text-sm font-semibold text-slate-800">{field.value}</dd>
                 </div>
               ))}
             </dl>
@@ -129,8 +142,8 @@ export default async function StudentDetailPage({
           <div>
             {app ? (
               <div className="space-y-4">
-                <div className="flex items-center justify-between">
-                  <h2 className="text-sm font-semibold text-slate-700">Application Details</h2>
+                <div className="flex items-center justify-between mb-4">
+                  <h2 className="text-sm font-semibold text-slate-700 uppercase tracking-wider">Application Details</h2>
                   <Link href={`/admin/applications/${app.id}`} className="text-xs text-blue-600 hover:underline font-medium">
                     Open full detail →
                   </Link>
@@ -140,14 +153,13 @@ export default async function StudentDetailPage({
                     { label: 'Destination', value: app.study_destination ?? '—' },
                     { label: 'Preferred University', value: app.application_university_choices?.[0]?.university_name ?? '—' },
                     { label: 'Course', value: app.application_university_choices?.[0]?.university_course_choices?.[0]?.course_name ?? '—' },
-                    { label: 'Highest Qualification', value: Array.isArray(app.qualification_level) ? app.qualification_level[0]?.name : (app.qualification_level?.name ?? '—') },
+                    { label: 'Qualification at time of App', value: Array.isArray(app.qualification_level) ? app.qualification_level[0]?.name : (app.qualification_level?.name ?? '—') },
                     { label: 'Status', value: app.status },
                     { label: 'App Fee Paid', value: app.application_fee_paid ? 'Yes' : 'No' },
-                    { label: 'Tuition Deposit Paid', value: app.tuition_deposit_paid ? 'Yes' : 'No' },
                   ].map(field => (
-                    <div key={field.label} className="bg-slate-50 rounded-xl px-4 py-3">
-                      <dt className="text-xs text-slate-400 mb-0.5">{field.label}</dt>
-                      <dd className="text-sm font-medium text-slate-800">{field.value}</dd>
+                    <div key={field.label} className="bg-slate-50 border border-slate-100 rounded-xl px-5 py-3">
+                      <dt className="text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-0.5">{field.label}</dt>
+                      <dd className="text-sm font-semibold text-slate-800">{field.value}</dd>
                     </div>
                   ))}
                 </dl>

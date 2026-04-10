@@ -1,43 +1,47 @@
 'use client'
 
 import { useState, useTransition } from 'react'
-import { Plus, Pencil, Trash2, Check, Star, MapPin, Link as LinkIcon, GraduationCap } from 'lucide-react'
+import { Plus, Pencil, Trash2, Check, X, Star, MapPin, Link as LinkIcon, GraduationCap } from 'lucide-react'
 
 type Course = { name: string; level: string; duration: string; fees?: string }
 
 type University = {
-  id: string; 
-  name: string; 
-  slug: string; 
-  country: string; 
-  location: string | null;
-  logo_url: string | null; 
-  website_url: string | null;
-  description: string | null;
-  admission_requirements: string | null;
-  courses: Course[];
-  intakes: string[];
-  featured: boolean; 
+  id: string
+  name: string
+  slug: string
+  country: string
+  location: string | null
+  logo_url: string | null
+  website_url: string | null
+  description: string | null
+  admission_requirements: string | null
+  ranking: string | null
+  student_population: string | null
+  courses: Course[]
+  intakes: string[]
+  featured: boolean
   published: boolean
 }
 
-const EMPTY = { 
-  name: '', 
-  slug: '', 
-  country: '', 
-  location: '', 
-  logo_url: '', 
-  website_url: '', 
-  description: '', 
+const EMPTY = {
+  name: '',
+  slug: '',
+  country: '',
+  location: '',
+  logo_url: '',
+  website_url: '',
+  description: '',
   admission_requirements: '',
+  ranking: '',
+  student_population: '',
   courses: [] as Course[],
   intakes: [] as string[],
-  featured: false, 
-  published: true 
+  featured: false,
+  published: true,
 }
 
-function toSlug(s: string) { 
-  return s.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '') 
+function toSlug(s: string) {
+  return s.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '')
 }
 
 export default function UniversitiesClient({ initialItems }: { initialItems: University[] }) {
@@ -49,19 +53,21 @@ export default function UniversitiesClient({ initialItems }: { initialItems: Uni
 
   function openNew() { setForm(EMPTY); setEditing(null); setShowForm(true) }
   function openEdit(item: University) {
-    setForm({ 
-      name: item.name, 
-      slug: item.slug, 
-      country: item.country, 
-      location: item.location ?? '', 
-      logo_url: item.logo_url ?? '', 
-      website_url: item.website_url ?? '', 
-      description: item.description ?? '', 
+    setForm({
+      name: item.name,
+      slug: item.slug,
+      country: item.country,
+      location: item.location ?? '',
+      logo_url: item.logo_url ?? '',
+      website_url: item.website_url ?? '',
+      description: item.description ?? '',
       admission_requirements: item.admission_requirements ?? '',
+      ranking: item.ranking ?? '',
+      student_population: item.student_population ?? '',
       courses: Array.isArray(item.courses) ? item.courses : [],
       intakes: Array.isArray(item.intakes) ? item.intakes : [],
-      featured: item.featured, 
-      published: item.published 
+      featured: item.featured,
+      published: item.published,
     })
     setEditing(item); setShowForm(true)
   }
@@ -126,7 +132,7 @@ export default function UniversitiesClient({ initialItems }: { initialItems: Uni
       <div className="flex items-start justify-between gap-4 mb-8">
         <div>
           <h1 className="text-2xl font-bold text-slate-900">University Directory</h1>
-          <p className="text-slate-500 text-sm mt-1">{items.length} universities</p>
+          <p className="text-slate-500 text-sm mt-1">{items.length} universities · Manage listings displayed on the public site</p>
         </div>
         <button onClick={openNew} className="inline-flex items-center gap-2 bg-blue-600 text-white px-4 py-2 rounded-xl text-sm font-medium hover:bg-blue-700 transition-colors">
           <Plus className="w-4 h-4" /> New University
@@ -136,7 +142,7 @@ export default function UniversitiesClient({ initialItems }: { initialItems: Uni
       {showForm && (
         <div className="bg-blue-50 border border-blue-100 rounded-2xl p-6 mb-6 max-h-[85vh] overflow-y-auto custom-scrollbar">
           <h3 className="text-sm font-semibold text-slate-800 mb-4">{editing ? 'Edit University' : 'New University'}</h3>
-          
+
           <div className="space-y-6">
             <section className="bg-white p-4 rounded-xl border border-blue-100 shadow-sm">
               <h4 className="text-xs font-bold text-blue-800 uppercase tracking-wider mb-3">Basic Info</h4>
@@ -164,6 +170,16 @@ export default function UniversitiesClient({ initialItems }: { initialItems: Uni
                 <div>
                   <label className="block text-xs font-medium text-slate-600 mb-1">Website URL</label>
                   <input type="url" value={form.website_url} onChange={e => setForm(f => ({ ...f, website_url: e.target.value }))}
+                    className="w-full border border-slate-200 rounded-xl px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500" />
+                </div>
+                <div>
+                  <label className="block text-xs font-medium text-slate-600 mb-1">Ranking</label>
+                  <input type="text" placeholder="e.g. QS World #250" value={form.ranking} onChange={e => setForm(f => ({ ...f, ranking: e.target.value }))}
+                    className="w-full border border-slate-200 rounded-xl px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500" />
+                </div>
+                <div>
+                  <label className="block text-xs font-medium text-slate-600 mb-1">Student Population</label>
+                  <input type="text" placeholder="e.g. 35,000+" value={form.student_population} onChange={e => setForm(f => ({ ...f, student_population: e.target.value }))}
                     className="w-full border border-slate-200 rounded-xl px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500" />
                 </div>
                 <div className="sm:col-span-2">
@@ -250,7 +266,7 @@ export default function UniversitiesClient({ initialItems }: { initialItems: Uni
               <input type="checkbox" checked={form.published} onChange={e => setForm(f => ({ ...f, published: e.target.checked }))} className="rounded text-blue-600 w-4 h-4" /> Published
             </label>
           </div>
-          
+
           <div className="flex gap-2 mt-6">
             <button onClick={save} disabled={isPending || !form.name.trim() || !form.country.trim()} className="inline-flex items-center gap-1.5 bg-blue-600 text-white px-6 py-2.5 rounded-xl text-sm font-semibold hover:bg-blue-700 disabled:opacity-50 transition-colors shadow-sm">
               <Check className="w-4 h-4" /> Save University
@@ -262,9 +278,7 @@ export default function UniversitiesClient({ initialItems }: { initialItems: Uni
 
       <div className="bg-white rounded-2xl border border-slate-100 overflow-hidden shadow-sm">
         {items.length === 0 ? (
-          <div className="py-16 text-center">
-            <p className="text-slate-400">No universities in directory yet.</p>
-          </div>
+          <div className="py-16 text-center"><p className="text-slate-400">No universities in directory yet.</p></div>
         ) : (
           <div className="divide-y divide-slate-50">
             {items.map(item => (
@@ -286,6 +300,9 @@ export default function UniversitiesClient({ initialItems }: { initialItems: Uni
                     <p className="text-xs text-slate-500 flex items-center gap-1">
                       <MapPin className="w-3 h-3" /> {item.country}{item.location ? `, ${item.location}` : ''}
                     </p>
+                    {item.ranking && (
+                      <span className="text-[10px] text-purple-600 bg-purple-50 px-1.5 py-0.5 rounded-md font-medium">{item.ranking}</span>
+                    )}
                     {Array.isArray(item.courses) && item.courses.length > 0 && (
                       <p className="text-[10px] text-blue-600 bg-blue-50 px-1.5 py-0.5 rounded-md font-medium uppercase">
                         {item.courses.length} Courses
@@ -314,5 +331,3 @@ export default function UniversitiesClient({ initialItems }: { initialItems: Uni
     </div>
   )
 }
-
-import { X } from 'lucide-react'

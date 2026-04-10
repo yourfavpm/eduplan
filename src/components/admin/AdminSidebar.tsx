@@ -5,12 +5,13 @@ import Image from 'next/image'
 import { usePathname, useRouter } from 'next/navigation'
 import { useState } from 'react'
 import { createClient } from '@/lib/supabase/client'
+import LogoutModal from '@/components/shared/LogoutModal'
 import {
   LayoutDashboard, Users, FileText,
   Globe, Home, MapPin, Award, CalendarDays, BookOpen,
   Briefcase, UserCheck, ImageIcon, ShieldCheck, KeyRound,
   ClipboardList, Settings, ChevronDown, ChevronRight, Menu, X,
-  GraduationCap, ListChecks, Search, // Added Search icon
+  GraduationCap, ListChecks, Search,
 } from 'lucide-react'
 
 const NAV_GROUPS = [
@@ -63,9 +64,19 @@ export default function AdminSidebar({ adminName }: Props) {
   const router = useRouter()
   const [open, setOpen] = useState(false)
   const [collapsed, setCollapsed] = useState<Record<string, boolean>>({})
+  const [isLogoutModalOpen, setIsLogoutModalOpen] = useState(false)
+  const [isLoggingOut, setIsLoggingOut] = useState(false)
 
   function toggleGroup(label: string) {
     setCollapsed(prev => ({ ...prev, [label]: !prev[label] }))
+  }
+
+  async function handleLogout() {
+    setIsLoggingOut(true)
+    const supabase = createClient()
+    await supabase.auth.signOut()
+    router.push('/portal/sign-in')
+    router.refresh()
   }
 
   const SidebarContent = () => (
@@ -85,7 +96,7 @@ export default function AdminSidebar({ adminName }: Props) {
             <div key={group.label} className="mb-4">
               <button
                 onClick={() => toggleGroup(group.label)}
-                className="w-full flex items-center justify-between px-3 py-1.5 mb-1 text-slate-400 hover:bg-slate-800 hover:text-white rounded-lg text-sm font-semibold"
+                className="w-full flex items-center justify-between px-3 py-1.5 mb-1 text-slate-400 hover:bg-slate-800 hover:text-white rounded-lg text-sm font-semibold transition-colors"
               >
                 {group.label}
                 {isCollapsed ? <ChevronRight className="w-4 h-4" /> : <ChevronDown className="w-4 h-4" />}
@@ -119,15 +130,12 @@ export default function AdminSidebar({ adminName }: Props) {
       </nav>
 
       {/* Footer */}
-      <div className="shrink-0 border-t border-slate-800 px-4 py-3">
-        <p className="text-xs text-slate-500 truncate">{adminName}</p>
+      <div className="shrink-0 border-t border-slate-800 px-4 py-3 bg-slate-900/50">
+        <p className="text-[10px] text-slate-500 uppercase tracking-widest font-bold mb-1">Signed in as</p>
+        <p className="text-xs text-slate-200 truncate font-medium">{adminName}</p>
         <button 
-          onClick={async () => {
-            const supabase = createClient()
-            await supabase.auth.signOut()
-            router.push('/portal/sign-in')
-          }}
-          className="text-xs text-red-600 font-medium hover:text-red-500 transition-colors block mt-1"
+          onClick={() => setIsLogoutModalOpen(true)}
+          className="text-xs text-red-500 font-bold hover:text-red-400 transition-colors block mt-2 py-1"
         >
           Sign Out
         </button>
@@ -138,7 +146,7 @@ export default function AdminSidebar({ adminName }: Props) {
   return (
     <>
       {/* Desktop sidebar */}
-      <aside className="hidden md:flex flex-col w-56 bg-slate-900 h-screen fixed top-0 left-0 z-30">
+      <aside className="hidden md:flex flex-col w-56 bg-slate-900 h-screen fixed top-0 left-0 z-30 border-r border-slate-800">
         {SidebarContent()}
       </aside>
 
@@ -153,12 +161,19 @@ export default function AdminSidebar({ adminName }: Props) {
       {/* Mobile drawer */}
       {open && (
         <div className="md:hidden fixed inset-0 z-40 flex">
-          <div className="w-64 bg-slate-900 h-full pt-14">
+          <div className="w-64 bg-slate-900 h-full shadow-2xl animate-in slide-in-from-left duration-300">
             {SidebarContent()}
           </div>
-          <div className="flex-1 bg-black/50" onClick={() => setOpen(false)} />
+          <div className="flex-1 bg-black/60 backdrop-blur-sm animate-in fade-in duration-300" onClick={() => setOpen(false)} />
         </div>
       )}
+
+      <LogoutModal
+        isOpen={isLogoutModalOpen}
+        onClose={() => setIsLogoutModalOpen(false)}
+        onConfirm={handleLogout}
+        isLoggingOut={isLoggingOut}
+      />
     </>
   )
 }

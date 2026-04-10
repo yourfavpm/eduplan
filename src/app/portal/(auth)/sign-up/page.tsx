@@ -5,7 +5,7 @@ import Link from 'next/link'
 import Image from 'next/image'
 import { useRouter } from 'next/navigation'
 import { createClient } from '@/lib/supabase/client'
-import { Eye, EyeOff, Check, X } from 'lucide-react'
+import { Eye, EyeOff, Check, X, Loader2 } from 'lucide-react'
 
 const CHECKS = [
   { id: 'length',    label: 'At least 8 characters',  test: (p: string) => p.length >= 8 },
@@ -75,94 +75,147 @@ export default function SignUpPage() {
     router.refresh()
   }
 
+  const inputClasses = "w-full px-4 py-3 rounded-lg border border-slate-200 bg-white text-slate-900 placeholder-slate-400 text-sm focus:outline-none focus:ring-2 focus:ring-brand-500 focus:border-transparent transition shadow-sm"
+  const labelClasses = "block text-sm font-semibold text-slate-700 mb-1.5"
+
   return (
-    <div className="min-h-screen bg-linear-to-br from-slate-50 to-blue-50 flex items-center justify-center px-4 py-12">
-      <div className="w-full max-w-md">
-        {/* Brand */}
-        <div className="text-center mb-8">
-          <div className="flex justify-center mb-5">
+    <div className="flex flex-col lg:flex-row min-h-screen bg-slate-50">
+      {/* LEFT PANEL - Visual & Branding (Hidden on Mobile) */}
+      <div className="hidden lg:flex w-[40%] xl:w-1/2 relative bg-slate-900 border-r border-slate-200">
+        <Image
+          src="/images/auth.jpg"
+          alt="Graduation success"
+          fill
+          className="object-cover opacity-60"
+          priority
+        />
+        <div className="absolute inset-0 bg-linear-to-t from-slate-900/90 via-slate-900/40 to-slate-900/10" />
+
+        <div className="absolute inset-0 p-12 xl:p-20 flex flex-col justify-between">
+          <div>
             <Image
               src="/eduplan.png"
               alt="EduPlan360"
-              width={160}
-              height={45}
-              className="h-12 w-auto"
+              width={240}
+              height={68}
+              className="h-14 xl:h-16 w-auto filter brightness-0 invert opacity-90"
               priority
             />
           </div>
-          <h1 className="text-2xl font-bold text-slate-900">Create your account</h1>
-          <p className="text-slate-500 mt-1 text-sm">Start your study abroad journey with EduPlan360</p>
+          <div className="max-w-xl">
+            <h1 className="text-4xl xl:text-5xl font-bold text-white mb-6 leading-[1.1] tracking-tight">
+              Unlock Global Education Opportunities
+            </h1>
+            <p className="text-lg text-slate-300 leading-relaxed font-medium mb-10">
+              Connect with leading universities, institutions, and study abroad opportunities worldwide.
+            </p>
+            <div className="flex gap-8">
+              <div>
+                <div className="text-3xl font-bold text-white mb-1">10+</div>
+                <div className="text-sm font-semibold text-brand-400 uppercase tracking-wider">Years Experience</div>
+              </div>
+              <div className="w-px h-12 bg-white/20" />
+              <div>
+                <div className="text-3xl font-bold text-white mb-1">Trusted</div>
+                <div className="text-sm font-semibold text-brand-400 uppercase tracking-wider">Education Platform</div>
+              </div>
+            </div>
+          </div>
         </div>
+      </div>
 
-        <div className="bg-white rounded-2xl shadow-sm border border-slate-100 p-8">
+      {/* RIGHT PANEL - Auth Form */}
+      <div className="w-full lg:w-[60%] xl:w-1/2 flex items-center justify-center p-6 sm:p-12 xl:p-20 bg-slate-50 relative overflow-y-auto">
+        <div className="w-full max-w-[480px] py-10 lg:py-0">
+          {/* Mobile-only logo */}
+          <div className="lg:hidden flex justify-center mb-10">
+            <Image
+              src="/eduplan.png"
+              alt="EduPlan360"
+              width={200}
+              height={56}
+              className="h-12 sm:h-14 w-auto"
+            />
+          </div>
+
+          <div className="mb-10 text-center lg:text-left">
+            <h2 className="text-3xl font-bold text-slate-900 mb-2">Create your account</h2>
+            <p className="text-slate-600 text-sm">Start your study abroad journey with EduPlan360.</p>
+          </div>
+
           {error && (
-            <div className="mb-5 px-4 py-3 bg-red-50 border border-red-100 rounded-lg text-sm text-red-700">
+            <div className="mb-6 px-4 py-3 bg-red-50 border border-red-100 rounded-lg text-sm text-red-600 font-medium">
               {error}
             </div>
           )}
 
           <form onSubmit={handleSubmit} className="space-y-5">
-            {/* Full Name */}
-            <div>
-              <label htmlFor="full_name" className="block text-sm font-medium text-slate-700 mb-1.5">
-                Full Name <span className="text-red-500">*</span>
-              </label>
-              <input
-                id="full_name"
-                name="full_name"
-                type="text"
-                required
-                placeholder="Jane Doe"
-                className="w-full px-4 py-2.5 rounded-lg border border-slate-200 text-slate-900 placeholder-slate-400 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition"
-              />
+            <div className="grid sm:grid-cols-2 gap-5">
+               {/* Full Name */}
+               <div>
+                 <label htmlFor="full_name" className={labelClasses}>
+                   Full Name <span className="text-red-500">*</span>
+                 </label>
+                 <input
+                   id="full_name"
+                   name="full_name"
+                   type="text"
+                   required
+                   placeholder="Jane Doe"
+                   className={inputClasses}
+                 />
+               </div>
+
+               {/* Email */}
+               <div>
+                 <label htmlFor="email" className={labelClasses}>
+                   Email Address <span className="text-red-500">*</span>
+                 </label>
+                 <input
+                   id="email"
+                   name="email"
+                   type="email"
+                   required
+                   placeholder="jane@example.com"
+                   className={inputClasses}
+                 />
+               </div>
             </div>
 
-            {/* Email */}
-            <div>
-              <label htmlFor="email" className="block text-sm font-medium text-slate-700 mb-1.5">
-                Email Address <span className="text-red-500">*</span>
-              </label>
-              <input
-                id="email"
-                name="email"
-                type="email"
-                required
-                placeholder="jane@example.com"
-                className="w-full px-4 py-2.5 rounded-lg border border-slate-200 text-slate-900 placeholder-slate-400 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition"
-              />
-            </div>
+            <div className="grid sm:grid-cols-2 gap-5">
+               {/* Phone */}
+               <div>
+                 <label htmlFor="phone" className={labelClasses}>
+                   Phone Number
+                 </label>
+                 <input
+                   id="phone"
+                   name="phone"
+                   type="tel"
+                   required
+                   placeholder="+234 800 000 0000"
+                   className={inputClasses}
+                 />
+               </div>
 
-            {/* Phone */}
-            <div>
-              <label htmlFor="phone" className="block text-sm font-medium text-slate-700 mb-1.5">
-                Phone Number
-              </label>
-              <input
-                id="phone"
-                name="phone"
-                type="tel"
-                placeholder="+234 800 000 0000"
-                className="w-full px-4 py-2.5 rounded-lg border border-slate-200 text-slate-900 placeholder-slate-400 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition"
-              />
-            </div>
-
-            {/* Location */}
-            <div>
-              <label htmlFor="location" className="block text-sm font-medium text-slate-700 mb-1.5">
-                Location
-              </label>
-              <input
-                id="location"
-                name="location"
-                type="text"
-                placeholder="Lagos, Nigeria"
-                className="w-full px-4 py-2.5 rounded-lg border border-slate-200 text-slate-900 placeholder-slate-400 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition"
-              />
+               {/* Location */}
+               <div>
+                 <label htmlFor="location" className={labelClasses}>
+                   Location
+                 </label>
+                 <input
+                   id="location"
+                   name="location"
+                   type="text"
+                   placeholder="Lagos, Nigeria"
+                   className={inputClasses}
+                 />
+               </div>
             </div>
 
             {/* Password with toggle */}
             <div>
-              <label htmlFor="password" className="block text-sm font-medium text-slate-700 mb-1.5">
+              <label htmlFor="password" className={labelClasses}>
                 Password <span className="text-red-500">*</span>
               </label>
               <div className="relative">
@@ -174,64 +227,60 @@ export default function SignUpPage() {
                   value={password}
                   onChange={e => { setPassword(e.target.value); setTouched(true) }}
                   placeholder="Create a strong password"
-                  className={`w-full px-4 py-2.5 pr-11 rounded-lg border text-slate-900 placeholder-slate-400 text-sm focus:outline-none focus:ring-2 focus:border-transparent transition ${
+                  className={`w-full px-4 py-3 pr-11 rounded-lg border bg-white text-slate-900 placeholder-slate-400 text-sm focus:outline-none focus:ring-2 focus:border-transparent transition shadow-sm ${
                     touched && !allPassed
                       ? 'border-red-300 focus:ring-red-400'
-                      : 'border-slate-200 focus:ring-blue-500'
+                      : 'border-slate-200 focus:ring-brand-500'
                   }`}
                 />
                 <button
                   type="button"
                   onClick={() => setShowPassword(v => !v)}
-                  className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600 transition-colors"
+                  className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600 transition-colors p-1"
                   aria-label={showPassword ? 'Hide password' : 'Show password'}
                 >
                   {showPassword ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
                 </button>
               </div>
 
-              {/* Strength checklist — shows once user starts typing */}
+              {/* Strength checklist */}
               {(touched || password.length > 0) && (
-                <ul className="mt-3 space-y-1.5">
-                  {CHECKS.map(({ id, label, test }) => {
-                    const ok = test(password)
-                    return (
-                      <li key={id} className={`flex items-center gap-2 text-xs transition-colors ${ok ? 'text-green-600' : 'text-slate-400'}`}>
-                        <span className={`shrink-0 w-4 h-4 rounded-full flex items-center justify-center ${ok ? 'bg-green-100' : 'bg-slate-100'}`}>
-                          {ok
-                            ? <Check className="w-2.5 h-2.5" />
-                            : <X className="w-2.5 h-2.5" />
-                          }
-                        </span>
-                        {label}
-                      </li>
-                    )
-                  })}
-                </ul>
+                <div className="mt-4 p-4 bg-white border border-slate-200 rounded-xl shadow-sm">
+                   <p className="text-xs font-semibold text-slate-700 mb-3">Password requirements:</p>
+                   <ul className="space-y-2">
+                     {CHECKS.map(({ id, label, test }) => {
+                       const ok = test(password)
+                       return (
+                         <li key={id} className={`flex items-center gap-2 text-xs font-medium transition-colors ${ok ? 'text-green-600' : 'text-slate-500'}`}>
+                           <span className={`shrink-0 w-4 h-4 rounded-full flex items-center justify-center ${ok ? 'bg-green-100 text-green-600' : 'bg-slate-100 text-slate-400'}`}>
+                             {ok ? <Check className="w-2.5 h-2.5" /> : <X className="w-2.5 h-2.5" />}
+                           </span>
+                           {label}
+                         </li>
+                       )
+                     })}
+                   </ul>
+                </div>
               )}
             </div>
 
-            <button
-              type="submit"
-              disabled={loading}
-              className="w-full py-3 px-4 bg-blue-600 hover:bg-blue-700 disabled:bg-blue-400 text-white font-semibold rounded-lg text-sm transition-colors duration-150 flex items-center justify-center gap-2"
-            >
-              {loading ? (
-                <>
-                  <svg className="animate-spin h-4 w-4 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
-                    <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"/>
-                    <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z"/>
-                  </svg>
-                  Creating account…
-                </>
-              ) : 'Create Account'}
-            </button>
+            <div className="pt-4">
+              <button
+                type="submit"
+                disabled={loading}
+                className="w-full py-3.5 px-4 bg-brand-600 hover:bg-brand-700 disabled:opacity-70 text-white font-bold rounded-lg text-sm transition-all duration-200 flex items-center justify-center gap-2 shadow-sm active:scale-[0.98]"
+              >
+                {loading ? (
+                  <><Loader2 className="w-4 h-4 animate-spin" /> Creating account...</>
+                ) : 'Create Account'}
+              </button>
+            </div>
           </form>
 
-          <p className="text-center text-sm text-slate-500 mt-6">
+          <p className="text-center text-sm text-slate-500 mt-10">
             Already have an account?{' '}
-            <Link href="/portal/sign-in" className="text-blue-600 hover:underline font-medium">
-              Sign in
+            <Link href="/portal/sign-in" className="text-slate-900 font-bold hover:underline transition-all">
+              Sign In
             </Link>
           </p>
         </div>

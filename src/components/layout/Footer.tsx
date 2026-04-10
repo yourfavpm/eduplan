@@ -24,9 +24,9 @@ export function Footer() {
                             <Image
                                 src="/eduplan.png"
                                 alt="EduPlan360"
-                                width={160}
-                                height={45}
-                                className="h-10 w-auto brightness-0 invert"
+                                width={200}
+                                height={55}
+                                className="h-14 w-auto brightness-0 invert"
                             />
                         </div>
                         <p className="text-sm text-brand-100 leading-relaxed">
@@ -80,16 +80,19 @@ export function Footer() {
                         {/* Office locations as cards */}
                         <div className="grid sm:grid-cols-2 gap-3 mb-5">
                             <div className="bg-brand-800/50 rounded-xl p-4 border border-brand-700/50">
-                                <p className="text-[10px] font-semibold uppercase tracking-widest text-brand-300 mb-2">🇳🇬 Nigeria Office</p>
+                                <p className="text-[10px] font-semibold uppercase tracking-widest text-brand-300 mb-2">🇳🇬 Nigeria</p>
                                 <p className="text-sm text-brand-100 leading-relaxed">65A, Aba Johnson Street, Akora Villa Estate, Adeniyi Jones, Ikeja, Lagos</p>
                             </div>
                             <div className="bg-brand-800/50 rounded-xl p-4 border border-brand-700/50">
-                                <p className="text-[10px] font-semibold uppercase tracking-widest text-brand-300 mb-2">🇨🇦 Canada Office</p>
+                                <p className="text-[10px] font-semibold uppercase tracking-widest text-brand-300 mb-2">🇨🇦 Canada</p>
                                 <p className="text-sm text-brand-100 leading-relaxed">7644, MapleFord Blvd, Regina S4Y 0H1, Canada</p>
+                                <p className="text-sm text-brand-100 leading-relaxed mt-2">
+                                    <a href="mailto:info@eduplan360.com" className="hover:text-white transition-colors">info@eduplan360.com</a>
+                                </p>
                             </div>
                         </div>
 
-                        {/* Phone & Email */}
+                        {/* Phone */}
                         <ul className="space-y-3 text-sm text-brand-100">
                             <li className="flex items-start gap-3">
                                 <Phone className="w-4 h-4 shrink-0 text-brand-300 mt-0.5" />
@@ -97,10 +100,6 @@ export function Footer() {
                                     <a href="tel:+2348052829316" className="hover:text-white transition-colors">+234-8052829316</a>
                                     <a href="tel:+2348027442902" className="hover:text-white transition-colors">+234-8027442902</a>
                                 </div>
-                            </li>
-                            <li className="flex items-center gap-3">
-                                <Mail className="w-4 h-4 shrink-0 text-brand-300" />
-                                <a href="mailto:info@eduplan360.com" className="hover:text-white transition-colors">info@eduplan360.com</a>
                             </li>
                         </ul>
                     </div>

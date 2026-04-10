@@ -27,7 +27,7 @@ export function Navbar() {
         },
         {
             href: "/destinations",
-            label: "Explore Destinations",
+            label: "Destinations",
             isGrid: true,
             children: [
                 { href: "/destinations/usa", label: "USA 🇺🇸" },
@@ -67,7 +67,7 @@ export function Navbar() {
                 { href: "/study-abroad/apply", label: "Apply to Study" }
             ]
         },
-        { href: "/programs", label: "Programs" },
+        { href: "/universities", label: "Universities" },
         { href: "/scholarships", label: "Scholarships" },
         {
             href: "/english-test",
@@ -91,10 +91,10 @@ export function Navbar() {
                         <Image
                             src="/eduplan.png"
                             alt="EduPlan360"
-                            width={180}
-                            height={50}
+                            width={220}
+                            height={60}
                             priority
-                            className="h-10 w-auto md:h-12 brightness-0 invert"
+                            className="h-14 w-auto md:h-16 brightness-0 invert"
                         />
                     </Link>
 
